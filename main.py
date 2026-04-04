@@ -6,19 +6,30 @@ from src.experiments import run_experiments
 from src.plot_results import plot_results
 from src.greedy_selection import greedy_selection
 from src.analysis import plot_correlation
+from src.litholog_model import load_litholog, expand_layers, encode_facies, train_and_evaluate
 
-df = load_data()
 
-X_train, X_test, y_train, y_test = preprocess(df)
+# df = load_data()
 
-model = train_model(X_train, y_train)
+# X_train, X_test, y_train, y_test = preprocess(df)
 
-evaluate(model, X_test, y_test)
+# model = train_model(X_train, y_train)
 
-results = run_experiments(df)
+# evaluate(model, X_test, y_test)
 
-plot_results(results)
+# results = run_experiments(df)
 
-greedy_selection(df)
+# plot_results(results)
 
-plot_correlation(df)
+# greedy_selection(df)
+
+# plot_correlation(df)
+
+litho = load_litholog()
+
+expanded = expand_layers(litho)
+
+expanded, mapping = encode_facies(expanded)
+
+for step in [1, 2, 5, 10]:
+    train_and_evaluate(expanded, step)

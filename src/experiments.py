@@ -69,7 +69,7 @@ def run_experiments(df):
 
         results.append((name, mae, total_cost))
 
-        # 🔥 Plot feature importance ONLY for important cases
+        # Plot feature importance ONLY for important cases
         if name in ["GR + SP", "GR + SP + RILD"]:
             plot_feature_importance(model, features, name)
 

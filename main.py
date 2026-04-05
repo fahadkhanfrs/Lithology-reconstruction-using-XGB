@@ -9,7 +9,7 @@ from src.analysis import plot_correlation
 from src.litholog_model import (
     load_litholog, expand_layers, encode_facies,
     train_and_evaluate, uncertainty_sampling_experiment, add_context,
-    uniform_sampling_experiment, hybrid_sampling_experiment
+    uniform_sampling_experiment, hybrid_sampling_experiment, plot_reconstruction
 )
 
 RUN_BASELINE = False

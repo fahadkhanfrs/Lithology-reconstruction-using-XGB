@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score
 
@@ -226,5 +227,115 @@ def hybrid_sampling_experiment(full_df, initial_step=10, budget=20):
     acc = accuracy_score(y_test, preds)
 
     print(f"Hybrid Sampling | Accuracy: {acc:.4f} | Samples used: {len(sampled)}")
-
+    plot_reconstruction(full_df, sampled, model, class_mapping)
     return acc
+
+def plot_reconstruction(full_df, sampled, model, class_mapping):
+
+    inv_mapping = {v: k for k, v in class_mapping.items()}
+
+    X_test = full_df[["Depth", "prev_facies"]]
+    preds_mapped = model.predict(X_test)
+    preds = np.array([inv_mapping[p] for p in preds_mapped])
+
+    depth = full_df["Depth"].values
+    true = full_df["Facies"].values
+
+    # 🎨 Colors
+    colors = {
+        0: "orange",   # sand
+        1: "green",    # mud
+        2: "black",    # coal
+        3: "purple"    # carbon_mud
+    }
+
+    fig, axes = plt.subplots(1, 3, figsize=(9, 10), sharey=True)
+    # ---- BLOCK PLOT FUNCTION ----
+    def draw_blocks(ax, facies_array, title):
+        start = 0
+
+        for i in range(1, len(facies_array)):
+            if facies_array[i] != facies_array[i - 1]:
+                ax.fill_betweenx(
+                    depth[start:i],
+                    0,
+                    1,
+                    color=colors[facies_array[i - 1]]
+                )
+                start = i
+
+        # last block
+        ax.fill_betweenx(
+            depth[start:],
+            0,
+            1,
+            color=colors[facies_array[-1]]
+        )
+
+        ax.set_title(title)
+        ax.set_xticks([])
+        ax.set_xlim(0, 1)
+        ax.invert_yaxis()
+
+    # ---- TRUE ----
+    draw_blocks(axes[0], true, "True Lithology (Ground Truth)")
+
+    # ---- PREDICTED ----
+    draw_blocks(axes[1], preds, "Predicted Lithology (Hybrid Sampling)")
+
+    # 🔴 Sampled points
+    axes[1].scatter(
+        np.random.uniform(0.4, 0.6, size=len(sampled)),
+        sampled["Depth"],
+        color="red",
+        s=20,
+        label="Sampled"
+    )
+
+    # ❌ Error highlighting
+    error_mask = preds != true
+    axes[1].scatter(
+        np.random.uniform(0.7, 0.9, size=error_mask.sum()),
+        depth[error_mask],
+        color="yellow",
+        s=10,
+        label="Error"
+    )
+
+    # ---- Legend ----
+    labels = {
+        0: "Sand",
+        1: "Mud",
+        2: "Coal",
+        3: "Carbon Mud"
+    }
+
+    legend_elements = [
+        plt.Line2D([0], [0], marker='s', color='w',
+                   label=labels[k], markerfacecolor=colors[k], markersize=10)
+        for k in labels
+    ]
+
+    legend_elements += [
+        plt.Line2D([0], [0], marker='o', color='w',
+                   label='Sampled Points', markerfacecolor='red', markersize=8),
+        plt.Line2D([0], [0], marker='o', color='w',
+                   label='Errors', markerfacecolor='yellow', markersize=8)
+    ]
+
+    axes[1].legend(handles=legend_elements, loc='center left', bbox_to_anchor=(1, 0.5))
+    
+    error_band = (preds != true).astype(int)
+
+    axes[2].imshow(
+        error_band.reshape(-1, 1),
+        aspect='auto',
+        cmap='Reds', vmin=0, vmax=1
+    )
+
+    axes[2].set_title("Error Distribution")
+    axes[2].set_xticks([])
+    axes[2].invert_yaxis()
+
+    plt.tight_layout()
+    plt.show()

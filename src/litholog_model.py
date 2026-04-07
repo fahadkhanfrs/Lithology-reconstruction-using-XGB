@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score
 
 
 
-def load_litholog(path="data/litholog1.csv"):
+def load_litholog(path="data/litholog11.csv"):
     df = pd.read_csv(path)
     return df
 
@@ -246,7 +246,7 @@ def plot_reconstruction(full_df, sampled, model, class_mapping):
         0: "orange",   # sand
         1: "green",    # mud
         2: "black",    # coal
-        3: "purple"    # carbon_mud
+        3: "purple",    # carbon_mud
     }
 
     fig, axes = plt.subplots(1, 3, figsize=(9, 10), sharey=True)

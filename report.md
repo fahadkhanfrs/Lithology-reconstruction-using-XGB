@@ -36,3 +36,5 @@ oh, wow.
 Uncertainty-based sampling without geological context does not outperform uniform sampling.
 
 Adaptive sampling requires contextual geological information to be effective; depth-only models fail to capture facies transitions.
+
+Siltstone acts as a transitional facies between sand and mud, and is often misclassified due to overlapping characteristics.

@@ -44,7 +44,7 @@ if RUN_BASELINE:
 
 if RUN_EXPERIMENTS:
     print("\n--- Uniform ---")
-    uniform_sampling_experiment(expanded, budget=30)
+    sampled_uniform = uniform_sampling_experiment(expanded, budget=30)
 
     print("\n--- Hybrid ---")
-    hybrid_sampling_experiment(expanded, initial_step=10, budget=20)
+    sampled_hybrid = hybrid_sampling_experiment(expanded, initial_step=10, budget=20)

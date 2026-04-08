@@ -4,12 +4,9 @@ import matplotlib.pyplot as plt
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score
 
-
-
-def load_litholog(path="data/litholog11.csv"):
+def load_litholog(path="data/litholog9.csv"):
     df = pd.read_csv(path)
     return df
-
 
 def expand_layers(df):
     data = []
@@ -29,8 +26,7 @@ def add_context(df):
     df = df.copy()
     df["prev_facies"] = df["Facies"].shift(1)
     df = df.dropna()
-    return df
-
+    return df.reset_index(drop=True)
 
 def encode_facies(df):
     mapping = {
@@ -77,6 +73,7 @@ def train_and_evaluate(full_df, step):
     print(f"Step {step} | Accuracy: {acc:.4f}")
 
     return acc
+
 def get_uncertainty(model, X):
     probs = model.predict_proba(X)
     uncertainty = 1 - np.max(probs, axis=1)
@@ -86,7 +83,7 @@ def uniform_sampling_experiment(full_df, budget=30):
 
     # Pick evenly spaced indices
     indices = np.linspace(0, len(full_df)-1, budget).astype(int)
-    sampled = full_df.iloc[indices]
+    sampled = full_df.iloc[indices].reset_index(drop=True)
 
     X_train = sampled[["Depth", "prev_facies"]]
     y_train = sampled["Facies"]
@@ -109,7 +106,8 @@ def uniform_sampling_experiment(full_df, budget=30):
 
     print(f"Uniform Sampling | Accuracy: {acc:.4f} | Samples used: {len(sampled)}")
 
-    return acc
+    return acc, full_df, sampled, model, class_mapping
+
 def uncertainty_sampling_experiment(full_df, initial_step=10, budget=20):
 
     # Start with sparse sampling
@@ -147,10 +145,10 @@ def uncertainty_sampling_experiment(full_df, initial_step=10, budget=20):
 
         # Add it to sampled
         new_sample = remaining.iloc[[idx]]
-        sampled = pd.concat([sampled, new_sample])
+        sampled = pd.concat([sampled, new_sample]).reset_index(drop=True)
 
         # Remove from remaining
-        remaining = remaining.drop(new_sample.index)
+        remaining = remaining.drop(new_sample.index).reset_index(drop=True)
 
     # Final evaluation
     X_train = sampled[["Depth", "prev_facies"]]
@@ -203,8 +201,8 @@ def hybrid_sampling_experiment(full_df, initial_step=10, budget=20):
         idx = np.argmax(uncertainty)
 
         new_sample = remaining.iloc[[idx]]
-        sampled = pd.concat([sampled, new_sample])
-        remaining = remaining.drop(new_sample.index)
+        sampled = pd.concat([sampled, new_sample]).reset_index(drop=True)
+        remaining = remaining.drop(new_sample.index).reset_index(drop=True)
 
     # Final evaluation
     X_train = sampled[["Depth", "prev_facies"]]
@@ -228,7 +226,7 @@ def hybrid_sampling_experiment(full_df, initial_step=10, budget=20):
 
     print(f"Hybrid Sampling | Accuracy: {acc:.4f} | Samples used: {len(sampled)}")
     plot_reconstruction(full_df, sampled, model, class_mapping)
-    return acc
+    return acc, full_df, sampled, model, class_mapping
 
 def plot_reconstruction(full_df, sampled, model, class_mapping):
 
@@ -238,10 +236,29 @@ def plot_reconstruction(full_df, sampled, model, class_mapping):
     preds_mapped = model.predict(X_test)
     preds = np.array([inv_mapping[p] for p in preds_mapped])
 
-    depth = full_df["Depth"].values
-    true = full_df["Facies"].values
+    # Train uniform sampling model
+    budget = len(sampled)
+    uniform_indices = np.linspace(0, len(full_df)-1, budget).astype(int)
+    uniform_sampled = full_df.iloc[uniform_indices].reset_index(drop=True)
+    
+    X_train_uniform = uniform_sampled[["Depth", "prev_facies"]]
+    y_train_uniform = uniform_sampled["Facies"]
+    
+    unique_classes_uniform = np.unique(y_train_uniform)
+    class_mapping_uniform = {c: i for i, c in enumerate(unique_classes_uniform)}
+    y_train_mapped_uniform = y_train_uniform.map(class_mapping_uniform)
+    
+    model_uniform = XGBClassifier(n_estimators=50, max_depth=3)
+    model_uniform.fit(X_train_uniform, y_train_mapped_uniform)
+    
+    preds_uniform_mapped = model_uniform.predict(X_test)
+    inv_mapping_uniform = {v: k for k, v in class_mapping_uniform.items()}
+    preds_uniform = np.array([inv_mapping_uniform[p] for p in preds_uniform_mapped])
 
-    # 🎨 Colors
+    depth = full_df["Depth"].to_numpy()
+    true = full_df["Facies"].to_numpy()
+
+
     colors = {
         0: "orange",   # sand
         1: "green",    # mud
@@ -249,60 +266,38 @@ def plot_reconstruction(full_df, sampled, model, class_mapping):
         3: "purple",    # carbon_mud
     }
 
-    fig, axes = plt.subplots(1, 3, figsize=(9, 10), sharey=True)
-    # ---- BLOCK PLOT FUNCTION ----
-    def draw_blocks(ax, facies_array, title):
+    fig, axes = plt.subplots(1, 3, figsize=(14, 10), sharey=True)
+    def draw_blocks(ax, facies_array, depth, title, colors):
+
         start = 0
 
         for i in range(1, len(facies_array)):
             if facies_array[i] != facies_array[i - 1]:
+
                 ax.fill_betweenx(
-                    depth[start:i],
-                    0,
-                    1,
+                    [depth[start], depth[i]],
+                    0, 1,
                     color=colors[facies_array[i - 1]]
                 )
                 start = i
 
-        # last block
         ax.fill_betweenx(
-            depth[start:],
-            0,
-            1,
+            [depth[start], depth[-1]],
+            0, 1,
             color=colors[facies_array[-1]]
         )
 
-        ax.set_title(title)
-        ax.set_xticks([])
         ax.set_xlim(0, 1)
+        ax.set_xticks([])
         ax.invert_yaxis()
+        ax.set_title(title)
 
-    # ---- TRUE ----
-    draw_blocks(axes[0], true, "True Lithology (Ground Truth)")
+    draw_blocks(axes[0], true, depth, "True Lithology (Ground Truth)", colors)
 
-    # ---- PREDICTED ----
-    draw_blocks(axes[1], preds, "Predicted Lithology (Hybrid Sampling)")
+    draw_blocks(axes[1], preds_uniform, depth, "Predicted Lithology (Uniform Sampling)", colors)
 
-    # 🔴 Sampled points
-    axes[1].scatter(
-        np.random.uniform(0.4, 0.6, size=len(sampled)),
-        sampled["Depth"],
-        color="red",
-        s=20,
-        label="Sampled"
-    )
+    draw_blocks(axes[2], preds, depth, "Predicted Lithology (Hybrid Sampling)", colors)
 
-    # ❌ Error highlighting
-    error_mask = preds != true
-    axes[1].scatter(
-        np.random.uniform(0.7, 0.9, size=error_mask.sum()),
-        depth[error_mask],
-        color="yellow",
-        s=10,
-        label="Error"
-    )
-
-    # ---- Legend ----
     labels = {
         0: "Sand",
         1: "Mud",
@@ -316,26 +311,156 @@ def plot_reconstruction(full_df, sampled, model, class_mapping):
         for k in labels
     ]
 
-    legend_elements += [
-        plt.Line2D([0], [0], marker='o', color='w',
-                   label='Sampled Points', markerfacecolor='red', markersize=8),
-        plt.Line2D([0], [0], marker='o', color='w',
-                   label='Errors', markerfacecolor='yellow', markersize=8)
-    ]
-
-    axes[1].legend(handles=legend_elements, loc='center left', bbox_to_anchor=(1, 0.5))
-    
-    error_band = (preds != true).astype(int)
-
-    axes[2].imshow(
-        error_band.reshape(-1, 1),
-        aspect='auto',
-        cmap='Reds', vmin=0, vmax=1
-    )
-
-    axes[2].set_title("Error Distribution")
-    axes[2].set_xticks([])
-    axes[2].invert_yaxis()
+    axes[2].legend(handles=legend_elements, loc='center left', bbox_to_anchor=(1, 0.5))
 
     plt.tight_layout()
+    plt.show()
+
+def plot_error_analysis(full_df, sampled, model, class_mapping, method=""):
+    """
+    Enhanced error analysis plot showing:
+    - Error distribution along depth
+    - Per-class accuracy metrics
+    - Error regions highlighted
+    """
+    
+    inv_mapping = {v: k for k, v in class_mapping.items()}
+    
+    X_test = full_df[["Depth", "prev_facies"]]
+    preds_mapped = model.predict(X_test)
+    preds = np.array([inv_mapping[p] for p in preds_mapped])
+    
+    depth = full_df["Depth"].to_numpy()
+    true = full_df["Facies"].to_numpy()
+    
+    # Calculate errors
+    errors = (preds != true).astype(int)
+    correct = 1 - errors
+    
+    # Per-class metrics
+    facies_names = {0: "Sand", 1: "Mud", 2: "Coal", 3: "Carbon Mud"}
+    per_class_acc = {}
+    per_class_count = {}
+    
+    for facies_id in class_mapping.values():
+        mask = true == facies_id
+        if mask.sum() > 0:
+            per_class_acc[facies_names[facies_id]] = correct[mask].mean()
+            per_class_count[facies_names[facies_id]] = mask.sum()
+    
+    colors = {
+        0: "orange",
+        1: "green",
+        2: "black",
+        3: "purple",
+    }
+    
+    # Create comprehensive error visualization
+    fig = plt.figure(figsize=(16, 12))
+    gs = fig.add_gridspec(3, 2, hspace=0.45, wspace=0.35, top=0.93, bottom=0.08, left=0.08, right=0.95)
+    
+    # 1. Error distribution along depth (line plot)
+    ax1 = fig.add_subplot(gs[0, :])
+    # Calculate rolling error rate (windowed)
+    window = max(10, len(depth) // 50)
+    rolling_error = []
+    window_depths = []
+    for i in range(0, len(depth), window):
+        end = min(i + window, len(depth))
+        error_rate = 1 - correct[i:end].mean()
+        rolling_error.append(error_rate)
+        window_depths.append(depth[i:end].mean())
+    
+    ax1.plot(window_depths, rolling_error, linewidth=2, color='red', alpha=0.7)
+    ax1.fill_between(window_depths, rolling_error, alpha=0.3, color='red')
+    ax1.set_xlabel("Depth", fontsize=10)
+    ax1.set_ylabel("Error Rate (windowed)", fontsize=10)
+    ax1.set_title("Prediction Error Rate Along Depth", fontsize=11, fontweight='bold')
+    ax1.grid(True, alpha=0.3)
+    
+    # 2. Error regions visualization (similar to reconstruction)
+    ax2 = fig.add_subplot(gs[1, 0])
+    start = 0
+    for i in range(1, len(errors)):
+        if errors[i] != errors[i-1]:
+            color = 'red' if errors[i-1] == 1 else 'lightgreen'
+            ax2.fill_betweenx([depth[start], depth[i]], 0, 1, color=color, alpha=0.6)
+            start = i
+    color = 'red' if errors[-1] == 1 else 'lightgreen'
+    ax2.fill_betweenx([depth[start], depth[-1]], 0, 1, color=color, alpha=0.6)
+    
+    ax2.set_xlim(0, 1)
+    ax2.set_xticks([])
+    ax2.invert_yaxis()
+    ax2.set_ylabel("Depth", fontsize=10)
+    ax2.set_title("Error Regions (Red=Error, Green=Correct)", fontsize=11, fontweight='bold')
+    
+    # Add legend for error regions
+    from matplotlib.patches import Patch
+    error_legend = [
+        Patch(facecolor='red', alpha=0.6, label='Incorrect Prediction'),
+        Patch(facecolor='lightgreen', alpha=0.6, label='Correct Prediction')
+    ]
+    ax2.legend(handles=error_legend, loc='lower center', bbox_to_anchor=(0.5, -0.15), ncol=2, fontsize=9)
+    
+    # 3. Per-class accuracy bar chart
+    ax3 = fig.add_subplot(gs[1, 1])
+    class_names = list(per_class_acc.keys())
+    accuracies = list(per_class_acc.values())
+    bars = ax3.barh(class_names, accuracies, color=['orange', 'green', 'black', 'purple'][:len(class_names)], alpha=0.7)
+    ax3.set_xlabel("Accuracy", fontsize=10)
+    ax3.set_title("Per-Class Accuracy", fontsize=11, fontweight='bold')
+    ax3.set_xlim(0, 1)
+    
+    # Add value labels on bars
+    for i, (bar, acc) in enumerate(zip(bars, accuracies)):
+        ax3.text(acc + 0.02, bar.get_y() + bar.get_height()/2, f'{acc:.2%}', 
+                va='center', fontsize=9)
+    
+    # 4. Error count by facies
+    ax4 = fig.add_subplot(gs[2, 0])
+    error_counts = {}
+    total_counts = {}
+    for facies_id in class_mapping.values():
+        mask = true == facies_id
+        error_counts[facies_names[facies_id]] = errors[mask].sum()
+        total_counts[facies_names[facies_id]] = mask.sum()
+    
+    class_names = list(error_counts.keys())
+    error_vals = list(error_counts.values())
+    bars = ax4.bar(class_names, error_vals, color=['orange', 'green', 'black', 'purple'][:len(class_names)], alpha=0.7)
+    ax4.set_ylabel("Error Count", fontsize=10)
+    ax4.set_title("Number of Misclassifications by Facies", fontsize=11, fontweight='bold')
+    
+    # Add value labels on bars
+    for bar, count in zip(bars, error_vals):
+        height = bar.get_height()
+        ax4.text(bar.get_x() + bar.get_width()/2., height,
+                f'{int(count)}', ha='center', va='bottom', fontsize=9)
+    
+    # 5. Overall statistics
+    ax5 = fig.add_subplot(gs[2, 1])
+    ax5.axis('off')
+    
+    overall_acc = correct.mean()
+    overall_error_rate = errors.mean()
+    
+    stats_text = f"""
+    OVERALL PERFORMANCE
+    ─────────────────────────
+    Total Accuracy:     {overall_acc:.2%}
+    Error Rate:         {overall_error_rate:.2%}
+    Total Samples:      {len(true):,}
+    Correct:            {correct.sum():,}
+    Incorrect:          {errors.sum():,}
+    
+    Sampled Points:     {len(sampled):,}
+    Sampling %:         {len(sampled)/len(full_df):.1%}
+    """
+    
+    ax5.text(0.1, 0.5, stats_text, fontsize=10, family='monospace',
+            verticalalignment='center', bbox=dict(boxstyle='round', 
+            facecolor='wheat', alpha=0.5))
+    
+    plt.suptitle(f"Lithology Prediction Error Analysis ({method})", fontsize=13, fontweight='bold', y=0.98)
     plt.show()

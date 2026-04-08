@@ -9,7 +9,8 @@ from src.analysis import plot_correlation
 from src.litholog_model import (
     load_litholog, expand_layers, encode_facies,
     train_and_evaluate, uncertainty_sampling_experiment, add_context,
-    uniform_sampling_experiment, hybrid_sampling_experiment, plot_reconstruction
+    uniform_sampling_experiment, hybrid_sampling_experiment, plot_reconstruction,
+    plot_error_analysis
 )
 
 RUN_BASELINE = False
@@ -44,7 +45,13 @@ if RUN_BASELINE:
 
 if RUN_EXPERIMENTS:
     print("\n--- Uniform ---")
-    sampled_uniform = uniform_sampling_experiment(expanded, budget=30)
+    acc, full_df, sampled, model, class_mapping = uniform_sampling_experiment(expanded, budget=30)
+
+    print("\n--- Error Analysis (Uniform) ---")
+    plot_error_analysis(full_df, sampled, model, class_mapping, method="Uniform Sampling")
 
     print("\n--- Hybrid ---")
-    sampled_hybrid = hybrid_sampling_experiment(expanded, initial_step=10, budget=20)
+    acc, full_df, sampled, model, class_mapping = hybrid_sampling_experiment(expanded, initial_step=10, budget=20)
+
+    print("\n--- Error Analysis (Hybrid) ---")
+    plot_error_analysis(full_df, sampled, model, class_mapping, method="Hybrid Sampling")

@@ -1,0 +1,17 @@
+Top,Bottom,Facies
+0,8,mud
+8,12,carbon_mud
+12,16,sand
+16,18,silt
+18,22,sand
+22,27,sand
+27,31,mud
+31,35,carbon_mud
+35,37,coal
+37,48,sand
+48,54,carbon_mud
+54,57,silt
+57,63,carbon_mud
+63,68,mud
+68,72,silt
+72,80,mud

@@ -13,6 +13,7 @@ from data.loader import (
     DEFAULT_FACIES_MAPPING,
     DEFAULT_BASE_GR,
     CRITICAL_COLUMNS,
+    load_provenance_manifest,
 )
 
 
@@ -186,3 +187,36 @@ def test_real_workspace_raw_lithologs():
             assert (group["depth_m"].diff().dropna() > 0).all()
         for col in CRITICAL_COLUMNS:
             assert not df[col].isna().any()
+
+
+def test_provenance_manifest():
+    """Verifies that the provenance manifest correctly registers all 11 logs and metadata."""
+    manifest = load_provenance_manifest()
+    assert "lithologs" in manifest
+    assert len(manifest["lithologs"]) == 11
+
+    # Check Litholog 11 benchmark authority
+    l11 = manifest["lithologs"]["litholog11"]
+    assert l11["independent_validation"] is True
+    assert l11["benchmark_accuracy"] == 0.9359
+    assert l11["provenance_category"] == "source_derived_benchmarked"
+
+    # Check Litholog 1 and 9 source-derived unverified
+    for lid in ["litholog1", "litholog9"]:
+        entry = manifest["lithologs"][lid]
+        assert entry["provenance_category"] == "source_derived"
+        assert entry["independent_validation"] == "unknown"
+
+    # Check AI-reconstructed logs (2-8, 10)
+    for i in [2, 3, 4, 5, 6, 7, 8, 10]:
+        lid = f"litholog{i}"
+        entry = manifest["lithologs"][lid]
+        assert entry["provenance_category"] == "ai_reconstructed"
+        assert entry["independent_validation"] is False
+        assert entry["benchmark_accuracy"] is None
+
+    # Summary checks
+    assert manifest["provenance_summary"]["source_derived_count"] == 3
+    assert manifest["provenance_summary"]["ai_reconstructed_count"] == 8
+    assert manifest["provenance_summary"]["independently_validated_count"] == 1
+    assert manifest["metadata"]["total_observations_m"] == 920

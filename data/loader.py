@@ -3,6 +3,7 @@ LithologLoader module for Phase 0 lithology data ingestion,
 standardization, quality control, synthetic GR generation, and export.
 """
 
+import json
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 import re
@@ -382,5 +383,22 @@ class LithologLoader:
 
         df.to_parquet(p_path, index=False)
         df.to_csv(c_path, index=False)
-
         return p_path, c_path
+
+
+def load_provenance_manifest(
+    manifest_path: Optional[Union[str, Path]] = None,
+) -> dict:
+    """
+    Loads and returns the machine-readable dataset provenance manifest.
+    
+    Encodes reconstruction methods, independent validation flags, and
+    accuracy benchmarks for all 11 lithologs in the working dataset.
+    """
+    if manifest_path is None:
+        manifest_path = Path(__file__).resolve().parent / "provenance_manifest.json"
+    path_obj = Path(manifest_path)
+    if not path_obj.exists():
+        raise FileNotFoundError(f"Provenance manifest not found at: {path_obj}")
+    with open(path_obj, "r", encoding="utf-8") as f:
+        return json.load(f)

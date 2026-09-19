@@ -19,6 +19,23 @@ DEFAULT_FACIES_MAPPING: Dict[str, int] = {
     "mud": 4,
 }
 
+# Canonical bidirectional mapping between integer codes, technical IDs, and descriptive display names
+CANONICAL_FACIES_NAMES: Dict[int, str] = {
+    0: "Coal",
+    1: "Channel Sandstone",
+    2: "Fine Sandstone / Splay",
+    3: "Siltstone",
+    4: "Overbank Mudstone",
+}
+
+CANONICAL_TECHNICAL_NAMES: Dict[int, str] = {
+    0: "coal",
+    1: "sand",
+    2: "carbon_mud",
+    3: "silt",
+    4: "mud",
+}
+
 # Aliases to map variant naming to standard facies names
 FACIES_ALIASES: Dict[str, str] = {
     "coal": "coal",

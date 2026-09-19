@@ -117,3 +117,62 @@ $$\mathbf{A} = \mathbf{P} - \mathbf{P}^T, \qquad A_{ij} = P_{ij} - P_{ji}$$
 3. **Sahoo, H., Gani, M. R., & Gani, N. D. (2016).** 3D facies architecture and sequence stratigraphy of a fluvio-deltaic succession, Cretaceous Ferron Sandstone, Utah. *Sedimentology*, 63(6), 1403-1437. https://doi.org/10.1111/sed.12267
 4. **Elfeki, A., & Dekking, M. (2001).** A Markov chain model for subsurface characterization: theory and applications. *Mathematical Geology*, 33(5), 569-589.
 5. **Carle, S. F., & Fogg, G. E. (1996).** Transition probability-based geostatistics. *Mathematical Geology*, 28(4), 453-476.
+
+---
+
+## 4. Empirical Recomputed Results (Complete 11-Litholog Dataset)
+
+> [!NOTE]
+> Previous Phase 1 results generated from the incomplete 3-well subset (lithologs 1, 9, 11; 247 observations) are **OBSOLETE**. The authoritative empirical statistics below reflect the complete 11-litholog working dataset (920 observations, 909 regular transitions, 201 boundary crossings).
+
+### 4.1 Regular Transition Matrix $P_{\text{reg}}$ (Fixed-Step 1m, 11 Logs)
+```
+                         Coal  Channel Sandstone  Fine Sandstone / Splay  Siltstone  Overbank Mudstone
+Coal                    0.286              0.071                   0.286      0.036              0.321
+Channel Sandstone       0.031              0.904                   0.026      0.018              0.021
+Fine Sandstone / Splay  0.000              0.052                   0.759      0.043              0.147
+Siltstone               0.027              0.082                   0.082      0.466              0.342
+Overbank Mudstone       0.020              0.065                   0.013      0.082              0.820
+```
+- **Matrix Condition Number $\kappa(P_{\text{reg}})$**: 4.52
+- **Row Stochasticity**: Strictly verified $|\sum_j P_{ij} - 1| \le 1 \times 10^{-7}$
+
+### 4.2 Embedded Transition Matrix $P_{\text{emb}}$ (Boundary Crossings, $P_{ii} = 0$, 11 Logs)
+```
+                         Coal  Channel Sandstone  Fine Sandstone / Splay  Siltstone  Overbank Mudstone
+Coal                    0.000              0.100                   0.400      0.050              0.450
+Channel Sandstone       0.324              0.000                   0.270      0.189              0.216
+Fine Sandstone / Splay  0.000              0.214                   0.000      0.179              0.607
+Siltstone               0.051              0.154                   0.154      0.000              0.641
+Overbank Mudstone       0.109              0.364                   0.073      0.455              0.000
+```
+- **Matrix Condition Number $\kappa(P_{\text{emb}})$**: 17.82
+
+### 4.3 Directional Upward Fining Invariant
+Channel Sandstone (State 1) upward transitions strictly favor finer-grained facies:
+- Sand $\to$ Coal: 0.324
+- Sand $\to$ Fine Sandstone / Splay: 0.270
+- Sand $\to$ Siltstone: 0.189
+- Sand $\to$ Overbank Mudstone: 0.216
+- **Combined Upward Fining / Abandonment Transitions**: **100.0%** (1.000)
+
+### 4.4 Stationary Facies Occupancy Diagnostic
+| Facies State | Stationary $\pi_i$ | Empirical $p_{\text{emp}, i}$ | Absolute Diff | Relative Diff (%) |
+|---|---|---|---|---|
+| 0 (Coal) | 0.0305 | 0.0304 | 0.0001 | 0.29% |
+| 1 (Channel Sandstone) | 0.4043 | 0.4196 | 0.0153 | 3.64% |
+| 2 (Fine Sand / Splay) | 0.1264 | 0.1261 | 0.0003 | 0.25% |
+| 3 (Siltstone) | 0.0807 | 0.0793 | 0.0014 | 1.73% |
+| 4 (Overbank Mudstone) | 0.3581 | 0.3446 | 0.0135 | 3.92% |
+
+- **Bulk Net-to-Gross (Sand + Splay)**:
+  - Theoretical Stationary: **53.07%**
+  - Empirical Observed: **54.57%**
+  - Relative Difference: **2.74%** (< 3% diagnostic agreement)
+
+### 4.5 Comparison Against Obsolete 3-Log Results (Sensitivity Analysis)
+- **Stationary Net-to-Gross**: 53.07% (11-log) vs. 52.51% (3-log obsolete) [Difference: **+0.56%**]
+- **Empirical Net-to-Gross**: 54.57% (11-log) vs. 55.06% (3-log obsolete) [Difference: **-0.50%**]
+- **Regular Matrix Frobenius Difference $\|P_{11} - P_3\|_F$**: **0.3120**
+- **Embedded Matrix Frobenius Difference $\|P_{11} - P_3\|_F$**: **0.6158**
+- **Sparsity Constraints**: The obsolete 3-log subset contained only 50 boundary transitions (with sparse rows such as 7 coal and 8 siltstone boundaries, where a single count shifted transition probabilities by 12.5% to 14.3%). Expanding to the 11-log dataset (201 boundary crossings) regularizes the transition matrix while preserving the 100% upward fining invariant.

@@ -31,6 +31,15 @@ DEFAULT_FACIES_MAP: Dict[int, str] = {
     4: "Overbank Mudstone",
 }
 
+# 1:1 canonical correspondence with Phase 0 technical schema identifiers
+CANONICAL_TECHNICAL_MAP: Dict[int, str] = {
+    0: "coal",
+    1: "sand",
+    2: "carbon_mud",
+    3: "silt",
+    4: "mud",
+}
+
 
 class StratigraphicMarkovChain:
     """

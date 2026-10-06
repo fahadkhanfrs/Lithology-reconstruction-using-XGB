@@ -27,7 +27,7 @@ This data quality and provenance audit provides a complete, interval-by-interval
    In all lithologs, interval row count does not equal physical section thickness. Thickness is governed by continuous bed boundaries ($B_i - T_i$), varying from 0.2 m to 17.0 m per bed.
 5. **Coordinate and Provenance Integrity:**  
    - Litholog 1 has no geographic coordinates and will never have coordinates; it is permanently excluded from spatial modeling, but is validated for 1D vertical analyses.
-   - Lithologs 2 through 11 have coordinates recorded in [lolo/Location_coordinates_lithologs.xlsx](file:///d:/Lithology-reconstruction-using-XGB/lolo/Location_coordinates_lithologs.xlsx), but map projection (CRS) and distance units remain unverified.
+   - Lithologs 2 through 11 have coordinates recorded in [lolo/Location_coordinates_lithologs.xlsx](file:///d:/Lithology-reconstruction-using-XGB/lolo/Location_coordinates_lithologs.xlsx); distance units are officially assumed as international meters, while map projection (CRS/datum) remains unverified.
    - Litholog 12 has an approximate location marked on a presentation slide map, but no tabular coordinates in the coordinate spreadsheet.
    - Provenance consists of 3 source-derived outcrop logs (L1, L9, L11; L11 benchmarked at 93.59% accuracy), 8 AI-reconstructed outcrop logs (L2-L8, L10), and 1 digitized subsurface drill core (L12).
 
@@ -128,6 +128,8 @@ Text extraction and vector graphic parsing of [lolo/litholog12.pdf](file:///d:/L
    The represented span is $78.0 - 0.0 = 78.0\text{ m}$. The sum of interval thicknesses is $79.0\text{ m}$. The net difference is $-1.0\text{ m}$.
 4. **Resolution in Discretization:**
    The midpoint discretization algorithm evaluates the dominant facies at integer midpoints ($z_k = k + 0.5$). For $z = 18.5\text{ m}$, the nearest valid boundary is assigned; for the overlap, Interval 6 (`silt`) takes precedence at 28.5 m and Interval 7 (`mud`) takes precedence at 29.5 m.
+5. **Stratigraphic Resolution**:
+   For raw data reconciliation, the 1.0 m missing interval at 18.0 - 19.0 m is resolved as `c_sand` (channel sandstone), and the 2.0 m overlap interval at 28.0 - 30.0 m is resolved as `p_sand` (planar / splay sandstone).
 
 ### Litholog 11 Anomaly
 
@@ -138,6 +140,8 @@ Text extraction and vector graphic parsing of [lolo/litholog12.pdf](file:///d:/L
    - There is a 1.0 m unrecorded vertical interval between 59.0 m and 60.0 m.
 2. **Net Thickness Effect:**
    The represented span is $78.0 - 0.0 = 78.0\text{ m}$. The sum of interval thicknesses is $77.0\text{ m}$. The net difference is $+1.0\text{ m}$.
+3. **Stratigraphic Resolution**:
+   For raw data reconciliation, the 1.0 m unmapped gap at 59.0 - 60.0 m is resolved as `carbon_mud` (carbonaceous mudstone).
 
 ---
 
@@ -161,7 +165,7 @@ Cross-referencing the twelve lithologs against [data/provenance_manifest.json](f
 ### Coordinates Summary
 
 - **Litholog 1:** Permanently lacking coordinates. No spatial coordinates exist in any repository file or presentation slide. It cannot participate in spatial modeling, but is valid for vertical-only descriptive and Markov succession modeling.
-- **Lithologs 2 through 11:** Coordinates are recorded in [lolo/Location_coordinates_lithologs.xlsx](file:///d:/Lithology-reconstruction-using-XGB/lolo/Location_coordinates_lithologs.xlsx). However, as confirmed in Sprint A, the map projection, EPSG code, horizontal datum, and distance units (meters vs international feet) remain unverified.
+- **Lithologs 2 through 11:** Coordinates are recorded in [lolo/Location_coordinates_lithologs.xlsx](file:///d:/Lithology-reconstruction-using-XGB/lolo/Location_coordinates_lithologs.xlsx). Distance units are officially assumed as international meters, while map projection, EPSG code, and horizontal datum remain unverified.
 - **Litholog 12:** Located approximately on the presentation map slide ([lolo/litholog_locations.pptx](file:///d:/Lithology-reconstruction-using-XGB/lolo/litholog_locations.pptx)) northeast of the outcrop transect, but has no tabular entry in `Location_coordinates_lithologs.xlsx`.
 - **Synthetic Coordinates Warning:** The field `strike_pos_m = (num - 1) * 100.0` in `data/loader.py` is an artificial placeholder. It replaces real non-monotonic spatial geometry with false uniform 100 m spacing.
 

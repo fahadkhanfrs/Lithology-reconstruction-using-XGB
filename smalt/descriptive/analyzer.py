@@ -388,7 +388,8 @@ class LithologInspector:
         Discretizes a litholog into 1.0 m grid bins using midpoint interval evaluation.
 
         For each meter interval [d, d+1), evaluates the midpoint depth z = d + 0.5 m
-        against the continuous stratigraphy.
+        against the continuous stratigraphy. Tracks whether each cell is directly
+        source-observed, assigned across an unrecorded gap, or resolved from overlapping intervals.
         """
         df = self.load_raw_litholog(litholog_id)
         min_depth = int(np.floor(df["Top"].min()))
@@ -399,15 +400,27 @@ class LithologInspector:
             z_mid = d + 0.5
             # Find interval covering z_mid
             covering = df[(df["Top"] <= z_mid) & (df["Bottom"] > z_mid)]
-            if len(covering) > 0:
+            if len(covering) == 1:
                 facies = covering.iloc[0]["Facies"]
+                is_gap_filled = False
+                is_overlap_resolved = False
+                is_source_observed = True
+            elif len(covering) > 1:
+                # Overlap resolved by taking first valid covering interval
+                facies = covering.iloc[0]["Facies"]
+                is_gap_filled = False
+                is_overlap_resolved = True
+                is_source_observed = False
             else:
-                # If z_mid falls in an unrecorded gap, check nearest
+                # If z_mid falls in an unrecorded gap, nearest assignment
                 covering_lo = df[df["Top"] <= z_mid]
                 if len(covering_lo) > 0:
                     facies = covering_lo.iloc[-1]["Facies"]
                 else:
                     facies = df.iloc[0]["Facies"]
+                is_gap_filled = True
+                is_overlap_resolved = False
+                is_source_observed = False
 
             records.append({
                 "litholog_id": litholog_id,
@@ -415,9 +428,76 @@ class LithologInspector:
                 "depth_mid_m": z_mid,
                 "facies": facies,
                 "facies_code": CANONICAL_FACIES_SCHEMA[facies]["code"],
+                "is_source_observed": is_source_observed,
+                "is_gap_filled": is_gap_filled,
+                "is_overlap_resolved": is_overlap_resolved,
             })
 
         return pd.DataFrame(records)
+
+    def build_embedded_bed_sequence(self, litholog_id: str) -> pd.DataFrame:
+        """
+        Constructs the sequence of consecutive distinct facies beds from the continuous
+        stratigraphy, sorted in upward stratigraphic order (decreasing depth / bottom to top).
+
+        Consecutive raw intervals of the same facies are merged into a single distinct bed
+        to ensure the embedded sequence contains only genuine boundary-crossing transitions.
+
+        Tracks whether transitions between beds cross unrecorded gaps or overlaps.
+        """
+        df = self.load_raw_litholog(litholog_id)
+        # Sort descending by Bottom depth so iteration proceeds upward stratigraphically:
+        # deepest bed (base of well) -> shallowest bed (top of well)
+        df_sorted = df.sort_values(by="Bottom", ascending=False).reset_index(drop=True)
+
+        beds: List[Dict[str, Any]] = []
+        for _, r in df_sorted.iterrows():
+            top = float(r["Top"])
+            bot = float(r["Bottom"])
+            fac = str(r["Facies"])
+            code = int(CANONICAL_FACIES_SCHEMA[fac]["code"])
+
+            if not beds:
+                beds.append({
+                    "bed_idx": 0,
+                    "facies": fac,
+                    "facies_code": code,
+                    "top_m": top,
+                    "bottom_m": bot,
+                    "thickness_m": round(bot - top, 3),
+                    "intervals_merged": 1,
+                    "crosses_gap": False,
+                    "crosses_overlap": False,
+                })
+            else:
+                prev = beds[-1]
+                prev_top = float(prev["top_m"])
+                gap = prev_top - bot       # > 0 means unobserved interval between beds
+                overlap = bot - prev_top   # > 0 means intervals overlap
+
+                if fac == prev["facies"]:
+                    # Consecutive intervals of identical facies: merge into single distinct bed
+                    prev["top_m"] = min(prev["top_m"], top)
+                    prev["thickness_m"] = round(prev["thickness_m"] + (bot - top), 3)
+                    prev["intervals_merged"] += 1
+                    if gap > 1e-4:
+                        prev["crosses_gap"] = True
+                else:
+                    crosses_gap = bool(gap > 1e-4)
+                    crosses_overlap = bool(overlap > 1e-4)
+                    beds.append({
+                        "bed_idx": len(beds),
+                        "facies": fac,
+                        "facies_code": code,
+                        "top_m": top,
+                        "bottom_m": bot,
+                        "thickness_m": round(bot - top, 3),
+                        "intervals_merged": 1,
+                        "crosses_gap": crosses_gap,
+                        "crosses_overlap": crosses_overlap,
+                    })
+
+        return pd.DataFrame(beds)
 
     def compare_continuous_vs_discretized(self, litholog_id: str) -> Dict[str, Any]:
         """Quantifies the difference between continuous interval and 1m discretized facies proportions."""
@@ -448,6 +528,37 @@ class LithologInspector:
             "delta_ntg_pure": round(disc_props.get("sand", 0.0) - insp["ntg_pure"], 4),
         }
 
+    def compute_initial_state_distribution(
+        self,
+        litholog_ids: List[str],
+        embedded: bool = False,
+        use_discretized: bool = True,
+        smoothing_alpha: float = 0.1,
+    ) -> np.ndarray:
+        """
+        Computes the empirical basal (initial state) distribution across a set of training lithologs
+        in upward stratigraphic order (the facies at the base / deepest point of each well),
+        regularized with Laplace smoothing.
+        """
+        K = len(CANONICAL_FACIES_SCHEMA)
+        counts = np.zeros(K, dtype=np.float64)
+        for lid in litholog_ids:
+            if embedded and not use_discretized:
+                beds_df = self.build_embedded_bed_sequence(lid)
+                if len(beds_df) > 0:
+                    base_code = int(beds_df.iloc[0]["facies_code"])
+                    counts[base_code] += 1.0
+            else:
+                disc_df = self.discretize_litholog_1m(lid)
+                if len(disc_df) > 0:
+                    sorted_disc = disc_df.sort_values(by="depth_m", ascending=False)
+                    base_code = int(sorted_disc.iloc[0]["facies_code"])
+                    counts[base_code] += 1.0
+
+        total_wells = len(litholog_ids)
+        p_base = (counts + smoothing_alpha) / (total_wells + K * smoothing_alpha)
+        return p_base / p_base.sum()
+
     def compute_vertical_transitions(
         self,
         litholog_ids: List[str],
@@ -463,7 +574,7 @@ class LithologInspector:
         Args:
             litholog_ids: List of litholog IDs to fit.
             embedded: If True, suppresses self-transitions (P_ii = 0).
-            use_discretized: If True, uses 1m discretized grids; if False, uses continuous beds.
+            use_discretized: If True, uses 1m discretized grids; if False, uses distinct continuous beds.
             smoothing_alpha: Additive Laplace smoothing prior (default 0.1).
 
         Returns:
@@ -480,19 +591,29 @@ class LithologInspector:
                 # Sort descending by depth to step upward stratigraphically
                 df_sorted = df.sort_values(by="depth_m", ascending=False)
                 codes = df_sorted["facies_code"].to_numpy()
-            else:
-                df = self.load_raw_litholog(lid)
-                # Sort descending by Bottom depth to step upward stratigraphically
-                df_sorted = df.sort_values(by="Bottom", ascending=False)
-                codes = df_sorted["Facies"].map(lambda f: CANONICAL_FACIES_SCHEMA[f]["code"]).to_numpy()
-
-            if len(codes) < 2:
-                continue
-
-            for u, v in zip(codes[:-1], codes[1:]):
-                if embedded and u == v:
+                if len(codes) < 2:
                     continue
-                N[u, v] += 1.0
+                for u, v in zip(codes[:-1], codes[1:]):
+                    if embedded and u == v:
+                        continue
+                    N[u, v] += 1.0
+            else:
+                if embedded:
+                    # Distinct bed sequence: consecutive identical facies already merged
+                    beds_df = self.build_embedded_bed_sequence(lid)
+                    codes = beds_df["facies_code"].to_numpy()
+                    if len(codes) < 2:
+                        continue
+                    for u, v in zip(codes[:-1], codes[1:]):
+                        N[u, v] += 1.0
+                else:
+                    df = self.load_raw_litholog(lid)
+                    df_sorted = df.sort_values(by="Bottom", ascending=False)
+                    codes = df_sorted["Facies"].map(lambda f: CANONICAL_FACIES_SCHEMA[f]["code"]).to_numpy()
+                    if len(codes) < 2:
+                        continue
+                    for u, v in zip(codes[:-1], codes[1:]):
+                        N[u, v] += 1.0
 
         # Construct transition probability matrix P
         P = np.zeros((K, K), dtype=np.float64)

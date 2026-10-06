@@ -1,0 +1,25 @@
+experiment_type,target_log_id,evaluated_transitions,gap_crossing_transitions,mean_transition_log_score_standard,transition_perplexity_standard,mean_transition_log_score_gap_masked,transition_perplexity_gap_masked,delta_mean_log_score,delta_perplexity,interpretation
+LOLO_vertical_all12_regular_1m,litholog1,92,0,-0.7094,2.0327,-0.7094,2.0327,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog2,92,0,-0.6282,1.8742,-0.6282,1.8742,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog3,92,0,-0.389,1.4755,-0.389,1.4755,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog4,83,0,-0.6467,1.9092,-0.6467,1.9092,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog5,84,0,-0.67,1.9543,-0.67,1.9543,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog6,81,0,-0.7465,2.1097,-0.7465,2.1097,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog7,79,0,-0.7122,2.0386,-0.7122,2.0386,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog8,78,0,-0.907,2.4768,-0.907,2.4768,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog9,77,2,-0.755,2.1275,-0.7717,2.1635,-0.0167,0.036,Contains 2 gap-crossing transition(s). Masking shifts log score by -0.0167 and perplexity by +0.0360.
+LOLO_vertical_all12_regular_1m,litholog10,76,0,-0.7836,2.1893,-0.7836,2.1893,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog11,77,2,-0.6909,1.9954,-0.6701,1.9544,0.0208,-0.041,Contains 2 gap-crossing transition(s). Masking shifts log score by +0.0208 and perplexity by -0.0410.
+LOLO_vertical_all12_regular_1m,litholog12,110,0,-1.4011,4.0597,-1.4011,4.0597,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog1,19,0,-1.255,3.5079,-1.255,3.5079,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog2,14,0,-1.866,6.4624,-1.866,6.4624,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog3,9,0,-1.0748,2.9295,-1.0748,2.9295,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog4,17,0,-1.1445,3.141,-1.1445,3.141,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog5,17,0,-1.2464,3.4779,-1.2464,3.4779,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog6,15,0,-1.4453,4.2431,-1.4453,4.2431,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog7,14,0,-1.3472,3.8466,-1.3472,3.8466,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog8,25,0,-1.0514,2.8617,-1.0514,2.8617,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog9,16,1,-1.2715,3.5661,-1.2521,3.4977,0.0194,-0.0684,Contains 1 gap-crossing transition(s). Masking shifts log score by +0.0194 and perplexity by -0.0684.
+LOLO_vertical_all12_embedded_distinct_beds,litholog10,18,0,-1.0638,2.8975,-1.0638,2.8975,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog11,15,1,-1.2947,3.6501,-1.2788,3.5923,0.0159,-0.0578,Contains 1 gap-crossing transition(s). Masking shifts log score by +0.0159 and perplexity by -0.0578.
+LOLO_vertical_all12_embedded_distinct_beds,litholog12,62,0,-1.5245,4.5929,-1.5245,4.5929,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.

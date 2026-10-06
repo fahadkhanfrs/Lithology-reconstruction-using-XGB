@@ -3,6 +3,8 @@
 ## Phase Status Overview
 - **Phase 0 (Data Ingestion & Quality Control)**: COMPLETE / VERIFIED (11/11 lithologs loaded cleanly, 920 observations, 11/11 unit tests passing, provenance manifest registered, docs/notes/phase0_schema.md published)
 - **Phase 1 (1D Vertical Markov Succession Analysis)**: VERIFIED (Full 11-log dataset fitted [920 observations], provenance sensitivity analysis documented, 11/11 unit tests passing)
+- **Sprint C (Descriptive Lithology & Leakage-Free 1D Markov Baseline)**: COMPLETE / VERIFIED (All 12 lithologs audited, 12 unit tests passing, publication figures generated in audit_sprint_c/)
+- **Sprint D (Reproducible 1D Markov Validation & Summary Reconciliation)**: COMPLETE / VERIFIED (Mathematical scoring formalized with separate initial-state vs transition metrics, embedded bed sequence integrity enforced, 10/10 new unit tests passing [44/44 repository total], summary statistics reconciled directly from raw CSVs, deliverables in audit_sprint_d/)
 - **Phase 2 (2D Cross-Sectional Geostatistical Modeling)**: READY FOR SPRINT (Validated solely against Sahoo et al. [2016] geological priors [W/T = 35, mean thickness 5.8m, NTG 17%-46%] and synthetic realizations; independent of litholog subset)
 
 ---
@@ -164,6 +166,54 @@ Overbank Mudstone      -0.158              0.030                  -0.061      0.
 
 ---
 
-## 6. Recommended Next Action
+## 6. Sprint D Verified Metrics & Summary Reconciliation
 
-1. **Sprint Phase 2**: Implement `smalt/geostat/object_sim.py` according to Sahoo et al. (2016) geometrical priors.
+### 6.1 Reconciled Sandstone Bed Statistics (Full 12 Lithologs)
+- **Raw Sandstone Intervals**: Exactly 72 intervals across all 12 lithologs (cumulative thickness 444.70 m).
+  - The Sprint C narrative count of 73 was an unverified typographical error; the source CSVs strictly sum to 72.
+  - Min: 1.40 m, Median: 5.05 m, Mean: 6.18 m, Max: 17.00 m (Litholog 2, 40-57 m).
+  - Sample standard deviation (ddof=1): 3.36 m; population standard deviation (ddof=0): 3.33 m (rounded to 3.34 m).
+- **Merged Sandstone Lithosomes (Distinct Continuous Bodies)**: Exactly 53 distinct bodies (cumulative thickness 444.70 m).
+  - Min: 1.40 m, Median: 6.00 m, Mean: 8.39 m.
+  - Max: 32.00 m (Litholog 3 amalgamated channel-sand package at 61-93 m).
+  - Sample standard deviation: 6.54 m.
+
+### 6.2 Reconciled Stratigraphic Group Statistics
+- **Upstream (L2-L8, L10)**:
+  - Total thickness: 673.0 m (corrected from 664.0 m in Sprint C Table 7.1, which had transcribed a hardcoded plot label string).
+  - Pure sandstone thickness: 287.0 m; pure sandstone N/G: 42.64% (0.4264).
+- **Downstream Outcrop (L9, L11)**:
+  - Total thickness: 156.0 m; pure sandstone thickness: 65.0 m; pure sandstone N/G: 41.67% (0.4167). Exact match.
+- **Downstream Composite (L9, L11, L12)**:
+  - Total thickness: 267.0 m; pure sandstone thickness: 122.70 m; pure sandstone N/G: 45.96% (0.4596) (corrected from 47.19%).
+- **All 12 Lithologs (Full Study)**:
+  - Total thickness: 1033.0 m; pure sandstone thickness: 444.70 m; pure sandstone N/G: 43.05% (0.4305). Exact match.
+
+### 6.3 Leakage-Free Leave-One-Litholog-Out (LOLO) Cross-Validation
+- **Regular 1D Chain (1 m Discretized Grid)**:
+  - Average perplexity (All 12 logs): **2.1869** (Outcrop L1-L11 average: **2.0166**; Core L12: **4.0597**).
+  - Initial-state score ($\ln P_{\text{base}}(s_1)$) kept strictly separate from transition perplexity.
+- **Embedded 1D Chain (Distinct Bed Sequence, P_ii = 0)**:
+  - Average bed-transition perplexity (All 12 logs): **3.7647** (Outcrop L1-L11 average: **3.6894**; Core L12: **4.5929**).
+  - Non-equivalence principle: Regular perplexity (~2.19, high within-bed diagonal persistence) and embedded perplexity (~3.76, 4-way branching among distinct alternative facies) must not be compared as the same task.
+- **Gap Sensitivity Analysis**:
+  - Only L9 (18-19 m gap) and L11 (59-60 m gap) contain unrecorded gaps (2 transition steps in regular; 1 in embedded).
+  - Masking gap-crossing transitions shifts perplexity by less than +/- 0.07, confirming negligible impact on conclusions.
+
+---
+
+## 7. Remaining Blockers & Next Actions
+
+### Resolved in Sprint D:
+- Mathematical separation of basal state likelihood and step-by-step transition perplexity.
+- Elimination of artificial self-transitions in embedded chains via distinct bed sequence formulation.
+- Full reconciliation of sandstone thickness metrics and group net-to-gross statistics.
+- 44/44 unit and regression tests passing.
+
+### Remaining Blockers for Spatial Modeling (Phase 2 & Beyond):
+1. **Litholog 1 Coordinate Absence**: L1 lacks physical X, Y coordinates and elevation datum. It is valid for 1D vertical analysis but remains strictly prohibited from spatial modeling and spatial cross-validation.
+2. **Stratigraphic Datum Unification**: The 11 outcrop lithologs and L12 core lack an explicit, surveyed stratigraphic marker (e.g., top of lower coal or flooding surface) to align their vertical origins into a unified coordinate frame ($Z_{\text{rel}}$).
+3. **Lateral Correlation Lengths**: 1D vertical Markov models provide vertical transition probabilities only; horizontal transition lengths and channel width-to-thickness priors ($W/T = 35$) must come from geological literature (Sahoo et al., 2016) or lateral spatial variography once datums are defined.
+
+### Recommended Next Action:
+1. Proceed with Phase 2 implementation (`smalt/geostat/object_sim.py`) conditioned on Sahoo et al. (2016) geometrical priors, strictly unconditioned on spatial coordinates until datum unification is resolved.

@@ -391,7 +391,7 @@ The table below summarizes all audit findings, prioritized by severity.
 | **FIND-07** | Stratigraphic Datuming | **High** | Verified | `data/raw_lithologs/` & [smalt/data/loader.py](file:///d:/Lithology-reconstruction-using-XGB/smalt/data/loader.py) | All logs start at depth 0.0 at modern erosional cliff tops; no common stratigraphic datum is applied. | Obtain datum elevation offsets from Prof. Sahoo. Flatten logs against Star Point Sandstone top before spatial correlation. | **YES** |
 | **FIND-08** | Data Provenance | **Medium** | Verified | [data/processed/lithologs_unified.csv](file:///d:/Lithology-reconstruction-using-XGB/data/processed/lithologs_unified.csv) | Processed CSV and Parquet omit provenance metadata columns, separating observations from their origin. | Add `provenance_category` and `independent_validation` columns to processed schema in future updates. | No |
 | **FIND-09** | Code Quality / Bug | **Medium** | Verified | [src/litholog_model.py:L32-37](file:///d:/Lithology-reconstruction-using-XGB/src/litholog_model.py#L32-L37) (`encode_facies`) | `encode_facies` omits `"silt"`, causing all siltstone rows to map to `NaN` and be dropped by `dropna()`. | Retire legacy `src/litholog_model.py` or isolate it as an archived prototype. | No |
-| **FIND-10** | Data Provenance & Scope | **Medium** | Verified | [lolo/litholog12.pdf](file:///d:/Lithology-reconstruction-using-XGB/lolo/litholog12.pdf) (EM-137C core) | Litholog 12 is a 242m subsurface drill core, not an outcrop section, and exists only as a vector PDF graphic without tabular CSV data. | Digitize EM-137C core into standardized CSV if required; isolate Blackhawk interval depth window. | **YES** (for L12 inclusion) |
+| **FIND-10** | Data Provenance & Scope | **Medium** | Verified (Resolved) | [data/raw_lithologs/litholog12.csv](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog12.csv) | Litholog 12 is a subsurface drill core (EM-137C); Blackhawk interval (0-111m) has now been digitized into standardized CSV. | Ingested into 1D descriptive and Markov workflows; deeper core (111-242m) preserved as regional strata. | **RESOLVED** (for 0-111m) |
 
 ---
 
@@ -403,7 +403,7 @@ To transition from audit to scientifically valid implementation, the following t
 [Sprint C1: Metadata Resolution]
   |-- Obtain Coordinate CRS & Units from Prof. Sahoo
   |-- Obtain Star Point Sandstone Datum Elevations per Well
-  |-- Digitize Litholog 12 (EM-137C Core PDF) into Tabular CSV
+  |-- Digitize Litholog 12 (EM-137C Core PDF) into Tabular CSV [COMPLETED: data/raw_lithologs/litholog12.csv]
   v
 [Sprint C2: 1D Markov LOLO Baseline]
   |-- Implement Leave-One-Litholog-Out Cross-Validation Harness
@@ -421,8 +421,8 @@ To transition from audit to scientifically valid implementation, the following t
 
 1. **Priority 1: Resolve Coordinate System and Stratigraphic Datum (Data/Metadata).**  
    Confirm EPSG/projection for `Location_coordinates_lithologs.xlsx` and datum elevation offsets for all sections. Without this, no spatial model can be trained legitimately.
-2. **Priority 2: Digitize Litholog 12 (EM-137C Core).**  
-   Convert `lolo/litholog12.pdf` into a standardized CSV and define the exact depth window corresponding to the outcrop Blackhawk interval.
+2. **Priority 2: Digitize Litholog 12 (EM-137C Core) [RESOLVED - COMPLETED].**  
+   Tabular CSV digitized and verified in [`data/raw_lithologs/litholog12.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog12.csv) (63 contiguous beds, 0-111m Blackhawk interval).
 3. **Priority 3: Implement 1D Markov LOLO Cross-Validation Benchmark.**  
    Construct a clean validation runner that fits `smalt/geostat/markov.py` on $N-1$ lithologs and evaluates sequence log-likelihood and stationary distribution divergence on the withheld log.
 4. **Priority 4: Implement Leakage-Free Spatial ML Baseline (`ml/xgboost_model.py`).**  
@@ -432,17 +432,26 @@ To transition from audit to scientifically valid implementation, the following t
 
 ---
 
-## 13. Unresolved Questions for Professor Sahoo
+## 13. Unresolved Questions and Actionable Status
 
-1. **Coordinate Reference System (CRS) & Units:**  
-   What map projection, datum, and EPSG code govern the coordinates in `Location_coordinates_lithologs.xlsx`? Are the coordinate values meters or international feet?
-2. **Litholog 1 Coordinates:**  
-   Can real coordinates or an approximate outcrop position be provided for Litholog 1, or should L1 remain permanently excluded from spatial 2D/3D modeling?
-3. **Stratigraphic Datuming:**  
+### 13.1 Resolved Project Decisions
+1. **Coordinate Units:**  
+   Coordinate units are officially assumed as **international meters** (consistent with the $\sim 5\text{ km}$ transect length between L2 and L11).
+2. **Litholog 1 Spatial Coordinates:**  
+   Litholog 1 is permanently excluded from 2D/3D spatial modeling; no spatial coordinates are required or sought. L1 is validated for 1D vertical successions.
+3. **Litholog 12 Tabular CSV:**  
+   Tabular CSV is already digitized and verified at [`data/raw_lithologs/litholog12.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog12.csv).
+4. **Lithologs 9 and 11 Discontinuities:**  
+   Resolved: L9 18-19m taken as `c_sand`; L9 28-30m overlap taken as `p_sand`; L11 59-60m gap taken as `carbon_mud`.
+
+### 13.2 Remaining Unresolved Questions for Professor Sahoo
+1. **Coordinate Reference System (CRS) & Projection:**  
+   What map projection, datum, and EPSG code govern the coordinates in `Location_coordinates_lithologs.xlsx`?
+2. **Stratigraphic Datuming:**  
    Can elevation measurements or stratigraphic offsets for the top of the Star Point Sandstone be provided for each measured section to enable horizontal datum flattening?
-4. **Role of Litholog 12 (EM-137C Drill Core):**  
-   Is Litholog 12 intended to serve as a blind regional subsurface test well, or should it be digitized and incorporated into the downstream training group?
-5. **Gamma Ray Measurement Availability:**  
+3. **Role of Litholog 12 Lower Interval (EM-137C Core):**  
+   Does the lower 111-242 m core interval in `litholog12.pdf` represent underlying regional non-Blackhawk strata (Star Point Sandstone / Mancos Shale), or is it pending digitization?
+4. **Gamma Ray Measurement Availability:**  
    Is there any measured spectral or total gamma-ray log from the EM-137C core or outcrop scintillometer traverses? If none exists, we recommend permanently retiring Gamma Ray from the predictive feature set.
 
 ---

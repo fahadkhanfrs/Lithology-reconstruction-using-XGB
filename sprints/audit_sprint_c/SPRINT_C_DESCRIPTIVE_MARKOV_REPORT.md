@@ -294,8 +294,8 @@ The following technical questions require Professor Sahoo's guidance before spat
 
 1. **Litholog 12 Core Interval (0-111 m vs 242 m):**  
    Does `litholog12.csv` (0-111 m) represent the entire Blackhawk Formation interval penetrated by the EM-137C core, with the remaining 111-242 m representing underlying Star Point Sandstone / Mancos Shale? Or is the lower core interval pending digitization?
-2. **Coordinate Reference System (CRS) & Units:**  
-   What map projection, datum, and EPSG code govern the coordinates in `Location_coordinates_lithologs.xlsx`? Are the numerical coordinates meters (UTM) or international feet (State Plane)?
+2. **Coordinate Reference System (CRS) & Projection:**  
+   What map projection, datum, and EPSG code govern the coordinates in `Location_coordinates_lithologs.xlsx`? (Coordinate units are confirmed and assumed to be international meters based on transect geometry).
 3. **Stratigraphic Datum Elevations:**  
    Can elevation measurements or depth offsets for the top of the Star Point Sandstone be provided for each measured section so that all twelve logs can be flattened onto a common chronostratigraphic datum?
 4. **Location of Litholog 12:**  

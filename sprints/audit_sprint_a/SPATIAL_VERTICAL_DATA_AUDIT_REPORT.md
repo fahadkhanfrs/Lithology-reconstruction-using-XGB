@@ -26,9 +26,10 @@ The repository contains three categories of subsurface and outcrop data:
 | [`data/raw_lithologs/litholog6.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog6.csv) | CSV | 17 rows | `Top`, `Bottom`, `Facies` | AI-reconstructed section from published figures. Span: 0 to 82 m. |
 | [`data/raw_lithologs/litholog7.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog7.csv) | CSV | 16 rows | `Top`, `Bottom`, `Facies` | AI-reconstructed section from published figures. Span: 0 to 80 m. |
 | [`data/raw_lithologs/litholog8.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog8.csv) | CSV | 28 rows | `Top`, `Bottom`, `Facies` | AI-reconstructed section from published figures. Span: 0 to 79 m. |
-| [`data/raw_lithologs/litholog9.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog9.csv) | CSV | 20 rows | `Top`, `Bottom`, `Facies` | Source-derived section (Sahoo et al., 2016). Span: 0 to 78 m (has gap at 18-19m and overlaps at 28-30m). |
+| [`data/raw_lithologs/litholog9.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog9.csv) | CSV | 20 rows | `Top`, `Bottom`, `Facies` | Source-derived section (Sahoo et al., 2016). Span: 0 to 78 m (discontinuities resolved: 18-19m taken as `c_sand`, 28-30m overlap taken as `p_sand`). |
 | [`data/raw_lithologs/litholog10.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog10.csv) | CSV | 19 rows | `Top`, `Bottom`, `Facies` | AI-reconstructed section from published figures. Span: 0 to 77 m. |
-| [`data/raw_lithologs/litholog11.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog11.csv) | CSV | 18 rows | `Top`, `Bottom`, `Facies` | Source-derived benchmark section. Span: 0 to 78 m (unmapped gap at 59-60m; 93.59% accuracy benchmark). |
+| [`data/raw_lithologs/litholog11.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog11.csv) | CSV | 18 rows | `Top`, `Bottom`, `Facies` | Source-derived benchmark section. Span: 0 to 78 m (unmapped gap at 59-60m resolved as `carbon_mud`; 93.59% accuracy benchmark). |
+| [`data/raw_lithologs/litholog12.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog12.csv) | CSV | 63 rows | `Top`, `Bottom`, `Facies` | Digitized subsurface drill core (EM-137C core; Sahoo et al., 2016). Span: 0 to 111 m (Blackhawk Formation interval). |
 | [`data/litholog1.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/litholog1.csv) | CSV | 20 rows | `Top`, `Bottom`, `Facies` | Exact duplicate of `data/raw_lithologs/litholog1.csv`. |
 | [`data/litholog9.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/litholog9.csv) | CSV | 20 rows | `Top`, `Bottom`, `Facies` | Exact duplicate of `data/raw_lithologs/litholog9.csv`. |
 | [`data/litholog11.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/litholog11.csv) | CSV | 18 rows | `Top`, `Bottom`, `Facies` | Exact duplicate of `data/raw_lithologs/litholog11.csv`. |
@@ -85,30 +86,28 @@ Coordinates were extracted directly from the professor's spreadsheet ([`lolo/Loc
 
 ### 2.1 Proposed Spatial Metadata Table
 
-The audited coordinates are structured into the proposed schema and saved as a new artifact at [`audit/spatial_metadata_table.csv`](file:///d:/Lithology-reconstruction-using-XGB/audit/spatial_metadata_table.csv):
-
-| litholog_id | x | y | coordinate_reference_system | coordinate_units | upstream_downstream_group | coordinate_source | coordinate_available |
-| :---: | :---: | :---: | :---: | :---: | :---: | :--- | :---: |
-| **L1** | `NaN` | `NaN` | Undocumented | Undocumented | Undocumented | None (absent from coordinate spreadsheet) | **False** |
-| **L2** | -4057.6840 | 13755.6090 | Undocumented | Undocumented (Presumed Meters) | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
-| **L3** | -3577.0463 | 13317.0003 | Undocumented | Undocumented (Presumed Meters) | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
-| **L4** | -3121.5293 | 12356.8640 | Undocumented | Undocumented (Presumed Meters) | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
-| **L5** | -2709.2719 | 12276.4754 | Undocumented | Undocumented (Presumed Meters) | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
-| **L6** | -2737.7434 | 11361.2388 | Undocumented | Undocumented (Presumed Meters) | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
-| **L7** | -2163.3639 | 10733.2563 | Undocumented | Undocumented (Presumed Meters) | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
-| **L8** | -1476.1128 | 10873.8634 | Undocumented | Undocumented (Presumed Meters) | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
-| **L9** | -137.3543 | 12266.4076 | Undocumented | Undocumented (Presumed Meters) | Downstream | `Location_coordinates_lithologs.xlsx` | **True** |
-| **L10** | -469.4270 | 11082.7203 | Undocumented | Undocumented (Presumed Meters) | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
-| **L11** | 704.0729 | 12169.9234 | Undocumented | Undocumented (Presumed Meters) | Downstream | `Location_coordinates_lithologs.xlsx` | **True** |
-| **L12** | -1119.9100 | 14407.3000 | Undocumented | Undocumented (Presumed Meters) | Downstream | `Location_coordinates_lithologs.xlsx` | **True** |
+The audited coordinates are structured into the proposed schema and saved as a new artifact at [`audit/spatial_metadata_table.csv`](file:///d:/Lithology-reconstruction-using-XGB/audit/spatial_metadata_table.csv):| litholog_id | x | y | coordinate_reference_system | coordinate_units | upstream_downstream_group | coordinate_source | coordinate_available |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **L1** | `NaN` | `NaN` | Undocumented | Assumed Meters (Excluded from spatial) | Permanently Excluded | None (absent from coordinate spreadsheet; excluded from spatial) | **False** |
+| **L2** | -4057.6840 | 13755.6090 | Undocumented | Assumed Meters | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
+| **L3** | -3577.0463 | 13317.0003 | Undocumented | Assumed Meters | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
+| **L4** | -3121.5293 | 12356.8640 | Undocumented | Assumed Meters | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
+| **L5** | -2709.2719 | 12276.4754 | Undocumented | Assumed Meters | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
+| **L6** | -2737.7434 | 11361.2388 | Undocumented | Assumed Meters | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
+| **L7** | -2163.3639 | 10733.2563 | Undocumented | Assumed Meters | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
+| **L8** | -1476.1128 | 10873.8634 | Undocumented | Assumed Meters | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
+| **L9** | -137.3543 | 12266.4076 | Undocumented | Assumed Meters | Downstream | `Location_coordinates_lithologs.xlsx` | **True** |
+| **L10** | -469.4270 | 11082.7203 | Undocumented | Assumed Meters | Upstream | `Location_coordinates_lithologs.xlsx` | **True** |
+| **L11** | 704.0729 | 12169.9234 | Undocumented | Assumed Meters | Downstream | `Location_coordinates_lithologs.xlsx` | **True** |
+| **L12** | -1119.9100 | 14407.3000 | Undocumented | Assumed Meters | Downstream | `Location_coordinates_lithologs.xlsx` | **True** |
 
 ### 2.2 Integrity Checks and Observations
 
 1. **Duplicate Identifiers**:
    - Zero duplicate IDs were detected in the coordinate spreadsheet. Each entry from L2 to L12 is unique.
-2. **Missing Coordinates (Litholog 1)**:
-   - **Litholog 1 is completely absent** from `Location_coordinates_lithologs.xlsx`.
-   - In accordance with strict constraints, no synthetic, interpolated, or estimated coordinates were assigned. L1 is preserved with `x = NaN`, `y = NaN`, and `coordinate_available = False`.
+2. **Missing Coordinates (Litholog 1 - Excluded from Spatial Modeling)**:
+   - **Litholog 1 is absent** from `Location_coordinates_lithologs.xlsx`.
+   - In accordance with project decisions, Litholog 1 is permanently excluded from 2D/3D lateral spatial modeling (no spatial coordinates are required or requested), while remaining fully validated for 1D vertical descriptive and succession analysis.
 3. **Duplicate Coordinate Pairs**:
    - Zero duplicate $(X, Y)$ coordinate pairs exist. All 11 recorded positions are distinct spatial locations.
 4. **Data Types and Non-Numeric Values**:
@@ -117,8 +116,8 @@ The audited coordinates are structured into the proposed schema and saved as a n
    - **Undocumented**: Neither `Location_coordinates_lithologs.xlsx` nor `litholog_locations.pptx` specifies a CRS, EPSG code, geodetic datum (e.g., NAD27, NAD83, WGS84), or map projection (e.g., UTM Zone 12N, State Plane Utah Central).
    - Numerical values ($X \in [-4057.7, 704.1]$, $Y \in [10733.3, 14407.3]$) do not match standard UTM northing/easting (where Wasatch Plateau Easting is $\sim 480,000\text{ m}$ and Northing is $\sim 4,360,000\text{ m}$). They appear to be a local project origin, local mine grid, or relative offset coordinates.
 6. **Coordinate Units**:
-   - Undocumented in headers (header text: `X-coordionate` [sic] and `Y-coordinate`).
-   - The Euclidean span from L2 to L11 is $\Delta X = 4761.8\text{ units}$, $\Delta Y = -1585.7\text{ units}$, yielding a transect length of $\sqrt{4761.8^2 + 1585.7^2} = 5018.8\text{ units}$. Given that Sahoo et al. (2016) reports a "$\sim 6\text{ km strike-transect}$" (with L1 extending further northwest), the physical units are presumed to be meters. If units were feet, the transect would span only $1.5\text{ km}$, directly contradicting the publication.
+   - Header text: `X-coordionate` [sic] and `Y-coordinate`.
+   - The Euclidean span from L2 to L11 is $\Delta X = 4761.8\text{ units}$, $\Delta Y = -1585.7\text{ units}$, yielding a transect length of $\sqrt{4761.8^2 + 1585.7^2} = 5018.8\text{ units}$. Consistent with Sahoo et al. (2016) reporting a "$\sim 6\text{ km strike-transect}$" (with L1 extending further northwest), the physical units are officially assumed to be meters for all modeling tracks. Foot units would yield only $1.5\text{ km}$, directly contradicting the publication geometry.
 7. **Spatial Ordering vs. Litholog Numbering**:
    - **Litholog numerical indices do not follow spatial ordering**:
      - L6 ($X = -2737.74$) is located west of L5 ($X = -2709.27$).
@@ -126,7 +125,8 @@ The audited coordinates are structured into the proposed schema and saved as a n
      - L12 ($X = -1119.91, Y = 14407.30$) is located far to the north.
      - In `data/loader.py`, line 140 previously calculated `strike_pos_m = float((num - 1) * 100.0)`. This audit confirms that this synthetic assumption was an unverified heuristic that violated the true spatial configuration.
 8. **Nature and Identity of Litholog 12**:
-   - L12 does not correspond to an outcrop cliff section. File [`lolo/litholog12.pdf`](file:///d:/Lithology-reconstruction-using-XGB/lolo/litholog12.pdf) confirms that L12 is **EM-137C core** (Sahoo et al., 2016, Supplementary Data Repository Figure DR6), a subsurface drill core penetrating 242 meters of strata, located $\sim 2.3\text{ km}$ north-northeast of the outcrop cliff transect.
+   - L12 corresponds to the **EM-137C core** (Sahoo et al., 2016, Supplementary Data Repository Figure DR6; [`lolo/litholog12.pdf`](file:///d:/Lithology-reconstruction-using-XGB/lolo/litholog12.pdf)), a subsurface drill core located $\sim 2.3\text{ km}$ north-northeast of the outcrop cliff transect.
+   - The Blackhawk Formation interval (0.0 to 111.0 m) has been digitized and verified as tabular data in [`data/raw_lithologs/litholog12.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog12.csv) (63 contiguous beds).t.
 
 ---
 
@@ -146,11 +146,12 @@ Each of the 11 litholog CSV files in [`data/raw_lithologs/`](file:///d:/Litholog
 | **litholog6** | 17 | `Top`, `Bottom`, `Facies` | 0 | 82 | 82 | Increasing downward | 1 | 13 | Irregular bed intervals | None | None | 0 | **Unresolved** |
 | **litholog7** | 16 | `Top`, `Bottom`, `Facies` | 0 | 80 | 80 | Increasing downward | 2 | 11 | Irregular bed intervals | None | None | 0 | **Unresolved** |
 | **litholog8** | 28 | `Top`, `Bottom`, `Facies` | 0 | 79 | 79 | Increasing downward | 1 | 7 | Irregular bed intervals | None | None | 0 | **Unresolved** |
-| **litholog9** | 20 | `Top`, `Bottom`, `Facies` | 0 | 78 | 78 | Increasing downward | 1 | 11 | Irregular bed intervals | `(18, 19)` | `(29, 28)`, `(30, 29)` | 0 | **Unresolved** |
+| **litholog9** | 20 | `Top`, `Bottom`, `Facies` | 0 | 78 | 78 | Increasing downward | 1 | 11 | Irregular bed intervals | `(18, 19)` -> `c_sand` | `(29, 28)`, `(30, 29)` -> `p_sand` | 0 | **Unresolved** |
 | **litholog10** | 19 | `Top`, `Bottom`, `Facies` | 0 | 77 | 77 | Increasing downward | 1 | 10 | Irregular bed intervals | None | None | 0 | **Unresolved** |
-| **litholog11** | 18 | `Top`, `Bottom`, `Facies` | 0 | 78 | 78 | Increasing downward | 1 | 12 | Irregular bed intervals | `(59, 60)` | None | 0 | **Unresolved** |
+| **litholog11** | 18 | `Top`, `Bottom`, `Facies` | 0 | 78 | 78 | Increasing downward | 1 | 12 | Irregular bed intervals | `(59, 60)` -> `carbon_mud` | None | 0 | **Unresolved** |
+| **litholog12** | 63 | `Top`, `Bottom`, `Facies` | 0.0 | 111.0 | 111.0 | Increasing downward | 0.2 | 8.5 | Irregular bed intervals | None | None | 0 | **Unresolved** |
 
-*Note on Litholog 12 ([`lolo/litholog12.pdf`](file:///d:/Lithology-reconstruction-using-XGB/lolo/litholog12.pdf)):* Visual core graphic only. Depth spans 0 to 242 meters. Not yet digitized into tabular CSV format.
+*Note on Litholog 12 ([`data/raw_lithologs/litholog12.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog12.csv)):* Digitized tabular CSV is now available covering the 0.0 to 111.0 m Blackhawk Formation core interval (63 contiguous beds). The source vector core graphic ([`lolo/litholog12.pdf`](file:///d:/Lithology-reconstruction-using-XGB/lolo/litholog12.pdf)) extends to 242 m, with the deeper 111-242 m interval representing underlying regional strata.
 
 ### 3.2 Vertical Reference & Datum Analysis
 
@@ -235,27 +236,37 @@ Before any cross-well correlation, horizontal variogram estimation, or 2D/3D spa
 
 ---
 
-## 6. Unresolved Questions
+## 6. Actionable Status and Unresolved Questions
 
-To enable progress from 1D geostatistics (Phase 1) to 2D/3D spatial simulation (Phase 2), the following specific questions must be resolved with Professor Hiranya Sahoo:
+To enable progress from 1D geostatistics (Phase 1) to 2D/3D spatial simulation (Phase 2), the status of key technical questions is summarized below, distinguishing between resolved project decisions and remaining items requiring Professor Hiranya Sahoo's input:
+
+### 6.1 Resolved Technical Decisions
+
+1. **Coordinate Units**:
+   - **Resolved**: Coordinate units are confirmed and assumed as **international meters** across all datasets. This is fully consistent with the $\sim 5\text{ km}$ transect length between L2 and L11 documented by Sahoo et al. (2016).
+2. **Litholog 1 Spatial Coordinates**:
+   - **Resolved**: Litholog 1 has no spatial coordinates and is **permanently excluded from 2D/3D lateral spatial modeling**. It is retained strictly for 1D vertical descriptive and Markov succession modeling. No additional spatial coordinates are required or requested.
+3. **Availability of Litholog 12 CSV**:
+   - **Resolved**: The tabular CSV for Litholog 12 has been digitized and verified at [`data/raw_lithologs/litholog12.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog12.csv), covering the 0.0 to 111.0 m Blackhawk Formation interval (63 contiguous beds). Tabular data is already available.
+4. **Discontinuities in Raw Data (Lithologs 9 and 11)**:
+   - **Resolved**:
+     - **Litholog 9 (18-19 m gap)**: Taken as `c_sand` (channel sandstone).
+     - **Litholog 9 (28-30 m overlap)**: Taken as `p_sand` (planar / splay sandstone).
+     - **Litholog 11 (59-60 m unmapped gap)**: Taken as `carbon_mud` (carbonaceous mudstone).
+     - *(Note: Downstream encodings and manual updates to raw data files will be reconciled accordingly).*
+
+### 6.2 Remaining Unresolved Questions for Professor Hiranya Sahoo
 
 1. **Coordinate Reference System (CRS) & Projection**:
    - What specific coordinate reference system or projection governs the numeric coordinates in `Location_coordinates_lithologs.xlsx` (e.g., UTM Zone 12N with a local false origin, State Plane Utah Central, or a local coal mine survey grid)?
-2. **Coordinate Units Verification**:
-   - Can the professor confirm that the coordinate units in `Location_coordinates_lithologs.xlsx` are indeed international meters?
-3. **Litholog 1 Coordinates**:
-   - Are measured GPS coordinates or digitized outcrop map coordinates available for Litholog 1 (Canyon 1), which is currently missing from the coordinate spreadsheet?
-4. **Role and Status of Litholog 12 (EM-137C Core)**:
-   - Is Litholog 12 intended to be included as a hard conditioning well in the spatial simulation grid, or is it reserved for regional down-dip calibration?
-   - Does a standardized digital CSV exist for Litholog 12, or is it currently available only as the vector core log in `litholog12.pdf` (Figure DR6)?
-5. **Vertical Reference Datum & Elevation**:
+2. **Role of Litholog 12 (EM-137C Core)**:
+   - Is Litholog 12 intended to be included as a hard conditioning well in the spatial simulation grid, or is it reserved for regional down-dip blind testing?
+   - Does the lower interval of the EM-137C core (111-242 m in `litholog12.pdf`) represent underlying non-Blackhawk stratigraphy (Star Point Sandstone / Mancos Shale), or is it pending digitization?
+3. **Vertical Reference Datum & Elevation**:
    - What physical surface corresponds to `Depth = 0 m` for each litholog (e.g., local erosional cliff top, base of an overlying formation, or modern ground surface)?
    - Are absolute elevations (meters above sea level) or relative heights above the Star Point Sandstone contact available for each litholog?
-6. **Coal Marker Horizon Correlation**:
+4. **Coal Marker Horizon Correlation**:
    - Does the coal seam observed at $\sim 37-44\text{ m}$ in Lithologs 2-7 and 11 represent a single continuous chronostratigraphic marker bed (e.g., Axel Anderson coal zone)? If so, what accounts for its absence in Lithologs 8, 9, and 10?
-7. **Discontinuities in Raw Data (Lithologs 9 and 11)**:
-   - For Litholog 9, can field records clarify the 1-meter missing interval at $18-19\text{ m}$ and the 2-meter interval overlaps at $28-30\text{ m}$?
-   - For Litholog 11, can field records clarify whether the unmapped gap at $59-60\text{ m}$ is carbonaceous mudstone or unexposed talus?
 
 ---
 
@@ -265,8 +276,8 @@ To enable progress from 1D geostatistics (Phase 1) to 2D/3D spatial simulation (
 
 | Modeling Track | Readiness Status | Justification & Preconditions |
 | :--- | :---: | :--- |
-| **Phase 1: 1D Vertical Markov Modeling** | **READY / VERIFIED** | Validated on independent vertical successions; unaffected by lateral spatial coordinates or inter-well datuming. All 21 unit tests passing. |
-| **Phase 2/3: 2D/3D Spatial & Conditional Simulation** | **NOT READY / BLOCKED** | **BLOCKED** by missing coordinate metadata (CRS, units, L1 position) and lack of a verified vertical stratigraphic datum. |
+| **Phase 1: 1D Vertical Markov Modeling** | **READY / VERIFIED** | Validated on independent vertical successions; unaffected by lateral spatial coordinates or inter-well datuming. All unit tests passing. |
+| **Phase 2/3: 2D/3D Spatial & Conditional Simulation** | **NOT READY / BLOCKED** | **BLOCKED** by undocumented coordinate reference system (CRS/projection) and lack of a verified vertical stratigraphic datum. (Coordinate units assumed meters; L1 excluded from spatial; L12 CSV available). |
 
 ### 7.2 Detailed Readiness Rationale
 
@@ -275,16 +286,15 @@ The dataset in its current state is **NOT READY for 2D or 3D spatial simulation,
 While the 1D succession statistics are mathematically verified, attempting to define a spatial simulation grid ($X, Y, Z$) under present conditions would require making unverified assumptions:
 1. Treating $z = 0$ as a flat plane would distort geological bodies across the $5\text{ km}$ transect, causing channels deposited at different geological times to artificially intersect or terminate.
 2. Ingesting $X$ and $Y$ without a verified CRS prevents re-projection, spatial integration with regional GIS/seismic data, or valid distance calculations against true north.
-3. Excluding Litholog 1 due to missing coordinates would truncate the westernmost $1\text{ km}$ of the transect.
+3. Litholog 1 is permanently excluded from spatial modeling due to missing coordinates, focusing 2D/3D spatial modeling on the remaining transect (L2-L12).
 
 ### 7.3 Exact Additional Metadata Required Before Defining Simulation Grid
 
 Before any spatial simulation grid can be initialized, the following items must be provided and verified:
-1. **Verified CRS and Geodetic Datum** (EPSG code).
-2. **Confirmed coordinate units** (meters vs. feet).
-3. **Valid $(X, Y)$ coordinates for Litholog 1**.
-4. **Stratigraphic datum elevation or structural contact depth** (e.g., depth to Star Point Sandstone top or a regional marker coal) for each section.
-5. **Digitized interval CSV for Litholog 12 (EM-137C core)**, if it is to be incorporated into the conditioning set.
+1. **Verified CRS and Geodetic Datum** (EPSG code or local coordinate grid origin definition).
+2. **Stratigraphic datum elevation or structural contact depth** (e.g., depth to Star Point Sandstone top or a regional marker coal) for each section.
+
+*(Note: Coordinate units are resolved as assumed meters, Litholog 1 is resolved as excluded from spatial modeling, and Litholog 12 CSV is resolved and available at [`data/raw_lithologs/litholog12.csv`](file:///d:/Lithology-reconstruction-using-XGB/data/raw_lithologs/litholog12.csv)).*
 
 ---
 

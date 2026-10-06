@@ -4,12 +4,12 @@ Top,Bottom,Facies
 5,14,sand
 14,23,sand
 23,35,mud
-35,37,carbon_mud
+35,37,ripples
 37,38,coal
 38,46,sand
 46,56,sand
 56,58,mud
-58,61,carbon_mud
+58,61,ripples
 61,71,sand
 71,76,sand
 76,82,sand

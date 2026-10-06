@@ -1,0 +1,13 @@
+litholog_id,x,y,coordinate_reference_system,coordinate_units,upstream_downstream_group,coordinate_source,coordinate_available
+L1,,,Undocumented,Assumed Meters (Excluded from spatial),Permanently Excluded,None (absent from coordinate spreadsheet; excluded from spatial),False
+L2,-4057.684,13755.609,Undocumented,Assumed Meters,Upstream,Location_coordinates_lithologs.xlsx,True
+L3,-3577.0463,13317.0003,Undocumented,Assumed Meters,Upstream,Location_coordinates_lithologs.xlsx,True
+L4,-3121.5293,12356.864,Undocumented,Assumed Meters,Upstream,Location_coordinates_lithologs.xlsx,True
+L5,-2709.2719,12276.4754,Undocumented,Assumed Meters,Upstream,Location_coordinates_lithologs.xlsx,True
+L6,-2737.7434,11361.2388,Undocumented,Assumed Meters,Upstream,Location_coordinates_lithologs.xlsx,True
+L7,-2163.3639,10733.2563,Undocumented,Assumed Meters,Upstream,Location_coordinates_lithologs.xlsx,True
+L8,-1476.1128,10873.8634,Undocumented,Assumed Meters,Upstream,Location_coordinates_lithologs.xlsx,True
+L9,-137.3543,12266.4076,Undocumented,Assumed Meters,Downstream,Location_coordinates_lithologs.xlsx,True
+L10,-469.427,11082.7203,Undocumented,Assumed Meters,Upstream,Location_coordinates_lithologs.xlsx,True
+L11,704.0729,12169.9234,Undocumented,Assumed Meters,Downstream,Location_coordinates_lithologs.xlsx,True
+L12,-1119.91,14407.3,Undocumented,Assumed Meters,Downstream,Location_coordinates_lithologs.xlsx,True

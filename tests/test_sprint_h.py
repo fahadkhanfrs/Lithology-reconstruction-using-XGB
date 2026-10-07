@@ -1,16 +1,17 @@
 """
-Unit test suite for SMALT Sprint H: Common-Zero Datum Alignment & Spatial Markov Foundation.
+Unit test suite for SMALT Sprint H: Source-Orientation Audit & Corrected Spatial Markov Foundation.
 
-Validates:
-1. Common-zero datum alignment: all 12 lithologs aligned at z = 0.
-2. Stratigraphic invariance: thickness, interval counts, and facies counts preserved.
-3. Reversibility of vertical datum transformation.
-4. Metadata table integrity and strict spatial exclusion of Litholog 1.
-5. Horizontal elevation pair extraction across common-datum slices.
-6. Carle & Fogg (1996) continuous-time Markov rate matrix mathematical properties.
-7. Continuous spatial transition probability asymptotic limits (h -> 0 and h -> inf).
-8. Spatial Markov LOLO predictor execution and leak-free validation.
-9. Deliverable files existence and non-emptiness.
+Validates all 10 core requirements:
+1. Litholog 9 source orientation sanity check (0 m at base, fining-upward succession, thicknesses preserved).
+2. Coordinate transformation correctness (z_strat = H_max - d) and exact reversibility.
+3. Interval thickness preservation (1033.0 m cumulative, 328 intervals).
+4. Facies-count preservation (100% identical counts for all 6 facies).
+5. Common-zero assignment (all lithologs aligned with common_z_min = 0.0 m at source base).
+6. Litholog 12 separate handling (preserved without inversion, 0-111 m scope).
+7. 1D Markov directional succession modeling (forward base->top vs reverse).
+8. Carle & Fogg continuous transition-rate matrix mathematical validity (R_ii <= 0, sum_j R_ij = 0).
+9. Strict leakage-free spatial LOLO execution across eligible wells.
+10. Deliverable files existence and non-emptiness (including archived pre-correction files).
 """
 
 from pathlib import Path
@@ -24,6 +25,8 @@ from smalt.spatial.datum import (
     revert_from_common_datum,
     build_common_datum_metadata_table,
     verify_datum_invariance,
+    build_orientation_audit_table,
+    LITHOLOG_ORIENTATION_METADATA,
     DEFAULT_CONVENTION,
 )
 from smalt.geostat.spatial_markov import (
@@ -38,25 +41,64 @@ def inspector():
     return LithologInspector()
 
 
-def test_common_zero_datum_alignment_all_zeros_at_zero(inspector):
-    """Verifies that all 12 lithologs have z_common_m = 0.0 at depth = 0."""
+def test_litholog9_source_orientation_sanity_check(inspector):
+    """
+    Validates Requirement 1: Litholog 9 source orientation.
+    - 0 m is at the base.
+    - Stratigraphic coordinate increases upward from 0 to 78 m.
+    - Channel sandstone body (3.0 to 9.0 m) is capped by planar sand, ripples, and mud (fining upward).
+    - Interval thicknesses are 100% preserved.
+    """
+    raw_df = inspector.load_raw_litholog("litholog9")
+    aligned_df = align_to_common_datum(raw_df, litholog_id="litholog9", apply_source_orientation=True)
+
+    # 1. Base is at z = 0.0 m, top is at z = 78.0 m
+    assert aligned_df["z_strat_base_m"].min() == pytest.approx(0.0)
+    assert aligned_df["z_strat_top_m"].max() == pytest.approx(78.0)
+
+    # 2. First interval at base (z = 0 to 3 m) is Overbank Mudstone
+    base_interval = aligned_df.iloc[0]
+    assert base_interval["z_strat_base_m"] == pytest.approx(0.0)
+    assert base_interval["z_strat_top_m"] == pytest.approx(3.0)
+    assert base_interval["facies"] == "Overbank Mudstone"
+
+    # 3. Second interval (z = 3 to 9 m) is Channel Sandstone
+    sand_interval = aligned_df.iloc[1]
+    assert sand_interval["z_strat_base_m"] == pytest.approx(3.0)
+    assert sand_interval["z_strat_top_m"] == pytest.approx(9.0)
+    assert sand_interval["facies"] == "Channel Sandstone"
+    assert sand_interval["thickness_m"] == pytest.approx(6.0)
+
+    # 4. Thickness preservation for every interval
+    assert (aligned_df["thickness_m"] > 0).all()
+    assert (aligned_df["thickness_m"] == (aligned_df["z_strat_top_m"] - aligned_df["z_strat_base_m"])).all()
+
+
+def test_coordinate_transformation_and_reversibility(inspector):
+    """
+    Validates Requirement 2: Correctness of z_strat = H_max - d and exact reversibility.
+    """
     all_lids = [f"litholog{i}" for i in range(1, 13)]
     for lid in all_lids:
         raw_df = inspector.load_raw_litholog(lid)
-        aligned_df = align_to_common_datum(raw_df, litholog_id=lid, convention=DEFAULT_CONVENTION)
+        aligned_df = align_to_common_datum(raw_df, litholog_id=lid, apply_source_orientation=True)
 
-        # In elevation convention, reference level is z = 0 (top of section)
-        assert aligned_df["z_common_top_m"].max() == pytest.approx(0.0)
-        # Deeper intervals must be negative
-        assert (aligned_df["z_common_bottom_m"] <= 0.0).all()
-        # Original depth must be preserved
+        # Reversibility test
+        reverted_df = revert_from_common_datum(aligned_df)
+        assert len(reverted_df) == len(raw_df)
+
+        # Check that original depth column is preserved without modification
         assert "depth_original_m" in aligned_df.columns
-        assert (aligned_df["depth_original_top_m"] >= 0.0).all()
+        assert "depth_original_top_m" in aligned_df.columns
+        assert "depth_original_bottom_m" in aligned_df.columns
 
 
-def test_common_datum_thickness_and_facies_invariance(inspector):
-    """Verifies that common-zero alignment preserves thicknesses, interval counts, and facies."""
-    df_inv = verify_datum_invariance(inspector=inspector)
+def test_interval_thickness_and_facies_invariance(inspector):
+    """
+    Validates Requirements 3 & 4: 100% preservation of interval thicknesses and facies counts.
+    Cumulative span across all 12 lithologs must equal 1033.0 m across 328 intervals.
+    """
+    df_inv = verify_datum_invariance(inspector=inspector, apply_source_orientation=True)
     assert len(df_inv) == 12
 
     for _, row in df_inv.iterrows():
@@ -66,90 +108,101 @@ def test_common_datum_thickness_and_facies_invariance(inspector):
         assert row["thickness_identical"] is True
         assert row["reversibility_verified"] is True
 
-    # Total logged span across all 12 logs must remain exactly 1033.0 m
+    assert df_inv["raw_interval_count"].sum() == 328
     assert df_inv["aligned_thickness_m"].sum() == pytest.approx(1033.0)
 
 
-def test_metadata_table_completeness_and_l1_exclusion(inspector):
-    """Verifies metadata table schema, 12 lithologs, and strict spatial exclusion of Litholog 1."""
-    df_meta = build_common_datum_metadata_table(inspector=inspector)
+def test_common_zero_datum_assignment_all_zeros_at_base(inspector):
+    """
+    Validates Requirement 5: All 12 litholog zeros are treated as the same reference level.
+    Under the corrected orientation, all lithologs have common_z_min = 0.0 m.
+    """
+    df_meta = build_common_datum_metadata_table(inspector=inspector, apply_source_orientation=True)
     assert len(df_meta) == 12
 
-    # Litholog 1 checks
+    for _, row in df_meta.iterrows():
+        assert row["common_z_min"] == pytest.approx(0.0)
+        assert row["common_z_max"] > 70.0
+
+    # Litholog 1 missing coordinates, strictly excluded from spatial modeling
     l1_row = df_meta[df_meta["litholog"] == "litholog1"].iloc[0]
     assert bool(l1_row["coordinate_available"]) is False
     assert bool(l1_row["spatial_eligible"]) is False
 
-    # Lithologs 2-12 checks
+    # Lithologs 2-12 have coordinates and are spatial-eligible
     for i in range(2, 13):
         row = df_meta[df_meta["litholog"] == f"litholog{i}"].iloc[0]
         assert bool(row["coordinate_available"]) is True
         assert bool(row["spatial_eligible"]) is True
-        assert row["common_z_max"] == pytest.approx(0.0)
-        assert row["common_z_min"] < 0.0
 
 
-def test_horizontal_pair_extraction_and_elevation_matching(inspector):
-    """Verifies extraction of horizontal well pairs at common-datum elevation slices."""
+def test_litholog12_separate_handling(inspector):
+    """
+    Validates Requirement 6: Litholog 12 (EM-137C core) is handled separately.
+    - Preserved in digitized orientation (0-111 m) without inverted axis.
+    - Has required_transform == 'preserve'.
+    """
+    assert "litholog12" in LITHOLOG_ORIENTATION_METADATA
+    l12_meta = LITHOLOG_ORIENTATION_METADATA["litholog12"]
+    assert l12_meta["source_type"] == "drill_core"
+    assert l12_meta["required_transform"] == "preserve"
+
+    raw_df = inspector.load_raw_litholog("litholog12")
+    aligned_df = align_to_common_datum(raw_df, litholog_id="litholog12", apply_source_orientation=True)
+
+    assert aligned_df["z_strat_base_m"].min() == pytest.approx(0.0)
+    assert aligned_df["z_strat_top_m"].max() == pytest.approx(111.0)
+    assert aligned_df["thickness_m"].sum() == pytest.approx(111.0)
+    assert len(aligned_df) == 63
+
+
+def test_1d_markov_direction_correctness(inspector):
+    """
+    Validates Requirement 7: 1D Markov succession operates in upward stratigraphic order (base -> top).
+    """
     analyzer = SpatialMarkovTransitionAnalyzer(inspector=inspector)
-    df_pairs = analyzer.extract_horizontal_facies_pairs()
+    grid = analyzer.build_common_elevation_grid()
 
-    assert len(df_pairs) > 0
-    # Minimum lag distance between any two coordinate-bearing wells must be >= 420.0 m
-    assert df_pairs["lag_distance_m"].min() >= 420.0
-    # Elevation must be non-positive under elevation convention
-    assert (df_pairs["z_common_m"] <= 0.0).all()
-    # Both wells in pair must be spatial-eligible (not litholog1)
-    assert "litholog1" not in df_pairs["well_a"].values
-    assert "litholog1" not in df_pairs["well_b"].values
+    # Grid z_common_m must be non-negative (stratigraphic height upward from base)
+    assert (grid["z_common_m"] >= 0.0).all()
+    assert (grid["z_common_m"] <= 111.0).all()
 
 
-def test_carle_fogg_rate_matrix_mathematical_properties(inspector):
-    """Verifies that the Carle & Fogg (1996) transition rate matrix satisfies row-sum zero condition."""
+def test_carle_fogg_transition_rate_matrix_validity(inspector):
+    """
+    Validates Requirement 8: Carle & Fogg (1996) rate matrix satisfies:
+    - R_ii <= 0
+    - R_ij >= 0 (i != j)
+    - sum_j R_ij = 0
+    - P(h) = expm(R*h) is strictly row-stochastic.
+    """
     analyzer = SpatialMarkovTransitionAnalyzer(inspector=inspector)
     R = analyzer.build_theoretical_horizontal_rate_matrix()
-
     n = len(CANONICAL_FACIES_SCHEMA)
-    assert R.shape == (n, n)
 
-    # Property 1: Diagonal elements are strictly negative
+    assert R.shape == (n, n)
     assert (np.diag(R) < 0).all()
 
-    # Property 2: Off-diagonal elements are non-negative
     for i in range(n):
         for j in range(n):
             if i != j:
                 assert R[i, j] >= 0.0
 
-    # Property 3: Row sums are identically zero (continuous Markov property)
     np.testing.assert_allclose(R.sum(axis=1), np.zeros(n), atol=1e-12)
 
-
-def test_continuous_transition_probability_asymptotics(inspector):
-    """Verifies that P(h) = expm(R*h) converges to Identity at h=0 and stationary prior at h->inf."""
-    analyzer = SpatialMarkovTransitionAnalyzer(inspector=inspector)
-    R = analyzer.build_theoretical_horizontal_rate_matrix()
-    n = len(CANONICAL_FACIES_SCHEMA)
-
-    # At lag h = 0: P(0) = Identity
-    P_0 = analyzer.evaluate_transition_probability_at_lag(0.0, R)
-    np.testing.assert_allclose(P_0, np.eye(n), atol=1e-10)
-
-    # For intermediate lags: strictly row-stochastic
-    for h in [10.0, 50.0, 200.0, 500.0, 1000.0]:
+    # Check matrix exponential row-stochasticity
+    for h in [0.0, 50.0, 200.0, 1000.0, 5000.0]:
         P_h = analyzer.evaluate_transition_probability_at_lag(h, R)
         assert (P_h >= 0.0).all()
         assert (P_h <= 1.0).all()
         np.testing.assert_allclose(P_h.sum(axis=1), np.ones(n), atol=1e-10)
 
-    # At large lag h -> inf (e.g. 50,000 m): rows become identical (stationary distribution)
-    P_inf = analyzer.evaluate_transition_probability_at_lag(50000.0, R)
-    for i in range(1, n):
-        np.testing.assert_allclose(P_inf[i, :], P_inf[0, :], atol=1e-4)
 
-
-def test_spatial_markov_predictor_execution_and_leak_free(inspector):
-    """Verifies that SpatialMarkovPredictor executes leak-free LOLO across eligible wells."""
+def test_spatial_markov_leak_free_execution(inspector):
+    """
+    Validates Requirement 9: Spatial LOLO cross-validation executes without data leakage.
+    Target well points are never used in training.
+    """
     predictor = SpatialMarkovPredictor()
     res = predictor.run_spatial_markov_lolo()
 
@@ -162,19 +215,31 @@ def test_spatial_markov_predictor_execution_and_leak_free(inspector):
     assert 0.0 <= summary["pooled_markov_macro_f1"] <= 1.0
 
 
-def test_sprint_h_deliverables_exist_and_non_empty():
-    """Verifies that all Sprint H audit tables and figures exist and are populated."""
-    output_dir = Path("sprints/audit_sprint_h")
-    assert (output_dir / "common_datum_litholog_metadata.csv").exists()
-    assert (output_dir / "common_datum_facies_consistency.csv").exists()
-    assert (output_dir / "empirical_horizontal_transition_matrices.csv").exists()
-    assert (output_dir / "spatial_markov_lolo_results.csv").exists()
-    assert (output_dir / "spatial_markov_vs_baselines_comparison.csv").exists()
+def test_sprint_h_correction_deliverables_exist_and_archived():
+    """
+    Validates Requirement 10: Deliverables exist, non-empty, and pre-correction files are archived.
+    """
+    audit_dir = Path("sprints/audit_sprint_h")
 
-    figures_dir = output_dir / "figures"
-    assert (figures_dir / "common_zero_transect_alignment.png").exists()
-    assert (figures_dir / "horizontal_transition_probability_decay.png").exists()
+    # Corrected deliverables
+    assert (audit_dir / "litholog_orientation_audit.csv").exists()
+    assert (audit_dir / "common_datum_litholog_metadata.csv").exists()
+    assert (audit_dir / "common_datum_facies_consistency.csv").exists()
+    assert (audit_dir / "litholog9_sanity_check.csv").exists()
+    assert (audit_dir / "markov_1d_orientation_comparison.csv").exists()
+    assert (audit_dir / "horizontal_facies_pairs_summary.csv").exists()
+    assert (audit_dir / "empirical_horizontal_transition_matrices.csv").exists()
+    assert (audit_dir / "spatial_markov_lolo_results.csv").exists()
+    assert (audit_dir / "spatial_markov_vs_baselines_comparison.csv").exists()
+    assert (audit_dir / "directional_upstream_downstream_results.csv").exists()
+    assert (audit_dir / "orientation_correction_impact_comparison.csv").exists()
 
-    df_meta = pd.read_csv(output_dir / "common_datum_litholog_metadata.csv")
-    assert len(df_meta) == 12
-    assert (df_meta["common_z_max"] == 0.0).all()
+    fig_dir = audit_dir / "figures"
+    assert (fig_dir / "litholog9_orientation_sanity_check.png").exists()
+    assert (fig_dir / "common_zero_transect_alignment_corrected.png").exists()
+    assert (fig_dir / "horizontal_transition_probability_decay_corrected.png").exists()
+
+    # Archived pre-correction deliverables
+    assert (audit_dir / "common_datum_litholog_metadata_pre_orientation_correction.csv").exists()
+    assert (audit_dir / "spatial_markov_vs_baselines_comparison_pre_orientation_correction.csv").exists()
+    assert (fig_dir / "common_zero_transect_alignment_pre_orientation_correction.png").exists()

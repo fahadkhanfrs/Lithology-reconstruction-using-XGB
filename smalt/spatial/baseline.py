@@ -82,7 +82,13 @@ class ProvisionalSpatialValidator:
         disc_df = self.inspector.discretize_litholog_1m(litholog_id)
         
         # Calculate vertical coordinate relative to chosen datum
-        if self.vertical_reference in ("common_zero", "common_zero_datum", "relative_to_top"):
+        if self.vertical_reference in ("common_zero", "common_zero_datum", "stratigraphic_height"):
+            from smalt.spatial.datum import align_to_common_datum
+            aligned = align_to_common_datum(disc_df, litholog_id=litholog_id, apply_source_orientation=True)
+            z_rel = aligned["z_common_m"] + datum_offset_m
+        elif self.vertical_reference == "legacy_inverted_elevation":
+            z_rel = (-disc_df["depth_m"]) + datum_offset_m
+        elif self.vertical_reference == "relative_to_top":
             z_rel = (-disc_df["depth_m"]) + datum_offset_m
         elif self.vertical_reference == "relative_to_base":
             max_d = disc_df["depth_m"].max()

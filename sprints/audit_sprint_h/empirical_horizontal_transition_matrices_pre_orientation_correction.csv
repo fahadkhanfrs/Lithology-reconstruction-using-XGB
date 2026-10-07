@@ -1,0 +1,145 @@
+lag_bin_label,min_lag_m,max_lag_m,pair_observations,from_facies_code,from_facies_name,to_facies_code,to_facies_name,transition_count,transition_probability
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,0,Channel Sandstone,0,Channel Sandstone,228.0,0.5377
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,0,Channel Sandstone,1,Planar Sandstone,16.0,0.0378
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,0,Channel Sandstone,2,Rippled Heterolithics,27.0,0.0637
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,0,Channel Sandstone,3,Carbonaceous Mudstone,4.0,0.0095
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,0,Channel Sandstone,4,Coal,10.0,0.0236
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,0,Channel Sandstone,5,Overbank Mudstone,139.0,0.3278
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,1,Planar Sandstone,0,Channel Sandstone,16.0,0.2806
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,1,Planar Sandstone,1,Planar Sandstone,4.0,0.0703
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,1,Planar Sandstone,2,Rippled Heterolithics,3.0,0.0528
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,1,Planar Sandstone,3,Carbonaceous Mudstone,4.0,0.0703
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,1,Planar Sandstone,4,Coal,0.0,0.0002
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,1,Planar Sandstone,5,Overbank Mudstone,30.0,0.5259
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,2,Rippled Heterolithics,0,Channel Sandstone,27.0,0.3647
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,2,Rippled Heterolithics,1,Planar Sandstone,3.0,0.0406
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,2,Rippled Heterolithics,2,Rippled Heterolithics,14.0,0.1892
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,2,Rippled Heterolithics,3,Carbonaceous Mudstone,2.0,0.0271
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,2,Rippled Heterolithics,4,Coal,2.0,0.0271
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,2,Rippled Heterolithics,5,Overbank Mudstone,26.0,0.3512
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,3,Carbonaceous Mudstone,0,Channel Sandstone,4.0,0.307
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,3,Carbonaceous Mudstone,1,Planar Sandstone,4.0,0.307
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,3,Carbonaceous Mudstone,2,Rippled Heterolithics,2.0,0.1539
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,3,Carbonaceous Mudstone,3,Carbonaceous Mudstone,0.0,0.0008
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,3,Carbonaceous Mudstone,4,Coal,0.0,0.0008
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,3,Carbonaceous Mudstone,5,Overbank Mudstone,3.0,0.2305
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,4,Coal,0,Channel Sandstone,10.0,0.5543
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,4,Coal,1,Planar Sandstone,0.0,0.0006
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,4,Coal,2,Rippled Heterolithics,2.0,0.1113
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,4,Coal,3,Carbonaceous Mudstone,0.0,0.0006
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,4,Coal,4,Coal,0.0,0.0006
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,4,Coal,5,Overbank Mudstone,6.0,0.3328
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,5,Overbank Mudstone,0,Channel Sandstone,139.0,0.3407
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,5,Overbank Mudstone,1,Planar Sandstone,30.0,0.0735
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,5,Overbank Mudstone,2,Rippled Heterolithics,26.0,0.0637
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,5,Overbank Mudstone,3,Carbonaceous Mudstone,3.0,0.0074
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,5,Overbank Mudstone,4,Coal,6.0,0.0147
+"Short Lag (400 - 1000 m, Local Pairs)",400.0,1000.0,497,5,Overbank Mudstone,5,Overbank Mudstone,204.0,0.5
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,0,Channel Sandstone,0,Channel Sandstone,452.0,0.3993
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,0,Channel Sandstone,1,Planar Sandstone,106.0,0.0936
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,0,Channel Sandstone,2,Rippled Heterolithics,72.0,0.0636
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,0,Channel Sandstone,3,Carbonaceous Mudstone,17.0,0.015
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,0,Channel Sandstone,4,Coal,19.0,0.0168
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,0,Channel Sandstone,5,Overbank Mudstone,466.0,0.4116
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,1,Planar Sandstone,0,Channel Sandstone,106.0,0.4092
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,1,Planar Sandstone,1,Planar Sandstone,26.0,0.1004
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,1,Planar Sandstone,2,Rippled Heterolithics,19.0,0.0734
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,1,Planar Sandstone,3,Carbonaceous Mudstone,7.0,0.0271
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,1,Planar Sandstone,4,Coal,4.0,0.0155
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,1,Planar Sandstone,5,Overbank Mudstone,97.0,0.3745
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,2,Rippled Heterolithics,0,Channel Sandstone,72.0,0.373
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,2,Rippled Heterolithics,1,Planar Sandstone,19.0,0.0985
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,2,Rippled Heterolithics,2,Rippled Heterolithics,30.0,0.1554
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,2,Rippled Heterolithics,3,Carbonaceous Mudstone,5.0,0.026
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,2,Rippled Heterolithics,4,Coal,5.0,0.026
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,2,Rippled Heterolithics,5,Overbank Mudstone,62.0,0.3212
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,3,Carbonaceous Mudstone,0,Channel Sandstone,17.0,0.3398
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,3,Carbonaceous Mudstone,1,Planar Sandstone,7.0,0.14
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,3,Carbonaceous Mudstone,2,Rippled Heterolithics,5.0,0.1001
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,3,Carbonaceous Mudstone,3,Carbonaceous Mudstone,2.0,0.0402
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,3,Carbonaceous Mudstone,4,Coal,1.0,0.0202
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,3,Carbonaceous Mudstone,5,Overbank Mudstone,18.0,0.3598
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,4,Coal,0,Channel Sandstone,19.0,0.3583
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,4,Coal,1,Planar Sandstone,4.0,0.0756
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,4,Coal,2,Rippled Heterolithics,5.0,0.0944
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,4,Coal,3,Carbonaceous Mudstone,1.0,0.019
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,4,Coal,4,Coal,4.0,0.0756
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,4,Coal,5,Overbank Mudstone,20.0,0.3771
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,5,Overbank Mudstone,0,Channel Sandstone,466.0,0.3906
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,5,Overbank Mudstone,1,Planar Sandstone,97.0,0.0813
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,5,Overbank Mudstone,2,Rippled Heterolithics,62.0,0.052
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,5,Overbank Mudstone,3,Carbonaceous Mudstone,18.0,0.0151
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,5,Overbank Mudstone,4,Coal,20.0,0.0168
+Intermediate Lag (1000 - 2500 m),1000.0,2500.0,1440,5,Overbank Mudstone,5,Overbank Mudstone,530.0,0.4442
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,0,Channel Sandstone,0,Channel Sandstone,936.0,0.4282
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,0,Channel Sandstone,1,Planar Sandstone,149.0,0.0682
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,0,Channel Sandstone,2,Rippled Heterolithics,217.0,0.0993
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,0,Channel Sandstone,3,Carbonaceous Mudstone,49.0,0.0224
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,0,Channel Sandstone,4,Coal,51.0,0.0233
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,0,Channel Sandstone,5,Overbank Mudstone,784.0,0.3586
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,1,Planar Sandstone,0,Channel Sandstone,149.0,0.4917
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,1,Planar Sandstone,1,Planar Sandstone,10.0,0.033
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,1,Planar Sandstone,2,Rippled Heterolithics,29.0,0.0957
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,1,Planar Sandstone,3,Carbonaceous Mudstone,6.0,0.0198
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,1,Planar Sandstone,4,Coal,9.0,0.0297
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,1,Planar Sandstone,5,Overbank Mudstone,100.0,0.33
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,2,Rippled Heterolithics,0,Channel Sandstone,217.0,0.4707
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,2,Rippled Heterolithics,1,Planar Sandstone,29.0,0.0629
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,2,Rippled Heterolithics,2,Rippled Heterolithics,48.0,0.1041
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,2,Rippled Heterolithics,3,Carbonaceous Mudstone,6.0,0.013
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,2,Rippled Heterolithics,4,Coal,15.0,0.0326
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,2,Rippled Heterolithics,5,Overbank Mudstone,146.0,0.3167
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,3,Carbonaceous Mudstone,0,Channel Sandstone,49.0,0.4578
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,3,Carbonaceous Mudstone,1,Planar Sandstone,6.0,0.0561
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,3,Carbonaceous Mudstone,2,Rippled Heterolithics,6.0,0.0561
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,3,Carbonaceous Mudstone,3,Carbonaceous Mudstone,0.0,0.0001
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,3,Carbonaceous Mudstone,4,Coal,4.0,0.0375
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,3,Carbonaceous Mudstone,5,Overbank Mudstone,42.0,0.3924
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,4,Coal,0,Channel Sandstone,51.0,0.3311
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,4,Coal,1,Planar Sandstone,9.0,0.0585
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,4,Coal,2,Rippled Heterolithics,15.0,0.0974
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,4,Coal,3,Carbonaceous Mudstone,4.0,0.026
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,4,Coal,4,Coal,2.0,0.013
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,4,Coal,5,Overbank Mudstone,73.0,0.4739
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,5,Overbank Mudstone,0,Channel Sandstone,784.0,0.4519
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,5,Overbank Mudstone,1,Planar Sandstone,100.0,0.0576
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,5,Overbank Mudstone,2,Rippled Heterolithics,146.0,0.0842
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,5,Overbank Mudstone,3,Carbonaceous Mudstone,42.0,0.0242
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,5,Overbank Mudstone,4,Coal,73.0,0.0421
+"Long Lag (2500 - 5500 m, Regional Span)",2500.0,5500.0,2473,5,Overbank Mudstone,5,Overbank Mudstone,590.0,0.3401
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,0,Channel Sandstone,0,Channel Sandstone,1616.0,0.4319
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,0,Channel Sandstone,1,Planar Sandstone,271.0,0.0724
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,0,Channel Sandstone,2,Rippled Heterolithics,316.0,0.0844
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,0,Channel Sandstone,3,Carbonaceous Mudstone,70.0,0.0187
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,0,Channel Sandstone,4,Coal,80.0,0.0214
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,0,Channel Sandstone,5,Overbank Mudstone,1389.0,0.3712
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,1,Planar Sandstone,0,Channel Sandstone,271.0,0.4378
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,1,Planar Sandstone,1,Planar Sandstone,40.0,0.0646
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,1,Planar Sandstone,2,Rippled Heterolithics,51.0,0.0824
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,1,Planar Sandstone,3,Carbonaceous Mudstone,17.0,0.0275
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,1,Planar Sandstone,4,Coal,13.0,0.021
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,1,Planar Sandstone,5,Overbank Mudstone,227.0,0.3667
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,2,Rippled Heterolithics,0,Channel Sandstone,316.0,0.434
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,2,Rippled Heterolithics,1,Planar Sandstone,51.0,0.0701
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,2,Rippled Heterolithics,2,Rippled Heterolithics,92.0,0.1264
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,2,Rippled Heterolithics,3,Carbonaceous Mudstone,13.0,0.0179
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,2,Rippled Heterolithics,4,Coal,22.0,0.0302
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,2,Rippled Heterolithics,5,Overbank Mudstone,234.0,0.3214
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,3,Carbonaceous Mudstone,0,Channel Sandstone,70.0,0.4117
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,3,Carbonaceous Mudstone,1,Planar Sandstone,17.0,0.1
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,3,Carbonaceous Mudstone,2,Rippled Heterolithics,13.0,0.0765
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,3,Carbonaceous Mudstone,3,Carbonaceous Mudstone,2.0,0.0118
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,3,Carbonaceous Mudstone,4,Coal,5.0,0.0295
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,3,Carbonaceous Mudstone,5,Overbank Mudstone,63.0,0.3705
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,4,Coal,0,Channel Sandstone,80.0,0.3555
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,4,Coal,1,Planar Sandstone,13.0,0.0578
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,4,Coal,2,Rippled Heterolithics,22.0,0.0978
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,4,Coal,3,Carbonaceous Mudstone,5.0,0.0223
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,4,Coal,4,Coal,6.0,0.0267
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,4,Coal,5,Overbank Mudstone,99.0,0.4399
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,5,Overbank Mudstone,0,Channel Sandstone,1389.0,0.4164
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,5,Overbank Mudstone,1,Planar Sandstone,227.0,0.068
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,5,Overbank Mudstone,2,Rippled Heterolithics,234.0,0.0701
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,5,Overbank Mudstone,3,Carbonaceous Mudstone,63.0,0.0189
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,5,Overbank Mudstone,4,Coal,99.0,0.0297
+Omnidirectional (All Pairs >= 400 m),400.0,5500.0,4410,5,Overbank Mudstone,5,Overbank Mudstone,1324.0,0.3969

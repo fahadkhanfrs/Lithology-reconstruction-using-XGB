@@ -1,5 +1,5 @@
-model_name,model_type,vertical_datum,pooled_accuracy,pooled_balanced_acc,pooled_macro_f1,conditioning_principle
-Spatial Markov Transition Model,Continuous Geostatistical Transition Model (P(h) = expm(R*h)),common_zero_datum (Prof. Sahoo standard),0.3723,0.1667,0.0904,Continuous lateral transition decay conditioned on Sahoo et al. (2016) W/T aspect ratios
-Spatial 3D KNN (k=5),Spatial 3D Classifier,common_zero_datum (Prof. Sahoo standard),0.4851,0.2298,0.2256,"Inverse-distance weighted point-wise interpolation in (X, Y, Z_common)"
-Nearest-Well Vertical Profile,1D Transferred Profile Baseline (Zero Horizontal Decay),common_zero_datum (Prof. Sahoo standard),0.4585,0.2318,0.2303,Direct copy of nearest well facies at matching common elevation slice
-Training Prior Majority Facies,Zero-Spatial Naive Baseline (Infinite Horizontal Decay),common_zero_datum (Prof. Sahoo standard),0.4351,0.1667,0.1011,Always predicts training majority facies (Channel Sandstone)
+model_name,conditioning_mechanism,correct_points,total_points,raw_accuracy,balanced_accuracy,macro_f1
+Spatial 3D KNN (k=5),Coordinate Euclidean distance interpolation,429,940,0.4564,0.2196,0.2129
+Nearest-Well Vertical Profile,1D profile from nearest spatial neighbor well,411,940,0.4372,0.2223,0.2209
+Training Prior Majority (sand),Zero-spatial marginal mode prior,409,940,0.4351,0.1667,0.1011
+Spatial Markov Transition Model,Analytical continuous P(h) = expm(R_h * h),350,940,0.3723,0.1667,0.0904

@@ -13,6 +13,8 @@ from smalt.spatial.datum import (
     revert_from_common_datum,
     build_common_datum_metadata_table,
     verify_datum_invariance,
+    build_orientation_audit_table,
+    LITHOLOG_ORIENTATION_METADATA,
     COMMON_DATUM_NAME,
     DEFAULT_CONVENTION,
 )
@@ -26,7 +28,10 @@ __all__ = [
     "revert_from_common_datum",
     "build_common_datum_metadata_table",
     "verify_datum_invariance",
+    "build_orientation_audit_table",
+    "LITHOLOG_ORIENTATION_METADATA",
     "COMMON_DATUM_NAME",
     "DEFAULT_CONVENTION",
 ]
+
 

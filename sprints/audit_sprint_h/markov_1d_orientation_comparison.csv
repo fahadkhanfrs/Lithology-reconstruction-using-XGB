@@ -1,0 +1,3 @@
+stratigraphic_direction,average_lolo_perplexity,mean_transition_log_score,interpretation
+"Forward (Base -> Top, Correct)",2.3105,-0.8375,"Physical depositional succession (Walther's Law, older to younger)"
+"Reverse (Top -> Base, Inverted)",2.3166,-0.8401,Reverse time succession (younger to older)

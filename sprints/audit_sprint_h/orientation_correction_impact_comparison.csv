@@ -1,0 +1,12 @@
+metric,old_sprint_h,corrected_orientation,delta,interpretation
+Horizontal Pair Count,4410,4410,0,Identical vertical span structure across active wells
+Spatial Markov Raw Accuracy,37.23%,37.23%,0.00%,Markov model decays to stationary Overbank Mudstone prior
+Spatial Markov Balanced Accuracy,16.67%,16.67%,0.00%,Physical decay beyond 420m correlation length
+Spatial Markov Macro-F1,0.0904,0.0904,0.0000,Identical asymptotic stationary prediction
+Nearest-Well Raw Accuracy,45.85%,43.72%,-2.13%,Tied with zero-spatial prior (43.51%); no lateral correlation
+Nearest-Well Macro-F1,0.2303,0.2209,-0.0094,Slight variation; thin beds remain completely uncorrelated
+Spatial 3D KNN Raw Accuracy,48.51%,45.64%,-2.87%,KNN drops toward marginal prior; cannot interpolate bodies
+Spatial 3D KNN Macro-F1,0.2256,0.2129,-0.0127,Fails to beat 1D vertical profile or marginal prior
+1D Vertical Markov Perplexity (Regular),2.6289,2.6105,-0.0184,Consistent within +/- 0.02; true fining-upward transitions modeled
+Upstream -> Downstream KNN Accuracy,39.33%,34.83%,-4.50%,Severe underperformance vs training prior (44.94%)
+Downstream -> Upstream KNN Accuracy,38.93%,39.23%,+0.30%,Severe underperformance vs training prior (42.94%)

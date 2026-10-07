@@ -8,7 +8,7 @@
 - **Sprint E (Revised Dataset Reconciliation & Spatial Prototype Readiness)**: COMPLETE / SUPERSEDED (Reconciled 12 revised lithologs under provisional 5-state mapping; L12 registered in manifest; synthetic coordinate audit completed; provisional spatial baseline evaluated; 11/11 tests passing; deliverables in sprints/audit_sprint_e/)
 - **Sprint F (Six-State Migration & Spatial Baseline Revalidation)**: COMPLETE / VERIFIED (Migrated to 6-state canonical schema preserving distinct p_sand and ripples; recomputed 6x6 Markov transitions; leak-free Spatial LOLO revalidated with per-class metrics, 6x6 confusion matrices, and naive baselines; 10/10 new tests passing [65/65 repository total]; deliverables in sprints/audit_sprint_f/)
 - **Sprint G (Independent Results Audit & Spatial Modeling Decision)**: COMPLETE / VERIFIED (Independently audited Sprint F metrics [0 discrepancy]; confirmed inter-well sparsity root cause [420-5000 m spacing vs 140-210 m channel width]; identified and tested StandardScaler vertical anisotropy defect; established 20-day UGP presentation roadmap: proceed with Phase 1 [1D Markov] + scoped Phase 2 [unconditioned 2D fluvial forward model], defer Phase 3 [spatial interpolation on real wells], re-scope Phase 4-5 to synthetic benchmarks; 8/8 new unit tests passing [73/73 repository total]; deliverables in sprints/audit_sprint_g/)
-- **Sprint H (Common-Zero Datum Alignment & Spatial Markov Foundation)**: COMPLETE / VERIFIED (Implemented explicit vertical coordinate API for common-zero datum [z = -depth, top z = 0.0 m] per Prof. Sahoo's project directive; verified 100% stratigraphic invariance [1033.0 m, 328 intervals, zero facies count shift]; preserved validated 1D vertical Markov models [81/81 tests passing]; established horizontal pair extraction [4,410 empirical pairs] and Carle & Fogg [1996] continuous transition rate framework; evaluated minimal spatial Markov predictor under LOLO CV; 8/8 new unit tests passing [81/81 repository total]; deliverables in sprints/audit_sprint_h/)
+- **Sprint H (Common-Zero Datum Alignment, Orientation Audit & Spatial Markov Foundation)**: COMPLETE / VERIFIED (Audited source vertical orientation against Sahoo et al. [2016] measured-section convention [0 m = base, height increases upward]; transformed measured sections L1-L11 via z_strat = H_max - d; preserved L12 drill core orientation; verified 100% stratigraphic invariance [1033.0 m, 328 intervals]; rebuilt horizontal pairs [4,410 pairs across 111 elevation slices] and spatial LOLO benchmark; evaluated directional upstream <-> downstream generalization; confirmed orientation correction restores geological reality without altering sparsity-dominated spatial predictability limits; 9/9 Sprint H tests passing, 82/82 repository total; deliverables in sprints/audit_sprint_h/)
 - **Phase 2 (2D Cross-Sectional Geostatistical Modeling)**: READY FOR SPRINT (Scoped to unconditioned process-based forward simulation with W/T=35 geometric priors)
 
 ---
@@ -302,43 +302,51 @@ Overbank Mudstone      -0.158              0.030                  -0.061      0.
 
 ---
 
-## 10. Sprint H Common-Zero Datum Alignment & Spatial Markov Foundation Status
+## 10. Sprint H Source-Orientation Audit & Rebuilt Spatial Results Status
 
-### 10.1 Common-Zero Vertical Alignment & Invariance
-- **Project Reference Level**: Adopted Prof. Hiranya Sahoo's explicit project instruction: "All litholog zeros should be treated as being at the same reference level."
-- **Standard Vertical Coordinate**: Constructed explicit, reversible API in [`smalt/spatial/datum.py`](file:///d:/Lithology-reconstruction-using-XGB/smalt/spatial/datum.py):
-  - $z_{\text{common}} = -\text{depth}_{\text{measured}}$ (top datum $z = 0.0$ m; elevation convention with deeper intervals increasingly negative).
-  - Preserves original measured depth column (`depth_original_m`), interval thickness, facies codes, and facies names.
-  - Round-trip exact reversibility verified ($\text{depth} = -z_{\text{common}}$).
-- **100% Stratigraphic Invariance Verified**:
-  - Total cumulative thickness: Exactly **1033.0 m** across all 12 lithologs (328 intervals).
-  - Facies interval counts completely unchanged: `mud` (109), `sand` (92), `p_sand` (43), `ripples` (31), `coal` (29), `carbon_mud` (24).
-  - Litholog 1 (93.0 m) retained for 1D vertical analysis; strictly excluded from spatial modeling due to missing coordinates.
+### 10.1 Source-Orientation Audit & Coordinate Transformation
+- **Root Cause Identified**: Measured outcrop sections from Sahoo et al. (2016) employ a sedimentological convention where 0 m is at the stratigraphic base and height increases upward. Raw digitized CSVs recorded top-down depth ($d = 0$ at log top). The initial Sprint H implementation ($z = -d$) inverted the measured sections vertically.
+- **Orientation Audit Registry**: Implemented in [`smalt/spatial/datum.py`](file:///d:/Lithology-reconstruction-using-XGB/smalt/spatial/datum.py):
+  - **L1-L11 (Measured Sections)**: `source_type: measured_section`, `source_zero_location: base`, `source_direction: upward`, `required_transform: reverse_stratigraphic_axis`. Transformed via $z_{\text{strat}} = H_{\max} - d_{\text{original}}$.
+  - **L12 (Drill Core EM-137C)**: `source_type: drill_core`, `source_zero_location: base` (graphic log 0-242 m), `source_direction: upward`, `required_transform: preserve` (scope strictly 0-111 m). Preserved without inversion; isolated with `orientation_confidence: unresolved`.
+- **Stratigraphic Invariance (100% Preserved)**:
+  - Cumulative thickness: Exactly **1033.0 m** across all 12 lithologs (328 intervals).
+  - Interval-by-interval thickness error: $< 10^{-12}$ m.
+  - Facies counts unchanged: `mud` (109), `sand` (92), `p_sand` (43), `ripples` (31), `coal` (29), `carbon_mud` (24).
+- **Litholog 9 Sanity Check**: Authoritative verification against Sahoo et al. (2016) Figure 3:
+  - Base interval ($z = 0-3$ m): Overbank Mudstone (3.0 m).
+  - Capping interval ($z = 3-9$ m): Channel Sandstone (6.0 m).
+  - Restores physical fining-upward fluvial succession.
 
-### 10.2 Empirical Horizontal Transition Pairs & Continuous Rate Matrix
-- **Matched Elevation Slicing**: Extracted **4,410 empirical horizontal well pairs** across matched 1 m elevation slices from the 11 coordinate-bearing wells (L2-L12).
+### 10.2 Rebuilt Empirical Horizontal Pairs & Transition Probabilities
+- **Horizontal Facies Pairs**: Exactly **4,410 pairs** across 111 elevation slices ($z \in [0.0, 110.0]$ m) among the 11 spatial wells (L2-L12).
 - **Lag-Binned Transition Dynamics**:
-  - Short lag (400-1000 m, 736 pairs): `sand` auto-transition probability = **0.542**; `mud` = **0.448**; `coal` = **0.000** (no inter-well coal coincidence observed).
-  - Intermediate lag (1000-2500 m, 1,384 pairs): `sand` auto-transition = **0.478**; `mud` = **0.410**.
-  - Long lag (2500-5500 m, 2,290 pairs): `sand` auto-transition decays to **0.421**; `mud` to **0.385**, approaching stationary background proportions (43.5% sand, 37.2% mud).
-- **Continuous Transition Rate Matrix ($\mathbf{R}_h$)**:
-  - Implemented Carle & Fogg (1996) formulation: $R_{ii} = -1 / \bar{L}_{h,i}$, off-diagonals $R_{ij} = -R_{ii} p_j / (1 - p_i)$, rows sum to 0.
-  - Continuous matrix exponential $\mathbf{P}(h) = \exp(\mathbf{R}_h h)$ provides exact analytical transition decay for any horizontal separation.
+  - Short lag ($400-1000$ m, 497 pairs): Sand auto-transition $P_{00} = \mathbf{0.546}$; Mud $P_{55} = \mathbf{0.500}$; Ripples $P_{22} = \mathbf{0.192}$; Coal $P_{44} = \mathbf{0.000}$; Carbonaceous Mud $P_{33} = \mathbf{0.000}$.
+  - Intermediate lag ($1000-2500$ m, 1,495 pairs): Sand $P_{00} = \mathbf{0.482}$; Mud $P_{55} = \mathbf{0.407}$.
+  - Long lag ($2500-5500$ m, 2,418 pairs): Sand $P_{00} = \mathbf{0.418}$; Mud $P_{55} = \mathbf{0.387}$, reaching regional proportions.
 
-### 10.3 Spatial LOLO Benchmark Performance on Common Zero (940 Grid Points)
-- **Spatial LOLO Results**:
-  - **Nearest-Well Vertical Profile**: Pooled Raw Acc = **45.85%** (431/940), Balanced Acc = **23.18%**, Macro-F1 = **0.2303**.
-  - **Spatial 3D KNN (k=5)**: Pooled Raw Acc = **48.51%** (456/940), Balanced Acc = **22.98%**, Macro-F1 = **0.2256**.
-  - **Training Prior Majority Baseline (`sand`)**: Pooled Raw Acc = **43.51%** (409/940), Balanced Acc = **16.67%**, Macro-F1 = **0.1011**.
-  - **Spatial Markov Transition Model**: Pooled Raw Acc = **37.23%** (350/940), Balanced Acc = **16.67%**, Macro-F1 = **0.0904**.
-- **Theoretical Finding on Spatial Markov Behavior**:
-  - The continuous spatial Markov model is the exact theoretical link between Nearest-Well ($h \to 0, \mathbf{P}(0) = \mathbf{I}$) and stationary prior ($h \to \infty, \mathbf{P}(h) \to \mathbf{1}\mathbf{p}^T$).
-  - Because inter-well spacing ($h \ge 420.0$ m) exceeds lateral channel widths ($\bar{L}_h \approx 203$ m), the Markov model smoothly decays to predicting the most extensive regional lithology: Overbank Mudstone ($\bar{L}_h \approx 360$ m, 37.23% support).
-  - This mathematically proves the physical limit of inter-well correlation in sparse data.
+### 10.3 Rebuilt Spatial LOLO Benchmark Performance (940 Grid Points)
+- **Spatial LOLO CV Results**:
+  - **Spatial 3D KNN (k=5)**: Pooled Raw Acc = **45.64%** (429/940), Balanced Acc = **21.96%**, Macro-F1 = **0.2129** (Old: 48.51%, 22.98%, 0.2256).
+  - **Nearest-Well Vertical Profile**: Pooled Raw Acc = **43.72%** (411/940), Balanced Acc = **22.23%**, Macro-F1 = **0.2209** (Old: 45.85%, 23.18%, 0.2303).
+  - **Training Prior Majority (`sand`)**: Pooled Raw Acc = **43.51%** (409/940), Balanced Acc = **16.67%**, Macro-F1 = **0.1011** (Identical).
+  - **Spatial Markov Transition Model**: Pooled Raw Acc = **37.23%** (350/940), Balanced Acc = **16.67%**, Macro-F1 = **0.0904** (Identical).
 
-### 10.4 Test Suite & Deliverables
-- **Test Suite Status**: **81 passed, 0 failed** (`pytest tests/`). Dedicated test file: [`tests/test_sprint_h.py`](file:///d:/Lithology-reconstruction-using-XGB/tests/test_sprint_h.py) (8/8 passing).
-- **Audit Deliverables**: [`sprints/audit_sprint_h/`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_h/) (5 audit CSVs, 2 high-resolution publication figures, and comprehensive report [`sprints/audit_sprint_h/SPRINT_H_COMMON_ZERO_SPATIAL_MARKOV_REPORT.md`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_h/SPRINT_H_COMMON_ZERO_SPATIAL_MARKOV_REPORT.md)).
+### 10.4 Directional Generalization: Upstream <-> Downstream Validation
+- **Upstream -> Downstream** (Train L2-L8, L10; Test L9, L11, L12; 267 pts):
+  - KNN Raw Acc = **34.83%** (vs Training Prior = **44.94%**; delta = -10.11 pp).
+  - Spatial Markov Raw Acc = **34.46%** (predicts background mudstone).
+- **Downstream -> Upstream** (Train L9, L11, L12; Test L2-L8, L10; 673 pts):
+  - KNN Raw Acc = **39.23%** (vs Training Prior = **42.94%**; delta = -3.71 pp).
+  - Spatial Markov Raw Acc = **38.34%**.
+- **Conclusion**: Spatial conditioning completely breaks down across transport-parallel regimes because lateral well separation ($>420$ m) exceeds geobody width ($140-210$ m).
+
+### 10.5 Scientific Impact Classification & Test Suite
+- **Impact Classification**: **Category C (Little impact on spatial predictability limit; essential for geological realism)**.
+  - The previous finding that spatial ML cannot interpolate discontinuous ribbon channels across sparse wells is fully confirmed.
+  - Directional 1D succession (fining upward) is restored to scientific alignment with Sahoo et al. (2016).
+- **Test Suite Status**: **82 passed, 0 failed** (`python -m pytest tests/`). Dedicated test file: [`tests/test_sprint_h.py`](file:///d:/Lithology-reconstruction-using-XGB/tests/test_sprint_h.py) (9/9 passing).
+- **Audit Deliverables**: [`sprints/audit_sprint_h/`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_h/) (10 CSV artifacts, 3 figures including [`figures/common_zero_transect_alignment_corrected.png`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_h/figures/common_zero_transect_alignment_corrected.png), and comprehensive audit report [`sprints/audit_sprint_h/SPRINT_H_ORIENTATION_CORRECTION_REPORT.md`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_h/SPRINT_H_ORIENTATION_CORRECTION_REPORT.md)).
 
 ---
 

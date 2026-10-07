@@ -1,0 +1,13 @@
+litholog,original_depth_min,original_depth_max,common_z_min,common_z_max,n_intervals,total_thickness,coordinate_available,spatial_eligible
+litholog1,0.0,93.0,-93.0,-0.0,26,93.0,False,False
+litholog2,0.0,93.0,-93.0,-0.0,20,93.0,True,True
+litholog3,0.0,93.0,-93.0,-0.0,15,93.0,True,True
+litholog4,0.0,84.0,-84.0,-0.0,23,84.0,True,True
+litholog5,0.0,84.0,-84.0,-0.0,24,84.0,True,True
+litholog6,0.0,84.0,-84.0,-0.0,23,84.0,True,True
+litholog7,0.0,79.0,-79.0,-0.0,24,79.0,True,True
+litholog8,0.0,79.0,-79.0,-0.0,32,79.0,True,True
+litholog9,0.0,78.0,-78.0,-0.0,25,77.0,True,True
+litholog10,0.0,77.0,-77.0,-0.0,29,77.0,True,True
+litholog11,0.0,78.0,-78.0,-0.0,24,79.0,True,True
+litholog12,0.0,111.0,-111.0,-0.0,63,111.0,True,True

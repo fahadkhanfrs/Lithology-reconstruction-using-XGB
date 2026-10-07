@@ -1,0 +1,5 @@
+model_name,proportion_tv_distance,transition_matrix_frobenius_div,mean_bed_thickness_m,bed_thickness_error_m
+Ground Truth Target,0.0,0.0,3.76,0.0
+Sprint I Conditioned Markov (CTP),0.6277,1.4796,940.0,936.24
+Spatial 3D KNN (k=5),0.0766,0.9168,8.1,4.34
+Nearest-Well Profile,0.0457,0.264,4.1,0.34

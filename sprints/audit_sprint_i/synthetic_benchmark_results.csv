@@ -1,0 +1,6 @@
+test_item,status,details
+Synthetic Grid Extent,PASSED,200x50 cells (1000m x 50m)
+Synthetic Boreholes Sampled,PASSED,"4 wells at x=[50.0, 250.0, 550.0, 900.0] m"
+Training Boreholes Honored (Hard Data),PASSED,100.0% honor rate across 150 conditioning observations
+Target Borehole Withheld,PASSED,synth_well_3 (x=550.0 m) strictly excluded from training
+Inter-well Realization Diversity,PASSED,Non-zero entropy and stochastic variation in unsampled intervals

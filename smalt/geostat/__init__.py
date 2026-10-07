@@ -8,11 +8,20 @@ from smalt.geostat.spatial_markov import (
     SpatialMarkovPredictor,
     DEFAULT_LATERAL_FACIES_LENGTHS_M,
 )
+from smalt.geostat.spatial_transition import (
+    EmpiricalHorizontalTransitionEstimator,
+    SpatialTransitionRateModel,
+)
+from smalt.geostat.conditioned_markov import ConditionedMarkovClassifier
+from smalt.geostat.realization import InterWellRealizationGenerator
 
 __all__ = [
     "StratigraphicMarkovChain",
     "SpatialMarkovTransitionAnalyzer",
     "SpatialMarkovPredictor",
     "DEFAULT_LATERAL_FACIES_LENGTHS_M",
+    "EmpiricalHorizontalTransitionEstimator",
+    "SpatialTransitionRateModel",
+    "ConditionedMarkovClassifier",
+    "InterWellRealizationGenerator",
 ]
-

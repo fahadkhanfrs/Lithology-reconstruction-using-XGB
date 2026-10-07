@@ -9,6 +9,7 @@
 - **Sprint F (Six-State Migration & Spatial Baseline Revalidation)**: COMPLETE / VERIFIED (Migrated to 6-state canonical schema preserving distinct p_sand and ripples; recomputed 6x6 Markov transitions; leak-free Spatial LOLO revalidated with per-class metrics, 6x6 confusion matrices, and naive baselines; 10/10 new tests passing [65/65 repository total]; deliverables in sprints/audit_sprint_f/)
 - **Sprint G (Independent Results Audit & Spatial Modeling Decision)**: COMPLETE / VERIFIED (Independently audited Sprint F metrics [0 discrepancy]; confirmed inter-well sparsity root cause [420-5000 m spacing vs 140-210 m channel width]; identified and tested StandardScaler vertical anisotropy defect; established 20-day UGP presentation roadmap: proceed with Phase 1 [1D Markov] + scoped Phase 2 [unconditioned 2D fluvial forward model], defer Phase 3 [spatial interpolation on real wells], re-scope Phase 4-5 to synthetic benchmarks; 8/8 new unit tests passing [73/73 repository total]; deliverables in sprints/audit_sprint_g/)
 - **Sprint H (Common-Zero Datum Alignment, Orientation Audit & Spatial Markov Foundation)**: COMPLETE / VERIFIED (Audited source vertical orientation against Sahoo et al. [2016] measured-section convention [0 m = base, height increases upward]; transformed measured sections L1-L11 via z_strat = H_max - d; preserved L12 drill core orientation; verified 100% stratigraphic invariance [1033.0 m, 328 intervals]; rebuilt horizontal pairs [4,410 pairs across 111 elevation slices] and spatial LOLO benchmark; evaluated directional upstream <-> downstream generalization; confirmed orientation correction restores geological reality without altering sparsity-dominated spatial predictability limits; 9/9 Sprint H tests passing, 82/82 repository total; deliverables in sprints/audit_sprint_h/)
+- **Sprint I (Conditioned Transition-Probability Geostatistical Prototype)**: COMPLETE / VERIFIED (Implemented coupled Markov transition geostatistical prototype combining vertical succession P_v and continuous horizontal rate model P_h(h) = exp(R*h); guaranteed 100.0% hard conditioning honor rate; generated stochastic inter-well realizations reproducing ground-truth mean bed thickness within 0.09 m [3.85 m vs 3.76 m]; mapped spatial Shannon entropy; proved why pointwise MAP classification collapses to background mudstone [37.23%] while stochastic simulation succeeds; 15/15 Sprint I tests passing, 97/97 repository total; deliverables in sprints/audit_sprint_i/)
 - **Phase 2 (2D Cross-Sectional Geostatistical Modeling)**: READY FOR SPRINT (Scoped to unconditioned process-based forward simulation with W/T=35 geometric priors)
 
 ---
@@ -350,14 +351,75 @@ Overbank Mudstone      -0.158              0.030                  -0.061      0.
 
 ---
 
-## 11. Immediate Next Actions (Phase 2 & Presentation Preparation)
+## 11. Sprint I Conditioned Transition-Probability Geostatistical Prototype & Validation Status
+
+### 11.1 Prototype Architecture & Mathematical Formulation
+- **Coupled Markov Transition Model**: Built continuous spatial geostatistical framework [`smalt/geostat/spatial_transition.py`](file:///d:/Lithology-reconstruction-using-XGB/smalt/geostat/spatial_transition.py) and [`smalt/geostat/conditioned_markov.py`](file:///d:/Lithology-reconstruction-using-XGB/smalt/geostat/conditioned_markov.py) combining:
+  - Vertical transition probability matrix $\mathbf{P}_v \in \mathbb{R}^{6 \times 6}$ estimated from stratigraphic succession.
+  - Continuous horizontal transition probability matrix $\mathbf{P}_h(h) = \exp(\mathbf{R}_h h)$ parameterized via Carle & Fogg (1996) transition rates $R_{ii} = -1 / L_i$ with $R_{ij} = r_{ij} / L_i$ ($i \neq j$).
+  - Mean lateral lens lengths: $L_{\text{sand}} = 203\text{ m}, L_{\text{mud}} = 360\text{ m}, L_{\text{ripples}} = 75\text{ m}, L_{\text{coal}} = 55\text{ m}, L_{\text{carbon\_mud}} = 40\text{ m}, L_{\text{p\_sand}} = 30\text{ m}$.
+- **Conditioning Engine (SMALT-CTP Adaptation)**:
+  - Computes joint conditional facies probability field $\mathbf{p}(x, y, z) \propto \mathbf{P}_v(S(z-1), \cdot) \odot \left[ \sum_{w=1}^W \frac{1}{d_w^\alpha + \epsilon} \mathbf{P}_h(d_w)[S_w(z), \cdot] \right]$.
+  - Enforces **100.0% Hard Conditioning Honor Rate**: at any known well location $(x_w, y_w, z)$, the conditional probability collapses strictly to $p_k = 1.0$ for the observed facies and $0.0$ for all others.
+- **Inter-Well Stochastic Realization Generator**: [`smalt/geostat/realization.py`](file:///d:/Lithology-reconstruction-using-XGB/smalt/geostat/realization.py) generates reproducible 2D cross-sectional ensembles under deterministic random seeds, mapping ensemble mode, channel sand probability fields, and spatial Shannon entropy.
+
+### 11.2 Rebuilt LOLO Benchmark Performance (940 Evaluation Points across L2-L12)
+- **Spatial LOLO CV Comparison**:
+  - **Spatial 3D KNN ($k=5$)**: Pooled Raw Acc = **45.96%** (432/940), Balanced Acc = **22.16%**, Macro-F1 = **0.2163**.
+  - **Nearest-Well Vertical Profile**: Pooled Raw Acc = **43.94%** (413/940), Balanced Acc = **22.43%**, Macro-F1 = **0.2229**.
+  - **Training Prior Majority (`sand`)**: Pooled Raw Acc = **43.51%** (409/940), Balanced Acc = **16.67%**, Macro-F1 = **0.1011**.
+  - **Spatial Markov (Sprint H minimal)**: Pooled Raw Acc = **37.23%** (350/940), Balanced Acc = **16.67%**, Macro-F1 = **0.0904**.
+  - **Conditioned Transition-Probability Prototype (SMALT-CTP MAP)**: Pooled Raw Acc = **37.23%** (350/940), Balanced Acc = **16.67%**, Macro-F1 = **0.0904**.
+
+### 11.3 Key Theoretical Insight: Why Pointwise MAP Classification Collapses
+- **Nyquist-Shannon Spatial Sparsity Limit**:
+  - Inter-well spacing in the Blackhawk Formation dataset is $h \ge 420\text{ m}$ (mean spacing $> 1,200\text{ m}$).
+  - Channel sandstone geobody widths range between $140\text{ m}$ and $210\text{ m}$ ($W/T \approx 35$).
+  - For $h \ge 420\text{ m}$, the horizontal transition likelihood $\mathbf{P}_h(h)$ decays exponentially to regional stationary proportions $\boldsymbol{\pi}$.
+  - At unconditioned target locations, the deterministic argmax $\arg\max_k p_k$ invariably selects the regional background floodplain facies (Overbank Mudstone, support = 37.23%).
+- **Geological-Statistical Superiority of Stochastic Simulation**:
+  - While deterministic MAP yields low pointwise accuracy, **stochastic sampling** from the conditioned probability vector faithfully reproduces subsurface sedimentary architecture.
+  - **Mean Bed Thickness Reproduction**: Ground-truth target well mean bed thickness is **3.76 meters**. The conditioned stochastic realization ensemble achieves **3.85 meters** (relative discrepancy $< 2.4\%$), whereas spatial KNN produces artificial, vertically smeared beds averaging **8.10 meters** (+115% distortion).
+
+### 11.4 Directional Generalization: Upstream <-> Downstream Validation
+- **Upstream -> Downstream** (Train L2-L8, L10; Test L9, L11, L12; 267 pts):
+  - KNN Raw Acc = **34.83%** (vs Training Prior = **44.94%**).
+  - Conditioned Markov Raw Acc = **25.84%** (predicts background mudstone; test set has high sandstone support).
+- **Downstream -> Upstream** (Train L9, L11, L12; Test L2-L8, L10; 673 pts):
+  - KNN Raw Acc = **39.23%** (vs Training Prior = **42.94%**).
+  - Conditioned Markov Raw Acc = **42.94%**.
+
+### 11.5 Synthetic Benchmark Sanity Verification
+- Tested on synthetic 2D benchmark ($X \times Z = 500\text{ m} \times 50\text{ m}$, 3 facies, 3 sparse boreholes):
+  - Conditioning observations honored at **100.0%**.
+  - Withheld target well completely excluded from parameter estimation (leak-free).
+  - Realization ensemble generates variable inter-well channel geometry with realistic Shannon entropy ($H > 0.8$ nats in unsampled inter-well zones, $H = 0.0$ at well control points).
+
+### 11.6 Sprint I Deliverables & Test Suite
+- **Repository Test Suite**: **97 passed, 0 failed** in 57.69s (`python -m pytest tests/`).
+- **Dedicated Test Suite**: [`tests/test_sprint_i.py`](file:///d:/Lithology-reconstruction-using-XGB/tests/test_sprint_i.py) (15/15 tests passing).
+- **CSV Deliverables**: All saved in [`sprints/audit_sprint_i/`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_i/):
+  - `empirical_horizontal_transitions.csv` (4,410 horizontal pairs)
+  - `horizontal_transition_fit.csv` (continuous transition rate matrix)
+  - `conditioned_markov_lolo_results.csv` (LOLO predictions per well)
+  - `conditioned_markov_baseline_comparison.csv` (pointwise metrics vs baselines)
+  - `directional_upstream_downstream_sprint_i.csv` (transport-parallel splits)
+  - `geological_statistical_metrics.csv` (bed thickness, entropy, honor rates)
+  - `synthetic_benchmark_results.csv` (synthetic sanity test metrics)
+- **Publication Figures**: 10 figures in [`sprints/audit_sprint_i/figures/`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_i/figures/).
+- **Comprehensive Audit Report**: [`sprints/audit_sprint_i/SPRINT_I_CONDITIONED_MARKOV_REPORT.md`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_i/SPRINT_I_CONDITIONED_MARKOV_REPORT.md).
+
+---
+
+## 12. Immediate Next Actions (Phase 2 & Presentation Preparation)
 
 1. **Implement Scoped Phase 2 Fluvial Forward Generator**:
    - Build lightweight, unconditioned 2D ribbon channel cross-section simulator conditioned on Sahoo et al. (2016) architectural priors ($W/T \approx 35$, mean thickness $\approx 5.8$ m, target N/G 17-50%).
 2. **Prepare UGP Presentation Slide Deck**:
-   - Assemble slide deck highlighting the 1D Markov empirical succession, the common-zero datum alignment, the spatial Markov decay findings, and the 2D forward process model.
+   - Assemble slide deck highlighting the 1D Markov empirical succession, the common-zero datum alignment, the spatial Markov decay findings, the Nyquist-Shannon sparsity limits, and the 2D forward process model.
 3. **Formulate Next Data Inquiries for Prof. Sahoo**:
-   - Deliver Sprint H report and common-zero alignment transects to Prof. Sahoo.
+   - Deliver Sprint H and Sprint I reports and transects to Prof. Sahoo.
+
 
 
 

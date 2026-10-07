@@ -39,14 +39,15 @@ class ProvisionalSpatialValidator:
     def __init__(
         self,
         inspector: Optional[LithologInspector] = None,
-        vertical_reference: str = "relative_to_base",
+        vertical_reference: str = "common_zero",
         vertical_weight: float = 10.0,
     ):
         """
         Args:
             inspector: LithologInspector instance.
-            vertical_reference: 'relative_to_base' (Z_rel = bot_max - depth) or
-                                'relative_to_top' (Z_rel = -depth).
+            vertical_reference: 'common_zero' (standard project datum: z = -depth),
+                                'relative_to_top' (synonym for common_zero), or
+                                'relative_to_base' (legacy local datum: z = max(depth) - depth).
             vertical_weight: Scaling factor for vertical distance vs horizontal distance
                              (reflects anisotropic geological correlation where vertical
                              scale ~10-100x finer than lateral scale).
@@ -80,12 +81,12 @@ class ProvisionalSpatialValidator:
         x_m, y_m = self.coords_by_id[litholog_id]
         disc_df = self.inspector.discretize_litholog_1m(litholog_id)
         
-        # Calculate relative vertical coordinate Z_rel
-        max_d = disc_df["depth_m"].max()
-        if self.vertical_reference == "relative_to_base":
-            z_rel = (max_d - disc_df["depth_m"]) + datum_offset_m
-        elif self.vertical_reference == "relative_to_top":
+        # Calculate vertical coordinate relative to chosen datum
+        if self.vertical_reference in ("common_zero", "common_zero_datum", "relative_to_top"):
             z_rel = (-disc_df["depth_m"]) + datum_offset_m
+        elif self.vertical_reference == "relative_to_base":
+            max_d = disc_df["depth_m"].max()
+            z_rel = (max_d - disc_df["depth_m"]) + datum_offset_m
         else:
             raise ValueError(f"Unknown vertical_reference: {self.vertical_reference}")
 
@@ -93,6 +94,7 @@ class ProvisionalSpatialValidator:
         df_pts["x_m"] = x_m
         df_pts["y_m"] = y_m
         df_pts["z_rel_m"] = z_rel
+
         return df_pts
 
     def run_spatial_lolo(

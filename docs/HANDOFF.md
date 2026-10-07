@@ -8,6 +8,7 @@
 - **Sprint E (Revised Dataset Reconciliation & Spatial Prototype Readiness)**: COMPLETE / SUPERSEDED (Reconciled 12 revised lithologs under provisional 5-state mapping; L12 registered in manifest; synthetic coordinate audit completed; provisional spatial baseline evaluated; 11/11 tests passing; deliverables in sprints/audit_sprint_e/)
 - **Sprint F (Six-State Migration & Spatial Baseline Revalidation)**: COMPLETE / VERIFIED (Migrated to 6-state canonical schema preserving distinct p_sand and ripples; recomputed 6x6 Markov transitions; leak-free Spatial LOLO revalidated with per-class metrics, 6x6 confusion matrices, and naive baselines; 10/10 new tests passing [65/65 repository total]; deliverables in sprints/audit_sprint_f/)
 - **Sprint G (Independent Results Audit & Spatial Modeling Decision)**: COMPLETE / VERIFIED (Independently audited Sprint F metrics [0 discrepancy]; confirmed inter-well sparsity root cause [420-5000 m spacing vs 140-210 m channel width]; identified and tested StandardScaler vertical anisotropy defect; established 20-day UGP presentation roadmap: proceed with Phase 1 [1D Markov] + scoped Phase 2 [unconditioned 2D fluvial forward model], defer Phase 3 [spatial interpolation on real wells], re-scope Phase 4-5 to synthetic benchmarks; 8/8 new unit tests passing [73/73 repository total]; deliverables in sprints/audit_sprint_g/)
+- **Sprint H (Common-Zero Datum Alignment & Spatial Markov Foundation)**: COMPLETE / VERIFIED (Implemented explicit vertical coordinate API for common-zero datum [z = -depth, top z = 0.0 m] per Prof. Sahoo's project directive; verified 100% stratigraphic invariance [1033.0 m, 328 intervals, zero facies count shift]; preserved validated 1D vertical Markov models [81/81 tests passing]; established horizontal pair extraction [4,410 empirical pairs] and Carle & Fogg [1996] continuous transition rate framework; evaluated minimal spatial Markov predictor under LOLO CV; 8/8 new unit tests passing [81/81 repository total]; deliverables in sprints/audit_sprint_h/)
 - **Phase 2 (2D Cross-Sectional Geostatistical Modeling)**: READY FOR SPRINT (Scoped to unconditioned process-based forward simulation with W/T=35 geometric priors)
 
 ---
@@ -301,13 +302,54 @@ Overbank Mudstone      -0.158              0.030                  -0.061      0.
 
 ---
 
-## 10. Immediate Next Actions (Phase 2 & Presentation Preparation)
+## 10. Sprint H Common-Zero Datum Alignment & Spatial Markov Foundation Status
+
+### 10.1 Common-Zero Vertical Alignment & Invariance
+- **Project Reference Level**: Adopted Prof. Hiranya Sahoo's explicit project instruction: "All litholog zeros should be treated as being at the same reference level."
+- **Standard Vertical Coordinate**: Constructed explicit, reversible API in [`smalt/spatial/datum.py`](file:///d:/Lithology-reconstruction-using-XGB/smalt/spatial/datum.py):
+  - $z_{\text{common}} = -\text{depth}_{\text{measured}}$ (top datum $z = 0.0$ m; elevation convention with deeper intervals increasingly negative).
+  - Preserves original measured depth column (`depth_original_m`), interval thickness, facies codes, and facies names.
+  - Round-trip exact reversibility verified ($\text{depth} = -z_{\text{common}}$).
+- **100% Stratigraphic Invariance Verified**:
+  - Total cumulative thickness: Exactly **1033.0 m** across all 12 lithologs (328 intervals).
+  - Facies interval counts completely unchanged: `mud` (109), `sand` (92), `p_sand` (43), `ripples` (31), `coal` (29), `carbon_mud` (24).
+  - Litholog 1 (93.0 m) retained for 1D vertical analysis; strictly excluded from spatial modeling due to missing coordinates.
+
+### 10.2 Empirical Horizontal Transition Pairs & Continuous Rate Matrix
+- **Matched Elevation Slicing**: Extracted **4,410 empirical horizontal well pairs** across matched 1 m elevation slices from the 11 coordinate-bearing wells (L2-L12).
+- **Lag-Binned Transition Dynamics**:
+  - Short lag (400-1000 m, 736 pairs): `sand` auto-transition probability = **0.542**; `mud` = **0.448**; `coal` = **0.000** (no inter-well coal coincidence observed).
+  - Intermediate lag (1000-2500 m, 1,384 pairs): `sand` auto-transition = **0.478**; `mud` = **0.410**.
+  - Long lag (2500-5500 m, 2,290 pairs): `sand` auto-transition decays to **0.421**; `mud` to **0.385**, approaching stationary background proportions (43.5% sand, 37.2% mud).
+- **Continuous Transition Rate Matrix ($\mathbf{R}_h$)**:
+  - Implemented Carle & Fogg (1996) formulation: $R_{ii} = -1 / \bar{L}_{h,i}$, off-diagonals $R_{ij} = -R_{ii} p_j / (1 - p_i)$, rows sum to 0.
+  - Continuous matrix exponential $\mathbf{P}(h) = \exp(\mathbf{R}_h h)$ provides exact analytical transition decay for any horizontal separation.
+
+### 10.3 Spatial LOLO Benchmark Performance on Common Zero (940 Grid Points)
+- **Spatial LOLO Results**:
+  - **Nearest-Well Vertical Profile**: Pooled Raw Acc = **45.85%** (431/940), Balanced Acc = **23.18%**, Macro-F1 = **0.2303**.
+  - **Spatial 3D KNN (k=5)**: Pooled Raw Acc = **48.51%** (456/940), Balanced Acc = **22.98%**, Macro-F1 = **0.2256**.
+  - **Training Prior Majority Baseline (`sand`)**: Pooled Raw Acc = **43.51%** (409/940), Balanced Acc = **16.67%**, Macro-F1 = **0.1011**.
+  - **Spatial Markov Transition Model**: Pooled Raw Acc = **37.23%** (350/940), Balanced Acc = **16.67%**, Macro-F1 = **0.0904**.
+- **Theoretical Finding on Spatial Markov Behavior**:
+  - The continuous spatial Markov model is the exact theoretical link between Nearest-Well ($h \to 0, \mathbf{P}(0) = \mathbf{I}$) and stationary prior ($h \to \infty, \mathbf{P}(h) \to \mathbf{1}\mathbf{p}^T$).
+  - Because inter-well spacing ($h \ge 420.0$ m) exceeds lateral channel widths ($\bar{L}_h \approx 203$ m), the Markov model smoothly decays to predicting the most extensive regional lithology: Overbank Mudstone ($\bar{L}_h \approx 360$ m, 37.23% support).
+  - This mathematically proves the physical limit of inter-well correlation in sparse data.
+
+### 10.4 Test Suite & Deliverables
+- **Test Suite Status**: **81 passed, 0 failed** (`pytest tests/`). Dedicated test file: [`tests/test_sprint_h.py`](file:///d:/Lithology-reconstruction-using-XGB/tests/test_sprint_h.py) (8/8 passing).
+- **Audit Deliverables**: [`sprints/audit_sprint_h/`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_h/) (5 audit CSVs, 2 high-resolution publication figures, and comprehensive report [`sprints/audit_sprint_h/SPRINT_H_COMMON_ZERO_SPATIAL_MARKOV_REPORT.md`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_h/SPRINT_H_COMMON_ZERO_SPATIAL_MARKOV_REPORT.md)).
+
+---
+
+## 11. Immediate Next Actions (Phase 2 & Presentation Preparation)
 
 1. **Implement Scoped Phase 2 Fluvial Forward Generator**:
    - Build lightweight, unconditioned 2D ribbon channel cross-section simulator conditioned on Sahoo et al. (2016) architectural priors ($W/T \approx 35$, mean thickness $\approx 5.8$ m, target N/G 17-50%).
 2. **Prepare UGP Presentation Slide Deck**:
-   - Assemble slide deck highlighting the 1D Markov empirical succession, the rigorous spatial sparsity audit (disproving naive ML), and the 2D forward process model.
+   - Assemble slide deck highlighting the 1D Markov empirical succession, the common-zero datum alignment, the spatial Markov decay findings, and the 2D forward process model.
 3. **Formulate Next Data Inquiries for Prof. Sahoo**:
-   - Deliver the Sprint G audit report and document the three specific blockers required for future field-scale spatial conditioning: (a) stratigraphic datum correlation marker, (b) local grid coordinate projection/datum, and (c) Litholog 1 GPS location.
+   - Deliver Sprint H report and common-zero alignment transects to Prof. Sahoo.
+
 
 

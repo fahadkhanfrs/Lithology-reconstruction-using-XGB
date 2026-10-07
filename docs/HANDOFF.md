@@ -5,8 +5,9 @@
 - **Phase 1 (1D Vertical Markov Succession Analysis)**: VERIFIED (Full 11-log dataset fitted [920 observations], provenance sensitivity analysis documented, 11/11 unit tests passing)
 - **Sprint C (Descriptive Lithology & Leakage-Free 1D Markov Baseline)**: COMPLETE / VERIFIED (All 12 lithologs audited, 12 unit tests passing, publication figures generated in audit_sprint_c/)
 - **Sprint D (Reproducible 1D Markov Validation & Summary Reconciliation)**: COMPLETE / VERIFIED (Mathematical scoring formalized with separate initial-state vs transition metrics, embedded bed sequence integrity enforced, 10/10 new unit tests passing [44/44 repository total], summary statistics reconciled directly from raw CSVs, deliverables in audit_sprint_d/)
-- **Sprint E (Revised Dataset Reconciliation & Spatial Prototype Readiness)**: COMPLETE / VERIFIED (All 12 revised lithologs reconciled; p_sand and ripples mapped; L12 registered in manifest; synthetic coordinate audit completed; provisional spatial LOLO baseline and datum sensitivity evaluated; 11/11 new tests passing [55/55 repository total]; deliverables in sprints/audit_sprint_e/)
-- **Phase 2 (2D Cross-Sectional Geostatistical Modeling)**: READY FOR SPRINT (Requires stratigraphic datum correlation before conditioned spatial reconstruction; baseline exploratory spatial prototype documented)
+- **Sprint E (Revised Dataset Reconciliation & Spatial Prototype Readiness)**: COMPLETE / SUPERSEDED (Reconciled 12 revised lithologs under provisional 5-state mapping; L12 registered in manifest; synthetic coordinate audit completed; provisional spatial baseline evaluated; 11/11 tests passing; deliverables in sprints/audit_sprint_e/)
+- **Sprint F (Six-State Migration & Spatial Baseline Revalidation)**: COMPLETE / VERIFIED (Migrated to 6-state canonical schema preserving distinct p_sand and ripples; recomputed 6x6 Markov transitions; leak-free Spatial LOLO revalidated with per-class metrics, 6x6 confusion matrices, and naive baselines; 10/10 new tests passing [65/65 repository total]; deliverables in sprints/audit_sprint_f/)
+- **Phase 2 (2D Cross-Sectional Geostatistical Modeling)**: READY FOR SPRINT (Requires stratigraphic datum correlation from Prof. Sahoo before conditioned spatial simulation; baseline exploratory spatial prototype documented)
 
 ---
 
@@ -227,14 +228,68 @@ Overbank Mudstone      -0.158              0.030                  -0.061      0.
 
 ---
 
-## 8. Remaining Blockers & Next Actions
+## 8. Sprint F Six-State Migration & Spatial Baseline Revalidation Status
+
+### 8.1 Six-State Canonical Facies Schema
+- **Migration Completed**: Replaced provisional 5-state mapping with the definitive 6-state facies schema adhering to Sahoo et al. (2016):
+  - **Code 0: `sand`** (`Channel Sandstone`, Facies 1)
+  - **Code 1: `p_sand`** (`Planar Sandstone`, Facies 2)
+  - **Code 2: `ripples`** (`Rippled Heterolithics`, Facies 3; alias `silt`)
+  - **Code 3: `carbon_mud`** (`Carbonaceous Mudstone`, Facies 4)
+  - **Code 4: `coal`** (`Coal`, Facies 5)
+  - **Code 5: `mud`** (`Overbank Mudstone`, Facies 6)
+- **Net Sand Partitioning Formalized**:
+  - `ntg_channel` (Code 0 only): 43.05% (444.7 m across all 12 logs).
+  - `ntg_planar` (Code 1 only): 6.10% (63.0 m across all 12 logs).
+  - `ntg_net_sand` (`sand` + `p_sand`): 49.15% (507.7 m raw span; 506.7 m in discretized points).
+  - `ntg_coarse` (`sand` + `p_sand` + `ripples`): 56.78% (585.4 m raw span).
+- **Regenerated Pipeline Outputs**: Master script [`scripts/run_sprint_f_pipeline.py`](file:///d:/Lithology-reconstruction-using-XGB/scripts/run_sprint_f_pipeline.py) executed cleanly; all 11 CSV/JSON audit deliverables and 5 high-resolution figures generated in [`sprints/audit_sprint_f/`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_f/).
+
+### 8.2 Recomputed 6x6 Markov Transition Chains
+- **Regular Discretized 1D Chain (1 m Grid)**:
+  - Transition matrix dimension: 6x6. Average LOLO transition perplexity: **2.6289** across all 12 logs.
+  - Strong diagonal self-transition persistence: `sand` (0.8354), `p_sand` (0.4286), `ripples` (0.5844), `carbon_mud` (0.4706), `coal` (0.5833), `mud` (0.8149).
+- **Embedded 1D Chain (Distinct Bed Boundary Transitions, P_ii = 0)**:
+  - Transition matrix dimension: 6x6 with zero diagonals. Average LOLO transition perplexity: **4.1793** across all 12 logs.
+  - Asymmetric bed boundary transitions: `coal` transitions exclusively into `mud` (72.41%) or `carbon_mud` (27.59%), never directly erosive into `sand` (0.0%).
+
+### 8.3 Spatial LOLO Baseline Revalidation Findings (L2-L12, 940 Grid Points)
+- **Pooled Benchmark Comparison**:
+  - **Spatial 3D KNN (k=5)**: Pooled Macro-F1 = **0.2232**, Balanced Accuracy = **22.81%**, Raw Accuracy = **47.77%** (449/940 correct).
+  - **Nearest-Well Vertical Profile**: Pooled Macro-F1 = **0.2276**, Balanced Accuracy = **22.91%**, Raw Accuracy = **44.26%** (416/940 correct).
+  - **Training Prior Majority Baseline (`sand`)**: Pooled Macro-F1 = **0.1011**, Balanced Accuracy = **16.67%**, Raw Accuracy = **43.51%** (409/940 correct).
+- **Core Scientific Finding**:
+  - Spatial 3D KNN fails to beat the 1D Nearest-Well vertical profile baseline in Macro-F1 (**0.2232 vs 0.2276**).
+  - Spatial 3D KNN yields only a **+4.26 percentage point** gain in raw accuracy over the zero-spatial training prior majority baseline (47.77% vs 43.51%).
+  - Raw accuracy is heavily inflated by majority-class predictions (`sand` and `mud`).
+- **Minority Facies Failure**:
+  - `coal` (support = 25): **0/25 correct** for both Spatial KNN and Nearest-Well (Recall = 0.0000, F1 = 0.0000).
+  - `carbon_mud` (support = 17): **0/17 correct** for both Spatial KNN and Nearest-Well (Recall = 0.0000, F1 = 0.0000).
+  - `p_sand` (support = 62): Nearest-Well achieves F1 = **0.1111** (7/62 correct); Spatial KNN achieves only F1 = **0.0465** (2/62 correct).
+- **Directional Gap Generalization Failure**:
+  - Upstream -> Downstream: Spatial KNN accuracy = **39.33%**, underperforming the training prior (**44.94%**).
+  - Downstream -> Upstream: Spatial KNN accuracy = **38.93%**, underperforming the training prior (**42.94%**).
+- **Vertical Datum Sensitivity**:
+  - Systematic datum offset perturbations from -20 m to +20 m shift Spatial KNN Macro-F1 only between **0.2164 and 0.2270**. Macro-F1 remains effectively invariant, demonstrating that lateral facies heterogeneity and wide inter-well spacing (150 m to 14 km), rather than vertical datum alignment, govern spatial predictability.
+
+### 8.4 Test Suite & Quality Assurance
+- **Full Test Suite Status**: 65/65 tests passing cleanly across the repository.
+- Dedicated test suite [`tests/test_sprint_f.py`](file:///d:/Lithology-reconstruction-using-XGB/tests/test_sprint_f.py) validates 6-state mapping, distinct `p_sand`/`ripples`, strict L1 exclusion, zero leakage during cross-validation, 6x6 Markov normalization, and artifact synchronization.
+
+---
+
+## 9. Remaining Blockers & Next Actions
 
 ### Remaining Blockers for Conditioned 2D/3D Reconstruction:
-1. **Stratigraphic Datum Correlation**: The 11 outcrop logs and L12 core lack a correlated datum horizon (e.g. coal marker or flooding surface). Without vertical alignment, spatial models cannot distinguish true lateral continuity from vertical shifts.
-2. **Litholog 1 Coordinate Absence**: L1 lacks physical X, Y coordinates and remains excluded from spatial models.
+1. **Stratigraphic Datum Correlation**: The 11 outcrop logs and L12 core lack an anchored, verified marker datum (e.g. correlative coal seam, paleosol, or marine flooding surface). Without an anchored datum from Prof. Sahoo, relative-to-base remains a provisional assumption.
+2. **Litholog 1 Spatial Coordinates**: L1 lacks physical X, Y coordinates and must remain excluded from spatial models.
 3. **Coordinate Reference System Details**: Local Cartesian coordinates $(X, Y)$ in `Location_coordinates_lithologs.xlsx` are relative; projection parameters (e.g. UTM Zone 12N) are unconfirmed.
+4. **Severe Inter-Well Sparsity**: With inter-well distances ranging from 150 m to 14,000 m and lateral channel widths typically under 200-500 m, naive spatial interpolation cannot reconstruct channel architecture without geological concept priors or variogram conditioning.
 
-### Recommended Next Action (Sprint F):
-- **Sprint F: Stratigraphic Marker Correlation and 2D Cross-Sectional Geometry Formulation.**
-- Audit coal seams and maximum flooding surfaces across L1-L12 to test candidate stratigraphic datums.
-- Formulate 2D cross-sectional conditioning using marker-aligned elevations.
+### Recommended Next Action (Sprint G):
+- **Consultation with Prof. Hiranya Sahoo**: Present the Sprint F six-state spatial revalidation report ([`docs/notes/sprint_f_six_state_spatial_revalidation.md`](file:///d:/Lithology-reconstruction-using-XGB/docs/notes/sprint_f_six_state_spatial_revalidation.md)) and solicit guidance on:
+  1. The stratigraphic datum horizon connecting outcrop profiles L1-L11 to subsurface core L12.
+  2. Geographic coordinate origin / CRS for the local coordinate grid.
+  3. Physical location or GPS coordinates for Litholog 1.
+- **Geostatistical 2D Fluvial Architecture Modeling**: Once datum assumptions are clarified, implement 2D indicator geostatistics or transition probability geostatistics (T-PROGS / Carle & Fogg) conditioned on lateral facies lengths rather than unconstrained 3D distance interpolation.
+

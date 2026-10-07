@@ -1,0 +1,13 @@
+litholog_id,raw_label,provenance_category,group,digitized_span_m,coordinates_available,x_m,y_m,crs_status,spatial_modeling_eligibility,notes
+litholog1,L1,source_derived,unassigned_no_coords,93.0,False,,,None,EXCLUDED (no coordinates),Coordinates absent in source spreadsheet; strictly ineligible for spatial validation.
+litholog2,L2,ai_reconstructed,upstream,93.0,True,-4057.68,13755.61,Project-local Cartesian (unverified geographic origin/units),ELIGIBLE,Local Cartesian coordinate in meters; row 1 of spreadsheet.
+litholog3,L3,ai_reconstructed,upstream,93.0,True,-3577.05,13317.0,Project-local Cartesian (unverified geographic origin/units),ELIGIBLE,Local Cartesian coordinate in meters; row 2 of spreadsheet.
+litholog4,L4,ai_reconstructed,upstream,84.0,True,-3121.53,12356.86,Project-local Cartesian (unverified geographic origin/units),ELIGIBLE,Local Cartesian coordinate in meters; row 3 of spreadsheet.
+litholog5,L5,ai_reconstructed,upstream,84.0,True,-2709.27,12276.48,Project-local Cartesian (unverified geographic origin/units),ELIGIBLE,Local Cartesian coordinate in meters; row 4 of spreadsheet.
+litholog6,L6,ai_reconstructed,upstream,84.0,True,-2737.74,11361.24,Project-local Cartesian (unverified geographic origin/units),ELIGIBLE,Local Cartesian coordinate in meters; row 5 of spreadsheet.
+litholog7,L7,ai_reconstructed,upstream,79.0,True,-2163.36,10733.26,Project-local Cartesian (unverified geographic origin/units),ELIGIBLE,Local Cartesian coordinate in meters; row 6 of spreadsheet.
+litholog8,L8,ai_reconstructed,upstream,79.0,True,-1476.11,10873.86,Project-local Cartesian (unverified geographic origin/units),ELIGIBLE,Local Cartesian coordinate in meters; row 7 of spreadsheet.
+litholog9,L9,source_derived,downstream,78.0,True,-137.35,12266.41,Project-local Cartesian (unverified geographic origin/units),ELIGIBLE,Local Cartesian coordinate in meters; row 8 of spreadsheet.
+litholog10,L10,ai_reconstructed,upstream,77.0,True,-469.43,11082.72,Project-local Cartesian (unverified geographic origin/units),ELIGIBLE,Local Cartesian coordinate in meters; row 9 of spreadsheet.
+litholog11,L11,source_derived_benchmarked,downstream,78.0,True,704.07,12169.92,Project-local Cartesian (unverified geographic origin/units),ELIGIBLE,Local Cartesian coordinate in meters; row 10 of spreadsheet.
+litholog12,L12,digitized_core_log,downstream,111.0,True,-1119.91,14407.3,Project-local Cartesian (unverified geographic origin/units),ELIGIBLE,Local Cartesian coordinate in meters; row 11 of spreadsheet.

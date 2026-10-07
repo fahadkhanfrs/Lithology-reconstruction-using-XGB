@@ -61,18 +61,18 @@ def test_all_12_revised_lithologs_loaded(inspector):
 
 
 def test_canonical_facies_encoding_and_unknown_detection():
-    """Verifies that revised facies labels map correctly to canonical 5 classes and invalid labels fail."""
-    # Test revised labels
-    assert normalize_facies_label("p_sand") == "sand"
-    assert normalize_facies_label("planar_sand") == "sand"
-    assert normalize_facies_label("ripples") == "silt"
-    assert normalize_facies_label("ripple") == "silt"
+    """Verifies that revised facies labels map correctly to canonical classes and invalid labels fail."""
+    # Test revised labels (in Sprint F: p_sand and ripples are distinct canonical facies)
+    assert normalize_facies_label("p_sand") == "p_sand"
+    assert normalize_facies_label("planar_sand") == "p_sand"
+    assert normalize_facies_label("ripples") == "ripples"
+    assert normalize_facies_label("ripple") == "ripples"
 
     # Test standard canonical labels
     assert normalize_facies_label("coal") == "coal"
     assert normalize_facies_label("sand") == "sand"
     assert normalize_facies_label("carbon_mud") == "carbon_mud"
-    assert normalize_facies_label("silt") == "silt"
+    assert normalize_facies_label("silt") == "ripples"
     assert normalize_facies_label("mud") == "mud"
 
     # Test unknown label rejection

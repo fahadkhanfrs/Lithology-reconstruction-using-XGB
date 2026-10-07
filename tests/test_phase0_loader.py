@@ -92,8 +92,8 @@ def test_synthetic_gamma_ray_generation(sample_raw_dir, tmp_path):
 
     layers = []
     current_depth = 0
-    facies_cycle = ["sand", "mud", "coal", "carbon_mud", "silt"]
-    for i in range(100):
+    facies_cycle = ["sand", "p_sand", "ripples", "carbon_mud", "coal", "mud"]
+    for i in range(600):
         f = facies_cycle[i % len(facies_cycle)]
         layers.append(f"{current_depth},{current_depth + 10},{f}")
         current_depth += 10

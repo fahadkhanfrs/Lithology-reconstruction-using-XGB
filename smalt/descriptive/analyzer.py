@@ -139,78 +139,107 @@ PROVENANCE_METADATA: Dict[str, Dict[str, Any]] = {
     },
 }
 
-# Canonical 5-state facies schema
+# Canonical 6-state facies schema (Sahoo et al., 2016 Facies 1 to 6)
 CANONICAL_FACIES_SCHEMA: Dict[str, Dict[str, Any]] = {
-    "coal": {
-        "code": 0,
-        "canonical_name": "Coal",
-        "lithology_type": "Biogenic organic deposit / mire facies",
-        "color_hex": "#1C2833",
-        "geological_caveat": "Unambiguous biogenic coal bed. Forms critical chronostratigraphic markers.",
-    },
     "sand": {
-        "code": 1,
-        "canonical_name": "Channel Sandstone (undivided)",
-        "lithology_type": "Coarse siliciclastic / channel-belt sandstone",
+        "code": 0,
+        "facies_number": 1,
+        "canonical_name": "Channel Sandstone",
+        "lithology_type": "Multi-storey channel-belt sandstone (trough cross-bedded)",
         "color_hex": "#F4D03F",
-        "geological_caveat": (
-            "Mapped as 'Channel Sandstone' in Phase 0 schema. Represents all undivided sandstone intervals "
-            "in raw logs; crevasse splay and levee sandstones cannot be distinguished without grain-size/structure logs."
-        ),
+        "geological_caveat": "Facies 1 of Sahoo et al. (2016). Multi-storey channel-belt sandstone.",
+    },
+    "p_sand": {
+        "code": 1,
+        "facies_number": 2,
+        "canonical_name": "Planar Sandstone",
+        "lithology_type": "Planar/parallel-laminated sandstone",
+        "color_hex": "#EB984E",
+        "geological_caveat": "Facies 2 of Sahoo et al. (2016). Planar and parallel laminated sandstone sheets.",
+    },
+    "ripples": {
+        "code": 2,
+        "facies_number": 3,
+        "canonical_name": "Rippled Heterolithics",
+        "lithology_type": "Heterolithic rippled sandstone and siltstone",
+        "color_hex": "#5DADE2",
+        "geological_caveat": "Facies 3 of Sahoo et al. (2016). Interbedded rippled sandstone and siltstone.",
     },
     "carbon_mud": {
-        "code": 2,
+        "code": 3,
+        "facies_number": 4,
         "canonical_name": "Carbonaceous Mudstone",
         "lithology_type": "Organic-rich muddy sediment / poorly-drained swamp",
         "color_hex": "#6C3483",
-        "geological_caveat": (
-            "CRITICAL CONTRADICTION: Phase 0 CANONICAL_FACIES_NAMES labeled code 2 as 'Fine Sandstone / Splay', "
-            "yet assigned Base GR = 130.0 API and technical ID 'carbon_mud'. Geologically, this is carbonaceous "
-            "mudstone (organic-rich mud), NOT a fine sandstone or crevasse splay."
-        ),
+        "geological_caveat": "Facies 4 of Sahoo et al. (2016). Organic-rich mudstone associated with mire margins.",
     },
-    "silt": {
-        "code": 3,
-        "canonical_name": "Siltstone",
-        "lithology_type": "Fine-grained siliciclastic / floodplain-levee transition",
-        "color_hex": "#73C6B6",
-        "geological_caveat": "Unambiguous siltstone. Dropped by legacy XGBoost script due to dictionary omission.",
+    "coal": {
+        "code": 4,
+        "facies_number": 5,
+        "canonical_name": "Coal",
+        "lithology_type": "Biogenic organic deposit / mire facies",
+        "color_hex": "#1C2833",
+        "geological_caveat": "Facies 5 of Sahoo et al. (2016). Autochthonous mire peat / coal seam. Forms chronostratigraphic markers.",
     },
     "mud": {
-        "code": 4,
+        "code": 5,
+        "facies_number": 6,
         "canonical_name": "Overbank Mudstone",
         "lithology_type": "Fine siliciclastic / floodplain-overbank mudstone",
         "color_hex": "#95A5A6",
-        "geological_caveat": "Overbank floodplain mudstone; may include minor abandoned channel-plug muds.",
+        "geological_caveat": "Facies 6 of Sahoo et al. (2016). Overbank floodplain mudstone; may include minor abandoned channel-plug muds.",
     },
 }
 
 RAW_FACIES_ALIASES: Dict[str, str] = {
-    "coal": "coal",
     "sand": "sand",
     "sandstone": "sand",
     "channel_sandstone": "sand",
     "channel sandstone": "sand",
-    "p_sand": "sand",
-    "planar_sand": "sand",
-    "planar_sandstone": "sand",
     "c_sand": "sand",
     "channel_sand": "sand",
-    "ripples": "silt",
-    "rippled_sandstone": "silt",
-    "ripple": "silt",
+    "facies_1": "sand",
+    "facies 1": "sand",
+    "p_sand": "p_sand",
+    "planar_sand": "p_sand",
+    "planar_sandstone": "p_sand",
+    "planar sand": "p_sand",
+    "parallel_sand": "p_sand",
+    "parallel_sandstone": "p_sand",
+    "facies_2": "p_sand",
+    "facies 2": "p_sand",
+    "ripples": "ripples",
+    "ripple": "ripples",
+    "rippled_sandstone": "ripples",
+    "rippled heterolithics": "ripples",
+    "rippled_siltstone": "ripples",
+    "heterolithics": "ripples",
+    "silt": "ripples",
+    "siltstone": "ripples",
+    "facies_3": "ripples",
+    "facies 3": "ripples",
     "carbon_mud": "carbon_mud",
     "carbonaceous_mud": "carbon_mud",
     "carbonaceous mud": "carbon_mud",
     "carbonaceous_mudstone": "carbon_mud",
     "carbonaceous mudstone": "carbon_mud",
-    "silt": "silt",
-    "siltstone": "silt",
+    "carbon mud": "carbon_mud",
+    "fine sandstone / splay": "carbon_mud",
+    "fine_sandstone": "carbon_mud",
+    "fine sandstone": "carbon_mud",
+    "splay": "carbon_mud",
+    "facies_4": "carbon_mud",
+    "facies 4": "carbon_mud",
+    "coal": "coal",
+    "facies_5": "coal",
+    "facies 5": "coal",
     "mud": "mud",
     "mudstone": "mud",
     "overbank_mudstone": "mud",
     "overbank mudstone": "mud",
     "shale": "mud",
+    "facies_6": "mud",
+    "facies 6": "mud",
 }
 
 
@@ -238,9 +267,15 @@ class LithologInspector:
 
     def __init__(self, raw_dir: Union[str, Path] = "data/raw_lithologs"):
         self.raw_dir = Path(raw_dir)
+        self._raw_cache: Dict[str, pd.DataFrame] = {}
+        self._disc_cache: Dict[str, pd.DataFrame] = {}
+        self._bed_cache: Dict[str, pd.DataFrame] = {}
 
     def load_raw_litholog(self, litholog_id: str) -> pd.DataFrame:
         """Loads and normalizes raw litholog CSV file."""
+        if litholog_id in self._raw_cache:
+            return self._raw_cache[litholog_id].copy()
+
         csv_path = self.raw_dir / f"{litholog_id}.csv"
         if not csv_path.exists():
             raise FileNotFoundError(f"Raw litholog file not found: {csv_path}")
@@ -266,7 +301,8 @@ class LithologInspector:
             invalid = df_out[df_out["Thickness"] <= 0]
             raise ValueError(f"File {csv_path} contains non-positive thickness intervals:\n{invalid}")
 
-        return df_out
+        self._raw_cache[litholog_id] = df_out
+        return df_out.copy()
 
     def inspect_litholog(self, litholog_id: str) -> Dict[str, Any]:
         """Performs rigorous interval-continuity and boundary inspection for a litholog."""
@@ -317,7 +353,7 @@ class LithologInspector:
 
         duplicates_count = int(df.duplicated(subset=["Top", "Bottom"]).sum())
 
-        # Facies breakdown
+        # Facies breakdown across all 6 canonical states
         facies_counts: Dict[str, int] = {}
         facies_thickness: Dict[str, float] = {}
         facies_props: Dict[str, float] = {}
@@ -332,13 +368,16 @@ class LithologInspector:
             facies_thickness[facies_key] = round(thick, 3)
             facies_props[facies_key] = round(prop, 4)
 
-        # Net-to-gross ratios
+        # Explicit Net-to-Gross ratios (6-state schema)
         sand_thick = facies_thickness.get("sand", 0.0)
-        silt_thick = facies_thickness.get("silt", 0.0)
+        p_sand_thick = facies_thickness.get("p_sand", 0.0)
+        ripples_thick = facies_thickness.get("ripples", 0.0)
         coal_thick = facies_thickness.get("coal", 0.0)
 
-        ntg_pure = float(sand_thick / sum_thickness) if sum_thickness > 0 else 0.0
-        ntg_coarse = float((sand_thick + silt_thick) / sum_thickness) if sum_thickness > 0 else 0.0
+        ntg_channel = float(sand_thick / sum_thickness) if sum_thickness > 0 else 0.0
+        ntg_planar = float(p_sand_thick / sum_thickness) if sum_thickness > 0 else 0.0
+        ntg_pure = float((sand_thick + p_sand_thick) / sum_thickness) if sum_thickness > 0 else 0.0
+        ntg_coarse = float((sand_thick + p_sand_thick + ripples_thick) / sum_thickness) if sum_thickness > 0 else 0.0
 
         # Coal bed statistics
         coal_subset = df[df["Facies"] == "coal"]
@@ -346,7 +385,7 @@ class LithologInspector:
         coal_mean_thick = float(coal_subset["Thickness"].mean()) if coal_beds_count > 0 else 0.0
         coal_max_thick = float(coal_subset["Thickness"].max()) if coal_beds_count > 0 else 0.0
 
-        # Sandstone bed statistics
+        # Channel sandstone bed statistics (Facies 1: sand)
         sand_subset = df[df["Facies"] == "sand"]
         sand_beds_count = len(sand_subset)
         sand_min_thick = float(sand_subset["Thickness"].min()) if sand_beds_count > 0 else 0.0
@@ -354,6 +393,21 @@ class LithologInspector:
         sand_mean_thick = float(sand_subset["Thickness"].mean()) if sand_beds_count > 0 else 0.0
         sand_max_thick = float(sand_subset["Thickness"].max()) if sand_beds_count > 0 else 0.0
         sand_std_thick = float(sand_subset["Thickness"].std(ddof=1)) if sand_beds_count > 1 else 0.0
+
+        # Planar sandstone bed statistics (Facies 2: p_sand)
+        p_sand_subset = df[df["Facies"] == "p_sand"]
+        p_sand_beds_count = len(p_sand_subset)
+        p_sand_min_thick = float(p_sand_subset["Thickness"].min()) if p_sand_beds_count > 0 else 0.0
+        p_sand_median_thick = float(p_sand_subset["Thickness"].median()) if p_sand_beds_count > 0 else 0.0
+        p_sand_mean_thick = float(p_sand_subset["Thickness"].mean()) if p_sand_beds_count > 0 else 0.0
+        p_sand_max_thick = float(p_sand_subset["Thickness"].max()) if p_sand_beds_count > 0 else 0.0
+        p_sand_std_thick = float(p_sand_subset["Thickness"].std(ddof=1)) if p_sand_beds_count > 1 else 0.0
+
+        # All sandstone intervals (channel + planar sand combined)
+        all_sand_subset = df[df["Facies"].isin(["sand", "p_sand"])]
+        all_sand_beds_count = len(all_sand_subset)
+        all_sand_mean_thick = float(all_sand_subset["Thickness"].mean()) if all_sand_beds_count > 0 else 0.0
+        all_sand_max_thick = float(all_sand_subset["Thickness"].max()) if all_sand_beds_count > 0 else 0.0
 
         return {
             "litholog_id": litholog_id,
@@ -377,6 +431,8 @@ class LithologInspector:
             "facies_counts": facies_counts,
             "facies_thickness_m": facies_thickness,
             "facies_proportions": facies_props,
+            "ntg_channel": round(ntg_channel, 4),
+            "ntg_planar": round(ntg_planar, 4),
             "ntg_pure": round(ntg_pure, 4),
             "ntg_coarse": round(ntg_coarse, 4),
             "coal_total_thickness_m": round(coal_thick, 3),
@@ -389,6 +445,15 @@ class LithologInspector:
             "sand_mean_bed_thickness_m": round(sand_mean_thick, 3),
             "sand_max_bed_thickness_m": round(sand_max_thick, 3),
             "sand_std_bed_thickness_m": round(sand_std_thick, 3),
+            "p_sand_beds_count": p_sand_beds_count,
+            "p_sand_min_bed_thickness_m": round(p_sand_min_thick, 3),
+            "p_sand_median_bed_thickness_m": round(p_sand_median_thick, 3),
+            "p_sand_mean_bed_thickness_m": round(p_sand_mean_thick, 3),
+            "p_sand_max_bed_thickness_m": round(p_sand_max_thick, 3),
+            "p_sand_std_bed_thickness_m": round(p_sand_std_thick, 3),
+            "all_sand_beds_count": all_sand_beds_count,
+            "all_sand_mean_bed_thickness_m": round(all_sand_mean_thick, 3),
+            "all_sand_max_bed_thickness_m": round(all_sand_max_thick, 3),
         }
 
     def discretize_litholog_1m(self, litholog_id: str) -> pd.DataFrame:
@@ -399,6 +464,9 @@ class LithologInspector:
         against the continuous stratigraphy. Tracks whether each cell is directly
         source-observed, assigned across an unrecorded gap, or resolved from overlapping intervals.
         """
+        if litholog_id in self._disc_cache:
+            return self._disc_cache[litholog_id].copy()
+
         df = self.load_raw_litholog(litholog_id)
         min_depth = int(np.floor(df["Top"].min()))
         max_depth = int(np.ceil(df["Bottom"].max()))
@@ -441,7 +509,9 @@ class LithologInspector:
                 "is_overlap_resolved": is_overlap_resolved,
             })
 
-        return pd.DataFrame(records)
+        df_out = pd.DataFrame(records)
+        self._disc_cache[litholog_id] = df_out
+        return df_out.copy()
 
     def build_embedded_bed_sequence(self, litholog_id: str) -> pd.DataFrame:
         """
@@ -453,6 +523,9 @@ class LithologInspector:
 
         Tracks whether transitions between beds cross unrecorded gaps or overlaps.
         """
+        if litholog_id in self._bed_cache:
+            return self._bed_cache[litholog_id].copy()
+
         df = self.load_raw_litholog(litholog_id)
         # Sort descending by Bottom depth so iteration proceeds upward stratigraphically:
         # deepest bed (base of well) -> shallowest bed (top of well)
@@ -505,7 +578,9 @@ class LithologInspector:
                         "crosses_overlap": crosses_overlap,
                     })
 
-        return pd.DataFrame(beds)
+        df_out = pd.DataFrame(beds)
+        self._bed_cache[litholog_id] = df_out
+        return df_out.copy()
 
     def compare_continuous_vs_discretized(self, litholog_id: str) -> Dict[str, Any]:
         """Quantifies the difference between continuous interval and 1m discretized facies proportions."""
@@ -524,6 +599,13 @@ class LithologInspector:
             disc_props[facies_key] = round(disc_prop, 4)
             delta_props[facies_key] = round(disc_prop - cont_prop, 4)
 
+        cont_ntg_pure = insp["ntg_pure"]
+        disc_channel = disc_props.get("sand", 0.0)
+        disc_planar = disc_props.get("p_sand", 0.0)
+        disc_ripples = disc_props.get("ripples", 0.0)
+        disc_ntg_pure = round(disc_channel + disc_planar, 4)
+        disc_ntg_coarse = round(disc_channel + disc_planar + disc_ripples, 4)
+
         return {
             "litholog_id": litholog_id,
             "continuous_thickness_m": insp["sum_thickness_m"],
@@ -531,9 +613,15 @@ class LithologInspector:
             "continuous_proportions": insp["facies_proportions"],
             "discretized_proportions": disc_props,
             "delta_proportions (disc - cont)": delta_props,
-            "continuous_ntg_pure": insp["ntg_pure"],
-            "discretized_ntg_pure": round(disc_props.get("sand", 0.0), 4),
-            "delta_ntg_pure": round(disc_props.get("sand", 0.0) - insp["ntg_pure"], 4),
+            "continuous_ntg_pure": cont_ntg_pure,
+            "discretized_ntg_pure": disc_ntg_pure,
+            "delta_ntg_pure": round(disc_ntg_pure - cont_ntg_pure, 4),
+            "continuous_ntg_channel": insp["ntg_channel"],
+            "discretized_ntg_channel": disc_channel,
+            "continuous_ntg_planar": insp["ntg_planar"],
+            "discretized_ntg_planar": disc_planar,
+            "continuous_ntg_coarse": insp["ntg_coarse"],
+            "discretized_ntg_coarse": disc_ntg_coarse,
         }
 
     def compute_initial_state_distribution(

@@ -1,8 +1,11 @@
 # SMALT Sprint E Technical Note: Revised Dataset Reconciliation and Spatial Prototype Readiness
 
+> [!NOTE]
+> **SUPERSEDED BY SPRINT F:** The five-state facies schema and metrics in this document represent historical Sprint E deliverables. In Sprint F, the repository fully migrated to a six-state schema preserving distinct planar sandstone (`p_sand`) and rippled heterolithics (`ripples`). For current active results, refer to [`sprint_f_six_state_spatial_revalidation.md`](file:///d:/Lithology-reconstruction-using-XGB/docs/notes/sprint_f_six_state_spatial_revalidation.md).
+
 **Project:** SMALT (Subsurface Stratigraphic Modeling & Active Learning Toolkit)  
 **Repository:** `fahadkhanfrs/Lithology-reconstruction-using-XGB`  
-**Branch:** `sprint-e`  
+**Branch:** `sprint-e` (Superseded by `sprint-f`)  
 **Date:** October 2026  
 **Auditor / Senior Geostatistical ML Engineer:** Antigravity Pair  
 

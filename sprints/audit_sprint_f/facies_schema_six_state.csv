@@ -1,0 +1,7 @@
+code,facies_number,technical_identifier,canonical_name,lithology_type,color_hex,sahoo_2016_analogy
+0,1,sand,Channel Sandstone,Multi-storey channel-belt sandstone (trough cross-bedded),#F4D03F,Facies 1 of Sahoo et al. (2016). Multi-storey channel-belt sandstone.
+1,2,p_sand,Planar Sandstone,Planar/parallel-laminated sandstone,#EB984E,Facies 2 of Sahoo et al. (2016). Planar and parallel laminated sandstone sheets.
+2,3,ripples,Rippled Heterolithics,Heterolithic rippled sandstone and siltstone,#5DADE2,Facies 3 of Sahoo et al. (2016). Interbedded rippled sandstone and siltstone.
+3,4,carbon_mud,Carbonaceous Mudstone,Organic-rich muddy sediment / poorly-drained swamp,#6C3483,Facies 4 of Sahoo et al. (2016). Organic-rich mudstone associated with mire margins.
+4,5,coal,Coal,Biogenic organic deposit / mire facies,#1C2833,Facies 5 of Sahoo et al. (2016). Autochthonous mire peat / coal seam. Forms chronostratigraphic markers.
+5,6,mud,Overbank Mudstone,Fine siliciclastic / floodplain-overbank mudstone,#95A5A6,Facies 6 of Sahoo et al. (2016). Overbank floodplain mudstone; may include minor abandoned channel-plug muds.

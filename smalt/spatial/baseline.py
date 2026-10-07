@@ -18,7 +18,13 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import f1_score, balanced_accuracy_score, accuracy_score, confusion_matrix
+from sklearn.metrics import (
+    f1_score,
+    balanced_accuracy_score,
+    accuracy_score,
+    confusion_matrix,
+    precision_recall_fscore_support,
+)
 
 from smalt.descriptive.analyzer import LithologInspector, CANONICAL_FACIES_SCHEMA
 from smalt.spatial.coordinates import load_source_coordinates, get_spatial_litholog_subset
@@ -195,32 +201,39 @@ class ProvisionalSpatialValidator:
                 for k, meta in CANONICAL_FACIES_SCHEMA.items()
             }
 
-            # Net-to-Gross (Sand is code 1)
-            true_sand_ntg = float(np.mean(y_test == 1))
-            pred_sand_ntg_knn = float(np.mean(y_pred_knn == 1))
-            pred_sand_ntg_near = float(np.mean(y_pred_near_well == 1))
-            pred_sand_ntg_prior = float(np.mean(y_pred_prior == 1))
+            # Explicit Net-to-Gross definitions (6-state schema)
+            # Pure / Net sand: Channel Sandstone (0) + Planar Sandstone (1)
+            true_net_sand_ntg = float(np.mean(np.isin(y_test, [0, 1])))
+            pred_net_sand_ntg_knn = float(np.mean(np.isin(y_pred_knn, [0, 1])))
+            pred_net_sand_ntg_near = float(np.mean(np.isin(y_pred_near_well, [0, 1])))
+            pred_net_sand_ntg_prior = float(np.mean(np.isin(y_pred_prior, [0, 1])))
+
+            # Channel sandstone NTG
+            true_channel_ntg = float(np.mean(y_test == 0))
+            pred_channel_ntg_knn = float(np.mean(y_pred_knn == 0))
 
             fold_record = {
                 "target_litholog_id": target_id,
                 "nearest_well_id": nearest_well_id,
                 "test_points_count": len(y_test),
-                "true_sand_ntg": round(true_sand_ntg, 4),
+                "true_sand_ntg": round(true_net_sand_ntg, 4),
+                "true_channel_ntg": round(true_channel_ntg, 4),
                 # KNN Metrics
                 "knn_accuracy": round(accuracy_score(y_test, y_pred_knn), 4),
                 "knn_balanced_acc": round(balanced_accuracy_score(y_test, y_pred_knn), 4),
                 "knn_macro_f1": round(f1_score(y_test, y_pred_knn, average="macro", zero_division=0), 4),
-                "knn_sand_ntg_error": round(abs(pred_sand_ntg_knn - true_sand_ntg), 4),
+                "knn_sand_ntg_error": round(abs(pred_net_sand_ntg_knn - true_net_sand_ntg), 4),
+                "knn_channel_ntg_error": round(abs(pred_channel_ntg_knn - true_channel_ntg), 4),
                 # Nearest Well Metrics
                 "near_well_accuracy": round(accuracy_score(y_test, y_pred_near_well), 4),
                 "near_well_balanced_acc": round(balanced_accuracy_score(y_test, y_pred_near_well), 4),
                 "near_well_macro_f1": round(f1_score(y_test, y_pred_near_well, average="macro", zero_division=0), 4),
-                "near_well_sand_ntg_error": round(abs(pred_sand_ntg_near - true_sand_ntg), 4),
+                "near_well_sand_ntg_error": round(abs(pred_net_sand_ntg_near - true_net_sand_ntg), 4),
                 # Prior Facies Metrics
                 "prior_accuracy": round(accuracy_score(y_test, y_pred_prior), 4),
                 "prior_balanced_acc": round(balanced_accuracy_score(y_test, y_pred_prior), 4),
                 "prior_macro_f1": round(f1_score(y_test, y_pred_prior, average="macro", zero_division=0), 4),
-                "prior_sand_ntg_error": round(abs(pred_sand_ntg_prior - true_sand_ntg), 4),
+                "prior_sand_ntg_error": round(abs(pred_net_sand_ntg_prior - true_net_sand_ntg), 4),
                 "support_by_class": support_dict,
             }
             fold_results.append(fold_record)
@@ -234,6 +247,22 @@ class ProvisionalSpatialValidator:
         all_y_pred_knn = np.array(all_y_pred_knn)
         all_y_pred_near_well = np.array(all_y_pred_near_well)
         all_y_pred_prior = np.array(all_y_pred_prior)
+
+        k_labels = list(range(len(CANONICAL_FACIES_SCHEMA)))
+
+        def _calc_per_class(y_t, y_p):
+            p, r, f, s = precision_recall_fscore_support(y_t, y_p, labels=k_labels, zero_division=0)
+            res = {}
+            for meta in CANONICAL_FACIES_SCHEMA.values():
+                c = meta["code"]
+                res[meta["canonical_name"]] = {
+                    "code": c,
+                    "precision": round(float(p[c]), 4),
+                    "recall": round(float(r[c]), 4),
+                    "f1": round(float(f[c]), 4),
+                    "support": int(s[c]),
+                }
+            return res
 
         # Overall aggregate summary
         summary = {
@@ -250,7 +279,12 @@ class ProvisionalSpatialValidator:
             "overall_prior_macro_f1": round(f1_score(all_y_true, all_y_pred_prior, average="macro", zero_division=0), 4),
             "overall_prior_balanced_acc": round(balanced_accuracy_score(all_y_true, all_y_pred_prior), 4),
             "overall_prior_accuracy": round(accuracy_score(all_y_true, all_y_pred_prior), 4),
-            "knn_confusion_matrix": confusion_matrix(all_y_true, all_y_pred_knn, labels=list(range(5))).tolist(),
+            "knn_per_class": _calc_per_class(all_y_true, all_y_pred_knn),
+            "near_well_per_class": _calc_per_class(all_y_true, all_y_pred_near_well),
+            "prior_per_class": _calc_per_class(all_y_true, all_y_pred_prior),
+            "knn_confusion_matrix": confusion_matrix(all_y_true, all_y_pred_knn, labels=k_labels).tolist(),
+            "near_well_confusion_matrix": confusion_matrix(all_y_true, all_y_pred_near_well, labels=k_labels).tolist(),
+            "prior_confusion_matrix": confusion_matrix(all_y_true, all_y_pred_prior, labels=k_labels).tolist(),
         }
 
         df_folds = pd.DataFrame(fold_results)
@@ -301,6 +335,8 @@ class ProvisionalSpatialValidator:
         majority_class = classes[np.argmax(counts)]
         y_pred_prior = np.full_like(y_test, fill_value=majority_class)
 
+        k_labels = list(range(len(CANONICAL_FACIES_SCHEMA)))
+
         return {
             "experiment_name": experiment_name,
             "training_wells_count": len(training_group_ids),
@@ -312,5 +348,5 @@ class ProvisionalSpatialValidator:
             "prior_macro_f1": round(f1_score(y_test, y_pred_prior, average="macro", zero_division=0), 4),
             "prior_balanced_accuracy": round(balanced_accuracy_score(y_test, y_pred_prior), 4),
             "prior_accuracy": round(accuracy_score(y_test, y_pred_prior), 4),
-            "confusion_matrix": confusion_matrix(y_test, y_pred, labels=list(range(5))).tolist(),
+            "confusion_matrix": confusion_matrix(y_test, y_pred, labels=k_labels).tolist(),
         }

@@ -109,8 +109,11 @@ def test_facies_normalization_valid_labels():
     assert normalize_facies_label("coal") == "coal"
     assert normalize_facies_label("carbon_mud") == "carbon_mud"
     assert normalize_facies_label("carbonaceous mudstone") == "carbon_mud"
-    assert normalize_facies_label("silt") == "silt"
-    assert normalize_facies_label("siltstone") == "silt"
+    assert normalize_facies_label("ripples") == "ripples"
+    assert normalize_facies_label("silt") == "ripples"
+    assert normalize_facies_label("siltstone") == "ripples"
+    assert normalize_facies_label("p_sand") == "p_sand"
+    assert normalize_facies_label("planar_sand") == "p_sand"
     assert normalize_facies_label("mud") == "mud"
     assert normalize_facies_label("Overbank Mudstone") == "mud"
 

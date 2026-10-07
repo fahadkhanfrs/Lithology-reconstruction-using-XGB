@@ -1,0 +1,19 @@
+model_name,facies_name,facies_code,precision,recall,f1_score,test_support
+Spatial 3D KNN,Channel Sandstone,0,0.576,0.6112,0.5931,409
+Spatial 3D KNN,Planar Sandstone,1,0.0833,0.0323,0.0465,62
+Spatial 3D KNN,Rippled Heterolithics,2,0.2254,0.2078,0.2162,77
+Spatial 3D KNN,Carbonaceous Mudstone,3,0.0,0.0,0.0,17
+Spatial 3D KNN,Coal,4,0.0,0.0,0.0,25
+Spatial 3D KNN,Overbank Mudstone,5,0.4536,0.5171,0.4833,350
+Nearest-Well Profile,Channel Sandstone,0,0.5756,0.5306,0.5522,409
+Nearest-Well Profile,Planar Sandstone,1,0.1094,0.1129,0.1111,62
+Nearest-Well Profile,Rippled Heterolithics,2,0.225,0.2338,0.2293,77
+Nearest-Well Profile,Carbonaceous Mudstone,3,0.0,0.0,0.0,17
+Nearest-Well Profile,Coal,4,0.0,0.0,0.0,25
+Nearest-Well Profile,Overbank Mudstone,5,0.4508,0.4971,0.4728,350
+Training Prior Facies,Channel Sandstone,0,0.4351,1.0,0.6064,409
+Training Prior Facies,Planar Sandstone,1,0.0,0.0,0.0,62
+Training Prior Facies,Rippled Heterolithics,2,0.0,0.0,0.0,77
+Training Prior Facies,Carbonaceous Mudstone,3,0.0,0.0,0.0,17
+Training Prior Facies,Coal,4,0.0,0.0,0.0,25
+Training Prior Facies,Overbank Mudstone,5,0.0,0.0,0.0,350

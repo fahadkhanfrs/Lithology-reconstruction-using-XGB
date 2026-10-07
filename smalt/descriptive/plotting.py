@@ -114,7 +114,7 @@ def plot_vertical_successions(
         handles=legend_patches,
         loc="upper center",
         bbox_to_anchor=(0.5, 0.98),
-        ncol=5,
+        ncol=6,
         fontsize=11,
         frameon=True,
         shadow=True,
@@ -224,8 +224,8 @@ def plot_upstream_vs_downstream(
                 fac_thick[k] += insp["facies_thickness_m"][k]
 
         props = {k: fac_thick[k] / tot_thick for k in CANONICAL_FACIES_SCHEMA.keys()}
-        ntg_pure = fac_thick["sand"] / tot_thick
-        ntg_coarse = (fac_thick["sand"] + fac_thick["silt"]) / tot_thick
+        ntg_pure = (fac_thick["sand"] + fac_thick["p_sand"]) / tot_thick
+        ntg_coarse = (fac_thick["sand"] + fac_thick["p_sand"] + fac_thick["ripples"]) / tot_thick
         return props, ntg_pure, ntg_coarse
 
     up_props, up_ntg_p, up_ntg_c = aggregate_props(upstream_ids)
@@ -233,7 +233,7 @@ def plot_upstream_vs_downstream(
     dn_out_props, dn_out_ntg_p, dn_out_ntg_c = aggregate_props(downstream_outcrop_ids)
 
     groups = [
-        "Upstream (L2-L8, L10)\n[8 logs | 664.0m]",
+        "Upstream (L2-L8, L10)\n[8 logs | 673.0m]",
         "Downstream Outcrop (L9, L11)\n[2 logs | 156.0m]",
         "Downstream Composite (L9, L11, L12)\n[3 logs | 267.0m]",
     ]
@@ -242,7 +242,7 @@ def plot_upstream_vs_downstream(
 
     facies_keys = list(CANONICAL_FACIES_SCHEMA.keys())
     x = np.arange(len(groups))
-    width = 0.15
+    width = 0.11
 
     for idx, fkey in enumerate(facies_keys):
         meta = CANONICAL_FACIES_SCHEMA[fkey]
@@ -252,7 +252,7 @@ def plot_upstream_vs_downstream(
             dn_all_props[fkey] * 100.0,
         ]
         rects = ax1.bar(
-            x + (idx - 2) * width,
+            x + (idx - 2.5) * width,
             vals,
             width,
             label=meta["canonical_name"],
@@ -277,7 +277,7 @@ def plot_upstream_vs_downstream(
     ax1.set_xticklabels(groups, fontsize=10, fontweight="bold")
     ax1.set_ylabel("Facies Proportion (%)", fontsize=11, fontweight="bold")
     ax1.set_title("Facies Proportion Comparison: Upstream vs Downstream", fontsize=12, fontweight="bold")
-    ax1.set_ylim(0, 60)
+    ax1.set_ylim(0, 65)
     ax1.legend(loc="upper right", fontsize=9)
     ax1.grid(axis="y", linestyle="--", alpha=0.5)
 
@@ -324,10 +324,11 @@ def plot_sandstone_thickness_distributions(
     for i in range(1, 13):
         lid = f"litholog{i}"
         df = inspector.load_raw_litholog(lid)
-        sand_beds = df[df["Facies"] == "sand"]
+        sand_beds = df[df["Facies"].isin(["sand", "p_sand"])]
         for _, r in sand_beds.iterrows():
             records.append({
                 "litholog_id": lid,
+                "facies": r["Facies"],
                 "thickness_m": float(r["Thickness"]),
                 "group": PROVENANCE_METADATA[lid]["group"],
             })
@@ -359,7 +360,7 @@ def plot_sandstone_thickness_distributions(
 
     ax2.set_xlabel("Sandstone Bed Thickness (m)", fontsize=11, fontweight="bold")
     ax2.set_ylabel("Bed Count", fontsize=11, fontweight="bold")
-    ax2.set_title(f"All Sandstone Intervals (N = {len(df_sand)} beds)", fontsize=12, fontweight="bold")
+    ax2.set_title(f"All Sandstone Intervals (Channel & Planar, N = {len(df_sand)} beds)", fontsize=12, fontweight="bold")
     ax2.legend(fontsize=10)
     ax2.grid(axis="y", linestyle="--", alpha=0.5)
 
@@ -386,7 +387,7 @@ def plot_transition_matrix_heatmaps(
     """
     Plots annotated heatmaps of Regular and Embedded transition probability matrices.
     """
-    labels = [meta["canonical_name"].split(" ")[0] for meta in CANONICAL_FACIES_SCHEMA.values()]
+    labels = ["Channel\nSand", "Planar\nSand", "Rippled\nHet", "Carbon\nMud", "Coal", "Overbank\nMud"]
 
     fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(16, 7))
 

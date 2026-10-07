@@ -7,7 +7,8 @@
 - **Sprint D (Reproducible 1D Markov Validation & Summary Reconciliation)**: COMPLETE / VERIFIED (Mathematical scoring formalized with separate initial-state vs transition metrics, embedded bed sequence integrity enforced, 10/10 new unit tests passing [44/44 repository total], summary statistics reconciled directly from raw CSVs, deliverables in audit_sprint_d/)
 - **Sprint E (Revised Dataset Reconciliation & Spatial Prototype Readiness)**: COMPLETE / SUPERSEDED (Reconciled 12 revised lithologs under provisional 5-state mapping; L12 registered in manifest; synthetic coordinate audit completed; provisional spatial baseline evaluated; 11/11 tests passing; deliverables in sprints/audit_sprint_e/)
 - **Sprint F (Six-State Migration & Spatial Baseline Revalidation)**: COMPLETE / VERIFIED (Migrated to 6-state canonical schema preserving distinct p_sand and ripples; recomputed 6x6 Markov transitions; leak-free Spatial LOLO revalidated with per-class metrics, 6x6 confusion matrices, and naive baselines; 10/10 new tests passing [65/65 repository total]; deliverables in sprints/audit_sprint_f/)
-- **Phase 2 (2D Cross-Sectional Geostatistical Modeling)**: READY FOR SPRINT (Requires stratigraphic datum correlation from Prof. Sahoo before conditioned spatial simulation; baseline exploratory spatial prototype documented)
+- **Sprint G (Independent Results Audit & Spatial Modeling Decision)**: COMPLETE / VERIFIED (Independently audited Sprint F metrics [0 discrepancy]; confirmed inter-well sparsity root cause [420-5000 m spacing vs 140-210 m channel width]; identified and tested StandardScaler vertical anisotropy defect; established 20-day UGP presentation roadmap: proceed with Phase 1 [1D Markov] + scoped Phase 2 [unconditioned 2D fluvial forward model], defer Phase 3 [spatial interpolation on real wells], re-scope Phase 4-5 to synthetic benchmarks; 8/8 new unit tests passing [73/73 repository total]; deliverables in sprints/audit_sprint_g/)
+- **Phase 2 (2D Cross-Sectional Geostatistical Modeling)**: READY FOR SPRINT (Scoped to unconditioned process-based forward simulation with W/T=35 geometric priors)
 
 ---
 
@@ -278,18 +279,35 @@ Overbank Mudstone      -0.158              0.030                  -0.061      0.
 
 ---
 
-## 9. Remaining Blockers & Next Actions
+## 9. Sprint G Independent Results Audit & Spatial Modeling Decision
 
-### Remaining Blockers for Conditioned 2D/3D Reconstruction:
-1. **Stratigraphic Datum Correlation**: The 11 outcrop logs and L12 core lack an anchored, verified marker datum (e.g. correlative coal seam, paleosol, or marine flooding surface). Without an anchored datum from Prof. Sahoo, relative-to-base remains a provisional assumption.
-2. **Litholog 1 Spatial Coordinates**: L1 lacks physical X, Y coordinates and must remain excluded from spatial models.
-3. **Coordinate Reference System Details**: Local Cartesian coordinates $(X, Y)$ in `Location_coordinates_lithologs.xlsx` are relative; projection parameters (e.g. UTM Zone 12N) are unconfirmed.
-4. **Severe Inter-Well Sparsity**: With inter-well distances ranging from 150 m to 14,000 m and lateral channel widths typically under 200-500 m, naive spatial interpolation cannot reconstruct channel architecture without geological concept priors or variogram conditioning.
+### 9.1 Audit Findings & Metric Verification
+- **Metrics Reconciliation (0 Discrepancy)**: All Sprint F pooled metrics independently recomputed from confusion matrices and verified: Spatial 3D KNN raw accuracy = **0.4777** (449/940), balanced accuracy = **0.2281**, Macro-F1 = **0.2232**; Nearest-Well raw accuracy = **0.4426**, balanced accuracy = **0.2291**, Macro-F1 = **0.2276**; Training Prior raw accuracy = **0.4351**, balanced accuracy = **0.1667**, Macro-F1 = **0.1011**. Unweighted mean fold balanced accuracy (**24.89%**) distinguished from pooled (**22.81%**).
+- **Physical Sparsity Root Cause**: Nearest-neighbor inter-well distances range from **420.0 m to 2,355.6 m** (median 701.5 m). In contrast, Sahoo et al. (2016) report single-storey channel widths of **140 to 210 m** ($W/T \approx 35$) and splay widths of **10 to 130 m**. Inter-well spacing is 2x to 10x wider than the maximum lateral continuity of individual sandbodies. Point-wise interpolation is geologically impossible.
+- **Class Imbalance Distortion**: `sand` (43.5%) and `mud` (37.2%) account for 80.7% of all points. Thin-bed minority facies collapsed completely: `coal` (support 25) F1 = **0.0000** (0/25 identified); `carbon_mud` (support 17) F1 = **0.0000** (0/17 identified); `p_sand` (support 62) F1 = **0.0465** (2/62 identified).
+- **StandardScaler Anisotropy Defect**: Pre-scaling vertical weight factor ($c = 10.0$) was numerically cancelled by `StandardScaler` standard deviation division. Diagnostic sweep across actual post-scaling vertical weights (0.1 to 50.0) confirmed Macro-F1 remains trapped between **0.21 and 0.23**, proving that spatial KNN is physically unsuited for this problem.
+- **Alias Dictionary Audit**: Confirmed authoritative raw CSVs in `data/raw_lithologs/` contain strictly canonical tokens. Identified legacy risks in `data/loader.py`: `splay` mapped to `carbon_mud` (defect) and generic `siltstone` mapped to `ripples` (ambiguous).
 
-### Recommended Next Action (Sprint G):
-- **Consultation with Prof. Hiranya Sahoo**: Present the Sprint F six-state spatial revalidation report ([`docs/notes/sprint_f_six_state_spatial_revalidation.md`](file:///d:/Lithology-reconstruction-using-XGB/docs/notes/sprint_f_six_state_spatial_revalidation.md)) and solicit guidance on:
-  1. The stratigraphic datum horizon connecting outcrop profiles L1-L11 to subsurface core L12.
-  2. Geographic coordinate origin / CRS for the local coordinate grid.
-  3. Physical location or GPS coordinates for Litholog 1.
-- **Geostatistical 2D Fluvial Architecture Modeling**: Once datum assumptions are clarified, implement 2D indicator geostatistics or transition probability geostatistics (T-PROGS / Carle & Fogg) conditioned on lateral facies lengths rather than unconstrained 3D distance interpolation.
+### 9.2 SMALT Phase Decisions (20-Day Presentation Runway)
+1. **Phase 1 (1D Vertical Markov Analysis)**: **PROCEED (Core Contribution)**. Operates under Walther's Law; verified on 1031 m across 12 lithologs; 6x6 transition perplexity 2.6289 (regular) and 4.1793 (embedded).
+2. **Phase 2 (2D Fluvial Forward Modeling)**: **PROCEED AS UNCONDITIONED PROCESS PROTOTYPE**. Implement ribbon channel generator with $W/T \approx 35$ and target Net-to-Gross envelope (17-50%) from Sahoo et al. (2016) as a forward stochastic simulator, not inter-well reconstruction.
+3. **Phase 3 (Inter-Well Spatial Reconstruction)**: **DEFER / REJECT ON REAL WELLS**. Definitively proven impossible with current data. Presenting this rigorous negative result protects against examination criticism and demonstrates scientific maturity.
+4. **Phases 4-5 (Spatial ML & Active Learning)**: **RE-SCOPE TO SYNTHETIC BENCHMARK DEMONSTRATION**. Demonstrate Active Margin Sampling on synthetic 2D forward realizations (from Phase 2) where ground truth is known, proving borehole budget optimization without making false claims on sparse field data.
+
+### 9.3 Test Suite Status
+- Repository test suite: **73 passed, 0 failed** (`pytest tests/`).
+- Dedicated test suite: [`tests/test_sprint_g.py`](file:///d:/Lithology-reconstruction-using-XGB/tests/test_sprint_g.py) (8/8 tests passing).
+- Audit deliverables: [`sprints/audit_sprint_g/`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_g/) (5 audit CSVs and comprehensive audit report [`sprints/audit_sprint_g/SPRINT_G_AUDIT_REPORT.md`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_g/SPRINT_G_AUDIT_REPORT.md)).
+
+---
+
+## 10. Immediate Next Actions (Phase 2 & Presentation Preparation)
+
+1. **Implement Scoped Phase 2 Fluvial Forward Generator**:
+   - Build lightweight, unconditioned 2D ribbon channel cross-section simulator conditioned on Sahoo et al. (2016) architectural priors ($W/T \approx 35$, mean thickness $\approx 5.8$ m, target N/G 17-50%).
+2. **Prepare UGP Presentation Slide Deck**:
+   - Assemble slide deck highlighting the 1D Markov empirical succession, the rigorous spatial sparsity audit (disproving naive ML), and the 2D forward process model.
+3. **Formulate Next Data Inquiries for Prof. Sahoo**:
+   - Deliver the Sprint G audit report and document the three specific blockers required for future field-scale spatial conditioning: (a) stratigraphic datum correlation marker, (b) local grid coordinate projection/datum, and (c) Litholog 1 GPS location.
+
 

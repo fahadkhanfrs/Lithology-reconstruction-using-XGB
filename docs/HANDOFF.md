@@ -10,6 +10,7 @@
 - **Sprint G (Independent Results Audit & Spatial Modeling Decision)**: COMPLETE / VERIFIED (Independently audited Sprint F metrics [0 discrepancy]; confirmed inter-well sparsity root cause [420-5000 m spacing vs 140-210 m channel width]; identified and tested StandardScaler vertical anisotropy defect; established 20-day UGP presentation roadmap: proceed with Phase 1 [1D Markov] + scoped Phase 2 [unconditioned 2D fluvial forward model], defer Phase 3 [spatial interpolation on real wells], re-scope Phase 4-5 to synthetic benchmarks; 8/8 new unit tests passing [73/73 repository total]; deliverables in sprints/audit_sprint_g/)
 - **Sprint H (Common-Zero Datum Alignment, Orientation Audit & Spatial Markov Foundation)**: COMPLETE / VERIFIED (Audited source vertical orientation against Sahoo et al. [2016] measured-section convention [0 m = base, height increases upward]; transformed measured sections L1-L11 via z_strat = H_max - d; preserved L12 drill core orientation; verified 100% stratigraphic invariance [1033.0 m, 328 intervals]; rebuilt horizontal pairs [4,410 pairs across 111 elevation slices] and spatial LOLO benchmark; evaluated directional upstream <-> downstream generalization; confirmed orientation correction restores geological reality without altering sparsity-dominated spatial predictability limits; 9/9 Sprint H tests passing, 82/82 repository total; deliverables in sprints/audit_sprint_h/)
 - **Sprint I (Conditioned Transition-Probability Geostatistical Prototype)**: COMPLETE / VERIFIED (Implemented coupled Markov transition geostatistical prototype combining vertical succession P_v and continuous horizontal rate model P_h(h) = exp(R*h); guaranteed 100.0% hard conditioning honor rate; generated stochastic inter-well realizations reproducing ground-truth mean bed thickness within 0.09 m [3.85 m vs 3.76 m]; mapped spatial Shannon entropy; proved why pointwise MAP classification collapses to background mudstone [37.23%] while stochastic simulation succeeds; 15/15 Sprint I tests passing, 97/97 repository total; deliverables in sprints/audit_sprint_i/)
+- **Sprint J (Empirical Horizontal Transition & Correlation-Length Calibration)**: COMPLETE / VERIFIED (Recomputed 4,410 empirical horizontal pairs across 93 common-zero slices; calibrated facies continuity lengths showing composite channel sandstone continuity L=402.7m and widespread mudstone L=343.4m; evaluated alternative decay models reducing transition MSE by 43-63%; ablation study proved stochastic bed thickness reproduction [4.39m vs 4.50m] is driven by vertical Markov succession, not horizontal conditioning; synthetic benchmark verified estimator recovers known lengths [6.0% and 1.7% error]; classified result into CATEGORY C confirming spatial well spacing fundamentally prevents deterministic lateral prediction; 15/15 Sprint J tests passing, 112/112 repository total; deliverables in sprints/audit_sprint_j/)
 - **Phase 2 (2D Cross-Sectional Geostatistical Modeling)**: READY FOR SPRINT (Scoped to unconditioned process-based forward simulation with W/T=35 geometric priors)
 
 ---
@@ -411,15 +412,57 @@ Overbank Mudstone      -0.158              0.030                  -0.061      0.
 
 ---
 
-## 12. Immediate Next Actions (Phase 2 & Presentation Preparation)
+## 12. Sprint J Empirical Horizontal Transition & Correlation-Length Calibration Status
+
+### 12.1 Empirical Horizontal Continuity Calibration
+- **Empirical Horizontal Pairs**: Exactly **4,410 matched pairs** across **93 common-zero elevation slices** ($z \in [0.0, 110.0]\text{ m}$) among the 11 spatial wells (L2-L12).
+- **Multiple Distance Binning**: Evaluated Fixed, Quantile, and Uniform Sensitivity bins with bootstrap standard errors ($B = 200$).
+- **Facies Lateral Continuity Length Comparison**:
+  - **Channel Sandstone**: $L_{\text{geological}} = 203.0\text{ m}$, $L_{\text{empirical}} = 243.7\text{ m}$, $L_{\text{fitted}} = \mathbf{402.7\text{ m}}$ ($\pm 125.5\text{ m}$, 840 auto-pairs, high support). Reflects composite channel-belt amalgamation.
+  - **Overbank Mudstone**: $L_{\text{geological}} = 360.0\text{ m}$, $L_{\text{empirical}} = 307.1\text{ m}$, $L_{\text{fitted}} = \mathbf{343.4\text{ m}}$ ($\pm 164.4\text{ m}$, 576 auto-pairs, high support).
+  - **Coal & Carbonaceous Mudstone**: Auto-pairs count = 1 and 3 across 4,410 pairs. Formally classified as **"insufficient spatial support"** (unidentifiable at well spacing $\ge 420\text{ m}$).
+- **Alternative Decay Models Tested**:
+  - Model A (Sprint I Prescribed): MSE = 0.018991, RMSE = 0.1378.
+  - Model B (Sprint J Calibrated Markov): MSE = 0.010790, RMSE = 0.1039 (43.2% MSE reduction).
+  - Model C (Spherical Finite-Range Decay): MSE = 0.006991, RMSE = 0.0836 (63.2% MSE reduction).
+  - All models strictly satisfy row-stochasticity, non-negativity, $P(0) = \mathbf{I}$, and asymptotic stationary convergence.
+
+### 12.2 Critical Test: Premature Spatial Decay Diagnostic
+- **Sprint I Premature Decay Identified**: In Sprint I ($L_{\text{sand}} = 203\text{ m}$), at minimum well separation ($h = 420\text{ m}$), $P_{00}(420\text{ m}) = 0.3900$, dropping below the stationary prior ($\pi = 0.4397$). Model A had **0.0% excess spatial memory** at all well locations.
+- **Sprint J Correction**: Empirically calibrated Model B retains **28.3% spatial excess information** at $420\text{ m}$ ($P_{00} = 0.5980$) and **17.2%** at $1,000\text{ m}$ ($P_{00} = 0.5360$).
+
+### 12.3 Mandatory 4-Model Ablation Study Findings
+- **Model 0 (Stationary Proportions Only)**: Proportion TV = 0.0320, Mean Bed Thickness = 1.54 m, Bed Thickness Error = 2.96 m (beds shattered into 1m noise).
+- **Model 1 (Vertical Markov Succession Only, unconditioned horizontally)**: Proportion TV = **0.0244**, Mean Bed Thickness = **4.39 m**, Bed Thickness Error = **0.15 m** vs ground truth 4.50 m.
+- **Model 2 & 3 (Adding Horizontal Conditioning from Distant Wells)**: Bed Thickness Error = 11.25 m (horizontal conditioning acts as a static damper because $h \ge 420\text{ m}$ decays toward stationary proportions).
+- **Scientific Takeaway**: The realistic bed thickness reproduction reported in Sprint I was **100% inherited from the 1D vertical Markov succession**, NOT from horizontal conditioning.
+
+### 12.4 Validation Benchmarks (940 Evaluation Points)
+- **LOLO Cross-Validation**:
+  - Spatial 3D KNN ($k=5$): Raw Acc = **45.96%**, Balanced Acc = **22.16%**, Macro-F1 = **0.2163**.
+  - Nearest-Well Profile: Raw Acc = **43.72%**, Balanced Acc = **22.23%**, Macro-F1 = **0.2209**.
+  - Training Prior Majority: Raw Acc = **43.51%**, Balanced Acc = **16.67%**, Macro-F1 = **0.1011**.
+  - Sprint J Calibrated Markov: Raw Acc = **35.64%**, Balanced Acc = **13.98%**, Macro-F1 = **0.1121**.
+- **Directional Upstream <-> Downstream Generalization**:
+  - Upstream -> Downstream (267 pts): Sprint J matches Prior at **44.94%** (vs KNN 34.46%).
+  - Downstream -> Upstream (673 pts): Sprint J matches Prior at **42.94%** (vs KNN 37.74%).
+- **Synthetic Length Recovery Benchmark**:
+  - Medium-range (true 250m): estimated **265.1m** (6.0% error) -> **PASSED**.
+  - Long-range (true 600m): estimated **610.1m** (1.7% error) -> **PASSED**.
+  - Confirms estimator is mathematically correct. Real-data limits stem strictly from physical well sparsity.
+
+### 12.5 Decision Tree Classification
+- **Classification**: **CATEGORY C**
+- **Precise Geological Finding**:
+  *"The characteristic lateral dimensions of several facies bodies are substantially smaller than the observed inter-well spacing, limiting deterministic lateral predictability."*
+
+---
+
+## 13. Immediate Next Actions (Phase 2 & Presentation Preparation)
 
 1. **Implement Scoped Phase 2 Fluvial Forward Generator**:
    - Build lightweight, unconditioned 2D ribbon channel cross-section simulator conditioned on Sahoo et al. (2016) architectural priors ($W/T \approx 35$, mean thickness $\approx 5.8$ m, target N/G 17-50%).
 2. **Prepare UGP Presentation Slide Deck**:
-   - Assemble slide deck highlighting the 1D Markov empirical succession, the common-zero datum alignment, the spatial Markov decay findings, the Nyquist-Shannon sparsity limits, and the 2D forward process model.
+   - Assemble slide deck highlighting the 1D Markov empirical succession, the common-zero datum alignment, the spatial Markov decay findings, the spatial sparsity limits (well spacing vs facies dimensions), and the 2D forward process model.
 3. **Formulate Next Data Inquiries for Prof. Sahoo**:
-   - Deliver Sprint H and Sprint I reports and transects to Prof. Sahoo.
-
-
-
-
+   - Deliver Sprint H, Sprint I, and Sprint J reports and transects to Prof. Sahoo.

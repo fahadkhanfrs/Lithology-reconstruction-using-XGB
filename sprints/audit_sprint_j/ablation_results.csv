@@ -1,0 +1,5 @@
+model_key,model_label,proportion_tv_distance_mean,proportion_tv_distance_std,transition_matrix_div_mean,transition_matrix_div_std,mean_bed_thickness_m,bed_thickness_error_m,bed_thickness_error_std,bed_distribution_wasserstein_m,channel_sand_connectivity_m,shannon_entropy_mean,hard_data_honor_rate
+Model_0_Stationary_Proportions,Model 0: Stationary Proportions,0.032,0.0037,1.3976,0.0082,1.54,2.96,0.01,2.96,49.6,1.2752,1.0
+Model_1_Vertical_Markov_Only,Model 1: Vertical Markov Only,0.0244,0.0141,0.0601,0.0102,4.39,0.15,0.07,0.5,46.2,1.3063,1.0
+Model_2_Vertical_Plus_Sprint_I,Model 2: Vertical + Sprint I Horizontal,0.1967,0.0004,0.7346,0.0831,15.75,11.25,0.18,11.25,52.9,0.7406,1.0
+Model_3_Vertical_Plus_Sprint_J,Model 3: Vertical + Sprint J Calibrated,0.1967,0.0004,0.7346,0.0831,15.75,11.25,0.18,11.25,52.9,0.7406,1.0

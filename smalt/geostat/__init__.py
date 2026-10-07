@@ -14,6 +14,8 @@ from smalt.geostat.spatial_transition import (
 )
 from smalt.geostat.conditioned_markov import ConditionedMarkovClassifier
 from smalt.geostat.realization import InterWellRealizationGenerator
+from smalt.geostat.empirical_calibration import HorizontalContinuityCalibrator
+from smalt.geostat.ablation import AblationStudyEngine
 
 __all__ = [
     "StratigraphicMarkovChain",
@@ -24,4 +26,6 @@ __all__ = [
     "SpatialTransitionRateModel",
     "ConditionedMarkovClassifier",
     "InterWellRealizationGenerator",
+    "HorizontalContinuityCalibrator",
+    "AblationStudyEngine",
 ]

@@ -1,0 +1,7 @@
+model_name,model_type,raw_accuracy,balanced_accuracy,macro_f1,total_points
+Training Prior Majority,Naive Baseline,0.4351,0.1667,0.1011,940
+Nearest-Well Vertical Profile,Spatial Naive Baseline,0.4372,0.2223,0.2209,940
+Spatial 3D KNN (k=5),Machine Learning Baseline,0.4596,0.2216,0.2163,940
+Spatial Markov (Sprint H Minimal),Continuous Markov Transition,0.3723,0.1667,0.0904,940
+Conditioned Markov (Sprint I CTP),Coupled Markov Transition,0.3723,0.1667,0.0904,940
+Sprint J Calibrated Markov,Empirically Calibrated Markov,0.3564,0.1398,0.1121,940

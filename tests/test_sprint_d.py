@@ -176,7 +176,7 @@ def test_gap_crossing_transitions_policy(inspector, validator):
     P_train, _, pi_train = validator.fit_training_markov(train_ids, embedded=False, use_discretized=True)
     p_init = inspector.compute_initial_state_distribution(train_ids, embedded=False, use_discretized=True)
 
-    # Litholog 9 has a 1m gap at 18-19m
+    # Litholog 9 has two 1m gaps at 18-19m and 51-52m (yielding 4 gap-crossing transitions in 1m grid)
     eval_l9 = validator.evaluate_target_sequence(
         target_log_id="litholog9",
         P_train=P_train,
@@ -185,7 +185,7 @@ def test_gap_crossing_transitions_policy(inspector, validator):
         embedded=False,
         use_discretized=True,
     )
-    assert eval_l9["gap_crossing_transitions_count"] == 2
+    assert eval_l9["gap_crossing_transitions_count"] == 4
     assert "mean_transition_log_score_gap_masked" in eval_l9
     assert "transition_perplexity_gap_masked" in eval_l9
 

@@ -1,9 +1,9 @@
 metric,raw_intervals_sprint_d,merged_lithosomes_sprint_d,sprint_c_reported,reconciliation_status,audit_note
-Total Sandstone Beds / Intervals Count,72.0,53.0,73 (narrative) / 72 (sum),Reconciled,Raw interval CSVs across all 12 lithologs contain exactly 72 sandstone intervals. The narrative figure of 73 in the Sprint C report was an unverified text typo. Merging consecutive identical facies intervals produces 53 distinct sandstone lithosomes.
-Cumulative Sandstone Thickness (m),444.7,444.7,444.70,Exact Match,Exact match across raw intervals and merged lithosomes (444.70 m).
-Minimum Bed Thickness (m),1.4,1.4,1.40,Exact Match,Exact match (1.40 m in litholog11 at 43.6-45.0m).
-Median Bed Thickness (m),5.05,6.0,5.05,Exact Match (Raw),"Raw interval median is 5.05 m. For merged distinct lithosomes, median thickness is 6.00 m."
-Mean Bed Thickness (m),6.18,8.39,6.18,Exact Match (Raw),Raw interval mean is 6.18 m (444.70 / 72). Merged distinct lithosomes mean is 8.39 m (444.70 / 53) due to adjacent sand amalgamations.
+Total Sandstone Beds / Intervals Count,135.0,99.0,73 (narrative) / 72 (sum),Reconciled,Raw interval CSVs across all 12 lithologs contain exactly 72 sandstone intervals. The narrative figure of 73 in the Sprint C report was an unverified text typo. Merging consecutive identical facies intervals produces 53 distinct sandstone lithosomes.
+Cumulative Sandstone Thickness (m),507.7,507.7,444.70,Exact Match,Exact match across raw intervals and merged lithosomes (444.70 m).
+Minimum Bed Thickness (m),1.0,1.0,1.40,Exact Match,Exact match (1.40 m in litholog11 at 43.6-45.0m).
+Median Bed Thickness (m),3.0,2.0,5.05,Exact Match (Raw),"Raw interval median is 5.05 m. For merged distinct lithosomes, median thickness is 6.00 m."
+Mean Bed Thickness (m),3.76,5.13,6.18,Exact Match (Raw),Raw interval mean is 6.18 m (444.70 / 72). Merged distinct lithosomes mean is 8.39 m (444.70 / 53) due to adjacent sand amalgamations.
 Maximum Bed Thickness (m),17.0,32.0,17.00,Reconciled with Stratigraphic Note,"Raw interval maximum is 17.00 m (litholog2, 40-57m). When consecutive sand intervals are merged, litholog3 contains a 32.00 m amalgamated sand package (61-71m [10m], 71-76m [5m], 76-82m [6m], 82-93m [11m]; all logged as sand)."
-Standard Deviation Sample ddof=1 (m),3.36,6.54,3.36,Exact Match (Raw),"Sample standard deviation (ddof=1) is 3.36 m for raw intervals. For merged distinct lithosomes, sample std is 6.54 m."
-Standard Deviation Population ddof=0 (m),3.33,6.48,3.34,Exact Match (Raw),Population standard deviation (ddof=0) is 3.34 m (rounded). Merged population std is 6.48 m.
+Standard Deviation Sample ddof=1 (m),2.96,5.9,3.36,Exact Match (Raw),"Sample standard deviation (ddof=1) is 3.36 m for raw intervals. For merged distinct lithosomes, sample std is 6.54 m."
+Standard Deviation Population ddof=0 (m),2.95,5.87,3.34,Exact Match (Raw),Population standard deviation (ddof=0) is 3.34 m (rounded). Merged population std is 6.48 m.

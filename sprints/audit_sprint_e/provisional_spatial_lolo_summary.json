@@ -1,0 +1,52 @@
+{
+  "num_evaluated_wells": 11,
+  "total_evaluated_points": 940,
+  "vertical_reference": "relative_to_base",
+  "vertical_weight": 10.0,
+  "overall_knn_macro_f1": 0.2521,
+  "overall_knn_balanced_acc": 0.2561,
+  "overall_knn_accuracy": 0.4904,
+  "overall_near_well_macro_f1": 0.2523,
+  "overall_near_well_balanced_acc": 0.2545,
+  "overall_near_well_accuracy": 0.4755,
+  "overall_prior_macro_f1": 0.1335,
+  "overall_prior_balanced_acc": 0.2,
+  "overall_prior_accuracy": 0.5011,
+  "knn_confusion_matrix": [
+    [
+      0,
+      14,
+      0,
+      1,
+      10
+    ],
+    [
+      2,
+      271,
+      3,
+      23,
+      172
+    ],
+    [
+      0,
+      6,
+      0,
+      2,
+      9
+    ],
+    [
+      0,
+      37,
+      0,
+      16,
+      24
+    ],
+    [
+      0,
+      146,
+      1,
+      29,
+      174
+    ]
+  ]
+}

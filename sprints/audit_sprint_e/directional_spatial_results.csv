@@ -1,0 +1,3 @@
+experiment,training_wells,target_wells,total_test_points,knn_macro_f1,knn_balanced_acc,knn_accuracy,prior_macro_f1,prior_balanced_acc,prior_accuracy
+Upstream_to_Downstream,"litholog2,litholog3,litholog4,litholog5,litholog6,litholog7,litholog8,litholog10","litholog9,litholog11,litholog12",267,0.2279,0.2541,0.4457,0.1317,0.2,0.4906
+Downstream_to_Upstream,"litholog9,litholog11,litholog12","litholog2,litholog3,litholog4,litholog5,litholog6,litholog7,litholog8,litholog10",673,0.2205,0.2305,0.4235,0.1343,0.2,0.5052

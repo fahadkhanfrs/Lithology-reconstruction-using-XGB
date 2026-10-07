@@ -5,7 +5,8 @@
 - **Phase 1 (1D Vertical Markov Succession Analysis)**: VERIFIED (Full 11-log dataset fitted [920 observations], provenance sensitivity analysis documented, 11/11 unit tests passing)
 - **Sprint C (Descriptive Lithology & Leakage-Free 1D Markov Baseline)**: COMPLETE / VERIFIED (All 12 lithologs audited, 12 unit tests passing, publication figures generated in audit_sprint_c/)
 - **Sprint D (Reproducible 1D Markov Validation & Summary Reconciliation)**: COMPLETE / VERIFIED (Mathematical scoring formalized with separate initial-state vs transition metrics, embedded bed sequence integrity enforced, 10/10 new unit tests passing [44/44 repository total], summary statistics reconciled directly from raw CSVs, deliverables in audit_sprint_d/)
-- **Phase 2 (2D Cross-Sectional Geostatistical Modeling)**: READY FOR SPRINT (Validated solely against Sahoo et al. [2016] geological priors [W/T = 35, mean thickness 5.8m, NTG 17%-46%] and synthetic realizations; independent of litholog subset)
+- **Sprint E (Revised Dataset Reconciliation & Spatial Prototype Readiness)**: COMPLETE / VERIFIED (All 12 revised lithologs reconciled; p_sand and ripples mapped; L12 registered in manifest; synthetic coordinate audit completed; provisional spatial LOLO baseline and datum sensitivity evaluated; 11/11 new tests passing [55/55 repository total]; deliverables in sprints/audit_sprint_e/)
+- **Phase 2 (2D Cross-Sectional Geostatistical Modeling)**: READY FOR SPRINT (Requires stratigraphic datum correlation before conditioned spatial reconstruction; baseline exploratory spatial prototype documented)
 
 ---
 
@@ -202,18 +203,38 @@ Overbank Mudstone      -0.158              0.030                  -0.061      0.
 
 ---
 
-## 7. Remaining Blockers & Next Actions
+## 7. Sprint E Reconciliation & Spatial Readiness Status
 
-### Resolved in Sprint D:
-- Mathematical separation of basal state likelihood and step-by-step transition perplexity.
-- Elimination of artificial self-transitions in embedded chains via distinct bed sequence formulation.
-- Full reconciliation of sandstone thickness metrics and group net-to-gross statistics.
-- 44/44 unit and regression tests passing.
+### 7.1 Reconciled Dataset & Provenance
+- All 12 lithologs manually digitized and revised by user from primary source images.
+- Encodings mapped: `p_sand` -> `sand` (Channel Sandstone undivided, code 1); `ripples` -> `silt` (Siltstone / heterolithics, code 3).
+- Litholog 12 formally registered in `data/provenance_manifest.json` as a manually digitized subsurface core log (coverage strictly 0.0-111.0 m; original core length 242.0 m; unvalidated; not AI-generated).
+- Total stratigraphic span across all 12 lithologs: 1033.0 m (922.0 m outcrop; 111.0 m core). Valid observations: 1031.0 m (due to two 1 m unmapped gaps in L9).
+- Total sandstone raw intervals increased from 72 to 135; merged distinct sandstone lithosomes increased from 53 to 99; total sandstone thickness increased from 444.70 m to 507.70 m (49.15% overall N/G).
 
-### Remaining Blockers for Spatial Modeling (Phase 2 & Beyond):
-1. **Litholog 1 Coordinate Absence**: L1 lacks physical X, Y coordinates and elevation datum. It is valid for 1D vertical analysis but remains strictly prohibited from spatial modeling and spatial cross-validation.
-2. **Stratigraphic Datum Unification**: The 11 outcrop lithologs and L12 core lack an explicit, surveyed stratigraphic marker (e.g., top of lower coal or flooding surface) to align their vertical origins into a unified coordinate frame ($Z_{\text{rel}}$).
-3. **Lateral Correlation Lengths**: 1D vertical Markov models provide vertical transition probabilities only; horizontal transition lengths and channel width-to-thickness priors ($W/T = 35$) must come from geological literature (Sahoo et al., 2016) or lateral spatial variography once datums are defined.
+### 7.2 Synthetic-Coordinate Audit Findings
+- Traced `data/loader.py:L136-141` formula: `strike_pos_m = float(file_idx * 100.0)`. Never entered 1D Markov chains.
+- Dedicated spatial module (`smalt/spatial/coordinates.py`) created. Uses real local Cartesian coordinates $(X, Y)$ from `lolo/Location_coordinates_lithologs.xlsx` for L2-L12.
+- Litholog 1 is missing coordinates and is strictly excluded from spatial validation.
 
-### Recommended Next Action:
-1. Proceed with Phase 2 implementation (`smalt/geostat/object_sim.py`) conditioned on Sahoo et al. (2016) geometrical priors, strictly unconditioned on spatial coordinates until datum unification is resolved.
+### 7.3 Provisional Spatial Prototype & Empirical Findings
+- Leave-One-Litholog-Out spatial cross-validation executed on eligible wells (L2-L12) in `smalt/spatial/baseline.py`.
+- Evaluated against naive baselines:
+  - Spatial 3D KNN: Macro-F1 = 0.2521, Balanced Acc = 0.2561, Raw Acc = 49.04%.
+  - Nearest-Well Profile: Macro-F1 = 0.2523, Balanced Acc = 0.2545, Raw Acc = 47.55%.
+  - Training Prior Facies: Macro-F1 = 0.1335, Balanced Acc = 0.2000, Raw Acc = 49.15%.
+- Vertical datum sensitivity testing (±5m to ±20m shift) confirms Macro-F1 remains invariant at ~0.25, proving that sparse wells (~1.5-3.0 km apart) cannot correlate facies without an established stratigraphic marker datum.
+
+---
+
+## 8. Remaining Blockers & Next Actions
+
+### Remaining Blockers for Conditioned 2D/3D Reconstruction:
+1. **Stratigraphic Datum Correlation**: The 11 outcrop logs and L12 core lack a correlated datum horizon (e.g. coal marker or flooding surface). Without vertical alignment, spatial models cannot distinguish true lateral continuity from vertical shifts.
+2. **Litholog 1 Coordinate Absence**: L1 lacks physical X, Y coordinates and remains excluded from spatial models.
+3. **Coordinate Reference System Details**: Local Cartesian coordinates $(X, Y)$ in `Location_coordinates_lithologs.xlsx` are relative; projection parameters (e.g. UTM Zone 12N) are unconfirmed.
+
+### Recommended Next Action (Sprint F):
+- **Sprint F: Stratigraphic Marker Correlation and 2D Cross-Sectional Geometry Formulation.**
+- Audit coal seams and maximum flooding surfaces across L1-L12 to test candidate stratigraphic datums.
+- Formulate 2D cross-sectional conditioning using marker-aligned elevations.

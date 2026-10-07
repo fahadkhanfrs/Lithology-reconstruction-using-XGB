@@ -35,7 +35,7 @@ def main():
     print("STARTING SMALT SPRINT D RECONCILIATION & MARKOV VALIDATION PIPELINE")
     print("=" * 80)
 
-    output_dir = repo_root / "audit_sprint_d"
+    output_dir = repo_root / "sprints" / "audit_sprint_d"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     inspector = LithologInspector(raw_dir=repo_root / "data" / "raw_lithologs")

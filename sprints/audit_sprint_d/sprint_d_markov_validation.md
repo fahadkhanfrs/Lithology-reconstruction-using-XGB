@@ -110,46 +110,46 @@ A primary mandate of Sprint D was to trace and reconcile all sandstone bed metri
 
 ### 3.1 Reconciliation Summary Table
 
-| Metric | Raw Intervals (Sprint D) | Merged Lithosomes (Sprint D) | Sprint C Reported | Status | Audit Explanation |
+| Metric | Raw Intervals (Sprint E Reconciled) | Merged Lithosomes (Sprint E Reconciled) | Sprint C Reported Baseline | Status | Audit Explanation |
 | :--- | :---: | :---: | :---: | :---: | :--- |
-| **Total Sandstone Count** | **72** | **53** | 73 (narrative) / 72 (sum) | **Reconciled** | Raw interval CSVs across all 12 logs contain exactly 72 sandstone intervals. The narrative count of 73 in the Sprint C report was an unverified typographical error. Merging consecutive sand intervals produces 53 distinct sandstone lithosomes. |
-| **Cumulative Thickness (m)** | **444.70** | **444.70** | 444.70 | **Exact Match** | Total sandstone thickness across all 12 lithologs is identically 444.70 m in both raw intervals and merged lithosomes. |
-| **Minimum Bed Thickness (m)** | **1.40** | **1.40** | 1.40 | **Exact Match** | Observed in Litholog 11 at 43.6 - 45.0 m. |
-| **Median Bed Thickness (m)** | **5.05** | **6.00** | 5.05 | **Exact Match (Raw)** | Raw interval median is 5.05 m. For merged distinct lithosomes, median thickness is 6.00 m. |
-| **Mean Bed Thickness (m)** | **6.18** | **8.39** | 6.18 | **Exact Match (Raw)** | Raw interval mean is 6.18 m ($444.70 / 72$). Merged distinct lithosomes mean is 8.39 m ($444.70 / 53$) due to multi-interval sand amalgamations. |
+| **Total Sandstone Count** | **135** | **99** | 73 (narrative) / 72 (sum) | **Reconciled in Sprint E** | Due to user digitization of planar sandstones (`p_sand`) across L4-L11, raw intervals contain 135 sandstone intervals. Merging consecutive sand intervals produces 99 distinct lithosomes. |
+| **Cumulative Thickness (m)** | **507.70** | **507.70** | 444.70 | **Reconciled in Sprint E** | Total sandstone thickness across all 12 lithologs is 507.70 m in both raw intervals and merged lithosomes. |
+| **Minimum Bed Thickness (m)** | **1.00** | **1.00** | 1.40 | **Reconciled in Sprint E** | Observed in L4, L5, L6, L7, L8, L9, L10, L11 as 1.0 m thin sandstone beds. |
+| **Median Bed Thickness (m)** | **3.00** | **2.00** | 5.05 | **Reconciled in Sprint E** | Raw interval median is 3.00 m. For merged distinct lithosomes, median thickness is 2.00 m due to thin interbedded units. |
+| **Mean Bed Thickness (m)** | **3.76** | **5.13** | 6.18 | **Reconciled in Sprint E** | Raw interval mean is 3.76 m ($507.70 / 135$). Merged distinct lithosomes mean is 5.13 m ($507.70 / 99$). |
 | **Maximum Bed Thickness (m)** | **17.00** | **32.00** | 17.00 | **Reconciled** | Raw interval maximum is 17.00 m (Litholog 2, 40 - 57 m). When consecutive sand intervals are merged, Litholog 3 contains a 32.00 m amalgamated channel-sand package (61 - 93 m). |
-| **Sample Std Dev (ddof=1) (m)** | **3.36** | **6.54** | 3.36 | **Exact Match (Raw)** | Sample standard deviation for raw intervals is 3.36 m. For merged lithosomes, sample standard deviation is 6.54 m. |
-| **Population Std Dev (ddof=0) (m)**| **3.33** | **6.48** | 3.34 | **Exact Match (Raw)** | Population standard deviation is 3.334 m (rounded to 3.34 m in Sprint C). Merged population standard deviation is 6.48 m. |
+| **Sample Std Dev (ddof=1) (m)** | **2.96** | **5.90** | 3.36 | **Reconciled in Sprint E** | Sample standard deviation for raw intervals is 2.96 m. For merged lithosomes, sample standard deviation is 5.90 m. |
+| **Population Std Dev (ddof=0) (m)**| **2.95** | **5.87** | 3.34 | **Reconciled in Sprint E** | Population standard deviation is 2.95 m for raw intervals; 5.87 m for merged lithosomes. |
 
-*Artifact Reference:* [`audit_sprint_d/sandstone_thickness_reconciliation.csv`](file:///d:/Lithology-reconstruction-using-XGB/audit_sprint_d/sandstone_thickness_reconciliation.csv)
+*Artifact Reference:* [`sprints/audit_sprint_d/sandstone_thickness_reconciliation.csv`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_d/sandstone_thickness_reconciliation.csv)
 
 ---
 
 ## 4. Stratigraphic Group Reconciliation
 
-Sprint C Table 7.1 reported group summary statistics with minor discrepancies caused by hardcoded plot labels and manual entries. Sprint D audited and recomputed every group metric directly from source intervals.
+Sprint C Table 7.1 reported group summary statistics with minor discrepancies caused by hardcoded plot labels and manual entries. In Sprint E, all group metrics were recomputed directly from the revised source intervals.
 
 ### 4.1 Group Reconciliation Table
 
-| Group Name | Wells Included | Total Thickness (m) | Sand Thickness (m) | Pure Sand N/G | Sprint C Reported Thickness | Sprint C Reported N/G | Discrepancy & Root Cause |
-| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
-| **Upstream** | L2, L3, L4, L5, L6, L7, L8, L10 (8 logs) | **673.0** | **287.0** | **42.64%** | 664.0 m | 43.22% | **+9.0 m discrepancy:** Sprint C Table 7.1 transcribed 664.0 m from a hardcoded plot annotation in `plotting.py:L236`. Exact sum of raw thicknesses is $93+93+84+85+82+80+79+77 = 673.0\text{ m}$. Pure N/G is $287.0 / 673.0 = 42.64\%$. |
-| **Downstream Outcrop** | L9, L11 (2 logs) | **156.0** | **65.0** | **41.67%** | 156.0 m | 41.67% | **Exact match:** $79.0 + 77.0 = 156.0\text{ m}$; Sand $= 28.0 + 37.0 = 65.0\text{ m}$. |
-| **Downstream Composite** | L9, L11, L12 (3 logs) | **267.0** | **122.7** | **45.96%** | 267.0 m | 47.19% | **-1.23% N/G discrepancy:** Total thickness is $156.0 + 111.0 = 267.0\text{ m}$. Sand is $65.0 + 57.7 = 122.7\text{ m}$. True N/G is $122.7 / 267.0 = 45.96\%$. Sprint C reported 47.19% due to an unverified manual division. |
-| **All Outcrop** | L1 - L11 (11 logs) | **922.0** | **387.0** | **41.97%** | 922.0 m | 41.97% | **Exact match:** Cumulative thickness 922.0 m, pure sandstone 387.0 m. |
-| **All 12 Lithologs** | L1 - L12 (12 logs) | **1033.0** | **444.7** | **43.05%** | 1033.0 m | 43.05% | **Exact match:** Cumulative thickness 1033.0 m, pure sandstone 444.70 m. |
+| Group Name | Wells Included | Total Thickness (m) | Sand Thickness (m) | Pure Sand N/G | Historical Reported N/G | Discrepancy & Root Cause |
+| :--- | :--- | :---: | :---: | :---: | :---: | :--- |
+| **Upstream** | L2, L3, L4, L5, L6, L7, L8, L10 (8 logs) | **673.0** | **340.0** | **50.52%** | 43.22% | In Sprint E revision, distinct `p_sand` intervals increased pure sand thickness from 287.0 m to 340.0 m across the 673.0 m Upstream transect. |
+| **Downstream Outcrop** | L9, L11 (2 logs) | **156.0** | **75.0** | **48.08%** | 41.67% | Total sand increased to 75.0 m ($35.0 + 40.0\text{ m}$) due to revised `p_sand` intervals. |
+| **Downstream Composite** | L9, L11, L12 (3 logs) | **267.0** | **132.7** | **49.70%** | 45.96% / 47.19% | Total thickness is $156.0 + 111.0 = 267.0\text{ m}$. Total sand is $75.0 + 57.7 = 132.7\text{ m}$, yielding pure N/G of 49.70%. |
+| **All Outcrop** | L1 - L11 (11 logs) | **922.0** | **450.0** | **48.81%** | 41.97% | Cumulative outcrop thickness 922.0 m, pure sandstone 450.0 m. |
+| **All 12 Lithologs** | L1 - L12 (12 logs) | **1033.0** | **507.7** | **49.15%** | 43.05% | Cumulative study thickness 1033.0 m, pure sandstone 507.70 m. |
 
-*Artifact Reference:* [`audit_sprint_d/reconciled_group_statistics.csv`](file:///d:/Lithology-reconstruction-using-XGB/audit_sprint_d/reconciled_group_statistics.csv)
+*Artifact Reference:* [`sprints/audit_sprint_d/reconciled_group_statistics.csv`](file:///d:/Lithology-reconstruction-using-XGB/sprints/audit_sprint_d/reconciled_group_statistics.csv)
 
-### 4.2 Group Facies Proportions (Continuous Stratigraphy)
+### 4.2 Group Facies Proportions (Continuous Stratigraphy - Sprint E Reconciled)
 
 | Facies | Upstream (673.0 m) | Downstream Outcrop (156.0 m) | Downstream Composite (267.0 m) | All 12 Lithologs (1033.0 m) |
 | :--- | :---: | :---: | :---: | :---: |
-| **Coal** | 2.67% (18.0 m) | 1.28% (2.0 m) | 3.67% (9.8 m) | 3.47% (35.8 m) |
-| **Channel Sandstone** | 42.64% (287.0 m) | 41.67% (65.0 m) | 45.96% (122.7 m) | 43.05% (444.7 m) |
-| **Carbonaceous Mudstone** | 11.74% (79.0 m) | 21.79% (34.0 m) | 14.08% (37.6 m) | 11.58% (119.6 m) |
-| **Siltstone** | 8.32% (56.0 m) | 11.54% (18.0 m) | 10.41% (27.8 m) | 8.11% (83.8 m) |
-| **Overbank Mudstone** | 34.62% (233.0 m) | 23.72% (37.0 m) | 25.88% (69.1 m) | 33.79% (349.1 m) |
+| **Coal** | 1.93% (13.0 m) | 1.92% (3.0 m) | 4.04% (10.8 m) | 2.98% (30.8 m) |
+| **Channel Sandstone** | 50.52% (340.0 m) | 48.08% (75.0 m) | 49.70% (132.7 m) | 49.15% (507.7 m) |
+| **Carbonaceous Mudstone** | 0.89% (6.0 m) | 4.49% (7.0 m) | 3.97% (10.6 m) | 1.90% (19.6 m) |
+| **Siltstone** | 4.90% (33.0 m) | 21.15% (33.0 m) | 16.03% (42.8 m) | 7.63% (78.8 m) |
+| **Overbank Mudstone** | 41.75% (281.0 m) | 24.36% (38.0 m) | 26.25% (70.1 m) | 38.34% (396.1 m) |
 
 ---
 

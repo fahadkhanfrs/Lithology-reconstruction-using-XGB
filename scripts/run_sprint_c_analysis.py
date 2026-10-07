@@ -43,7 +43,7 @@ def main():
     print("STARTING SMALT SPRINT C DESCRIPTIVE & MARKOV VALIDATION PIPELINE")
     print("=" * 80)
 
-    output_dir = repo_root / "audit_sprint_c"
+    output_dir = repo_root / "sprints" / "audit_sprint_c"
     figures_dir = output_dir / "figures"
     output_dir.mkdir(parents=True, exist_ok=True)
     figures_dir.mkdir(parents=True, exist_ok=True)

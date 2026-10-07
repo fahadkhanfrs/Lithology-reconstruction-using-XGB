@@ -38,22 +38,22 @@ This report delivers the Sprint C research findings for the SMALT project. The o
 
 A complete inventory of all twelve lithologs is summarized below. Full details are recorded in [audit_sprint_c/DATA_QUALITY_AND_PROVENANCE_AUDIT.md](file:///d:/Lithology-reconstruction-using-XGB/audit_sprint_c/DATA_QUALITY_AND_PROVENANCE_AUDIT.md) and [audit_sprint_c/per_litholog_descriptive_statistics.csv](file:///d:/Lithology-reconstruction-using-XGB/audit_sprint_c/per_litholog_descriptive_statistics.csv).
 
-### Table 2.1: Litholog Data Quality and Stratigraphic Parameters
+### Table 2.1: Litholog Data Quality and Stratigraphic Parameters (Reconciled in Sprint E)
 
 | Litholog ID | Provenance Category | Group | Coordinates Status | Raw Beds | Depth Span (m) | Thickness (m) | Gaps / Overlaps | Net-to-Gross (Pure Sand) |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **L1** | Source-derived outcrop | Unassigned | None (excluded from spatial) | 20 | 0.0 - 93.0 | 93.00 | None | 37.63% |
-| **L2** | AI-reconstructed outcrop | Upstream | Excel Row 1 (unprojected) | 16 | 0.0 - 93.0 | 93.00 | None | 54.84% |
+| :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- | :---: |
+| **L1** | Source-derived outcrop | Unassigned | None (excluded from spatial) | 26 | 0.0 - 93.0 | 93.00 | None | 37.63% |
+| **L2** | AI-reconstructed outcrop | Upstream | Excel Row 1 (unprojected) | 20 | 0.0 - 93.0 | 93.00 | None | 58.06% |
 | **L3** | AI-reconstructed outcrop | Upstream | Excel Row 2 (unprojected) | 15 | 0.0 - 93.0 | 93.00 | None | 73.12% |
-| **L4** | AI-reconstructed outcrop | Upstream | Excel Row 3 (unprojected) | 20 | 0.0 - 84.0 | 84.00 | None | 38.10% |
-| **L5** | AI-reconstructed outcrop | Upstream | Excel Row 4 (unprojected) | 20 | 0.0 - 85.0 | 85.00 | None | 40.00% |
-| **L6** | AI-reconstructed outcrop | Upstream | Excel Row 5 (unprojected) | 17 | 0.0 - 82.0 | 82.00 | None | 37.80% |
-| **L7** | AI-reconstructed outcrop | Upstream | Excel Row 6 (unprojected) | 16 | 0.0 - 80.0 | 80.00 | None | 30.00% |
-| **L8** | AI-reconstructed outcrop | Upstream | Excel Row 7 (unprojected) | 28 | 0.0 - 79.0 | 79.00 | None | 29.11% |
-| **L9** | Source-derived outcrop | Downstream | Excel Row 8 (unprojected) | 20 | 0.0 - 78.0 | 79.00 | Gap 18-19m; Overlap 28-30m | 35.44% |
-| **L10** | AI-reconstructed outcrop | Upstream | Excel Row 9 (unprojected) | 19 | 0.0 - 77.0 | 77.00 | None | 31.17% |
-| **L11** | Source-derived (benchmarked 93.59%) | Downstream | Excel Row 10 (unprojected) | 18 | 0.0 - 78.0 | 77.00 | Gap 59-60m | 48.05% |
-| **L12** | Digitized core log (EM-137C) | Downstream | Map slide only; no Excel row | 63 | 0.0 - 111.0 | 111.00 | None (0-111m) | 51.98% |
+| **L4** | AI-reconstructed outcrop | Upstream | Excel Row 3 (unprojected) | 23 | 0.0 - 84.0 | 84.00 | None | 44.05% |
+| **L5** | AI-reconstructed outcrop | Upstream | Excel Row 4 (unprojected) | 24 | 0.0 - 84.0 | 84.00 | None | 42.86% |
+| **L6** | AI-reconstructed outcrop | Upstream | Excel Row 5 (unprojected) | 23 | 0.0 - 84.0 | 84.00 | None | 45.24% |
+| **L7** | AI-reconstructed outcrop | Upstream | Excel Row 6 (unprojected) | 24 | 0.0 - 79.0 | 79.00 | None | 40.51% |
+| **L8** | AI-reconstructed outcrop | Upstream | Excel Row 7 (unprojected) | 32 | 0.0 - 79.0 | 79.00 | None | 45.57% |
+| **L9** | Source-derived outcrop | Downstream | Excel Row 8 (unprojected) | 25 | 0.0 - 78.0 | 77.00 | Gaps: 18-19m, 51-52m; Overlap: 28-29m | 45.45% |
+| **L10** | AI-reconstructed outcrop | Upstream | Excel Row 9 (unprojected) | 29 | 0.0 - 77.0 | 77.00 | None | 50.65% |
+| **L11** | Source-derived (benchmarked 93.59%) | Downstream | Excel Row 10 (unprojected) | 24 | 0.0 - 78.0 | 79.00 | Gap 59-60m resolved; Overlap: 71-72m | 50.63% |
+| **L12** | Digitized core log (EM-137C) | Downstream | Excel Row 11 (X=-1119.91, Y=14407.30) | 63 | 0.0 - 111.0 | 111.00 | None (0-111m) | 51.98% |
 
 ---
 

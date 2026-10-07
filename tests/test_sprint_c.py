@@ -80,14 +80,16 @@ def test_thickness_equals_sum_not_row_count(inspector):
 # 2. Detection of Missing Intervals (Gaps) and Overlaps
 # -----------------------------------------------------------------------------
 def test_detect_gap_in_litholog9_and_litholog11(inspector):
-    """Verifies that gaps in L9 (18-19m) and L11 (59-60m) are correctly detected."""
+    """Verifies that gaps in L9 (18-19m, 51-52m) and interval features in L11 are correctly detected."""
     insp9 = inspector.inspect_litholog("litholog9")
     assert insp9["has_gaps"]
     assert any(g["depth_before"] == 18.0 and g["depth_after"] == 19.0 for g in insp9["gaps"])
+    assert any(g["depth_before"] == 51.0 and g["depth_after"] == 52.0 for g in insp9["gaps"])
 
+    # In revised digitization, L11's 59-60m gap was resolved as carbon_mud, with overlap at 71-72m
     insp11 = inspector.inspect_litholog("litholog11")
-    assert insp11["has_gaps"]
-    assert any(g["depth_before"] == 59.0 and g["depth_after"] == 60.0 for g in insp11["gaps"])
+    assert insp11["has_overlaps"]
+    assert any(o["depth_before"] == 72.0 and o["depth_after"] == 71.0 for o in insp11["overlaps"])
 
 
 def test_detect_overlaps_in_litholog9(inspector):

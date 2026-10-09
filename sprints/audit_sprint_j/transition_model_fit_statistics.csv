@@ -1,0 +1,4 @@
+model_identifier,model_description,mean_squared_error,root_mean_squared_error,mean_absolute_error,row_stochastic_satisfied,p_zero_equals_identity,non_negative_satisfied,asymptotic_stationary_convergence
+Model_A_Sprint_I,Prescribed Continuous Markov expm(R_A * h),0.018991,0.1378,0.0886,True,True,True,True
+Model_B_Calibrated_Markov,Empirically Calibrated Continuous Markov expm(R_B * h),0.01079,0.1039,0.0684,True,True,True,True
+Model_C_Spherical_Decay,Finite-Range Spherical Transition Probability Model,0.006991,0.0836,0.0561,True,True,True,True

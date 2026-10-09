@@ -1,0 +1,7 @@
+facies_code,facies_name,L_geological_m,L_empirical_m,L_fitted_m,uncertainty_m,auto_pair_count,total_touching_pairs,pair_support,identifiability_status,empirical_status_notes,fit_status_notes
+0,Channel Sandstone,203.0,243.7,402.7,125.5,840,3038,High (>500),sub_well_spacing_identifiable_with_uncertainty,sub_well_spacing (<420m),converged
+1,Planar Sandstone,30.0,226.2,80.3,457.1,19,596,Moderate (15-50),sub_well_spacing_identifiable_with_uncertainty,sub_well_spacing (<420m),converged
+2,Rippled Heterolithics,75.0,1.4,7.8,0.0,30,689,Moderate (15-50),sub_well_spacing_identifiable_with_uncertainty,sub_well_spacing (<420m),converged
+3,Carbonaceous Mudstone,40.0,5.4,40.0,20.0,3,164,Sparse (<5),insufficient_spatial_support,sub_well_spacing (<420m),insufficient_pairs_fallback_geo
+4,Coal,55.0,2.7,55.0,27.5,1,199,Sparse (<5),insufficient_spatial_support,sub_well_spacing (<420m),insufficient_pairs_fallback_geo
+5,Overbank Mudstone,360.0,307.1,343.4,164.4,576,2665,High (>500),sub_well_spacing_identifiable_with_uncertainty,sub_well_spacing (<420m),converged

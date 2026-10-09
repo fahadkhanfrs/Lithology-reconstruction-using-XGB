@@ -1,0 +1,19 @@
+metric_scope,model_or_context,reported_value,recomputed_value,discrepancy,audit_status,notes
+Dataset Total Points,All Models,940,940,0,PASS,Exact match across 11 eligible wells (L2-L12). L1 (91 pts) strictly excluded.
+Pooled Raw Accuracy,Spatial 3D KNN (k=5),0.4777,0.4777,0.0000,PASS,449/940 correct predictions. Pooled over all test points.
+Pooled Balanced Accuracy,Spatial 3D KNN (k=5),0.2281,0.2281,0.0000,PASS,Unweighted mean recall across all 6 classes. Matches reported table.
+Pooled Macro-F1,Spatial 3D KNN (k=5),0.2232,0.2232,0.0000,PASS,Unweighted mean F1 across all 6 classes. Matches reported table.
+Unweighted Mean Fold Accuracy,Spatial 3D KNN (k=5),N/A (only fold table published),0.4717,None (distinguished from pooled),PASS,Fold-level average (47.17%) is slightly lower than pooled (47.77%) due to unequal well lengths.
+Unweighted Mean Fold Balanced Acc,Spatial 3D KNN (k=5),N/A (only fold table published),0.2489,None (distinguished from pooled),PASS,Fold-level average (24.89%) is higher than pooled (22.81%) because missing classes in test wells reduce local denominator.
+Unweighted Mean Fold Macro-F1,Spatial 3D KNN (k=5),N/A (only fold table published),0.2303,None (distinguished from pooled),PASS,Fold-level average (0.2303) vs pooled (0.2232).
+Pooled Raw Accuracy,Nearest-Well Profile,0.4426,0.4426,0.0000,PASS,416/940 correct predictions. Matches reported table.
+Pooled Balanced Accuracy,Nearest-Well Profile,0.2291,0.2291,0.0000,PASS,Mean recall across all 6 classes. Matches reported table.
+Pooled Macro-F1,Nearest-Well Profile,0.2276,0.2276,0.0000,PASS,Mean F1 across all 6 classes. Matches reported table.
+Pooled Raw Accuracy,Training Prior Facies,0.4351,0.4351,0.0000,PASS,409/940 correct (always Channel Sandstone). Matches reported table.
+Pooled Balanced Accuracy,Training Prior Facies,0.1667,0.1667,0.0000,PASS,1.0 / 6 = 0.1667 (only sand has non-zero recall). Matches reported table.
+Pooled Macro-F1,Training Prior Facies,0.1011,0.1011,0.0000,PASS,0.6064 / 6 = 0.1011. Matches reported table.
+Minority Class Support: coal,Ground Truth,25,25,0,PASS,Exact match across 940 points.
+Minority Class F1: coal,Spatial 3D KNN & Nearest-Well,0.0000,0.0000,0.0000,PASS,0/25 correctly identified by both models. Complete failure on coal.
+Minority Class Support: carbon_mud,Ground Truth,17,17,0,PASS,Exact match across 940 points.
+Minority Class F1: carbon_mud,Spatial 3D KNN & Nearest-Well,0.0000,0.0000,0.0000,PASS,0/17 correctly identified by both models. Complete failure on carbonaceous mud.
+Raw Sample Prediction Persistence,Storage Audit,Serialized predictions,Only confusion matrices & fold summaries serialized,"Sample-level (x,y,z,y_true,y_pred) table not saved to disk",IDENTIFIED GAP,"Full 6x6 confusion matrices allow exact recomputation of all pooled metrics, but point-by-point predictions were not saved as a standalone CSV."

@@ -1,0 +1,25 @@
+experiment_type,target_log_id,evaluated_transitions,gap_crossing_transitions,mean_transition_log_score_standard,transition_perplexity_standard,mean_transition_log_score_gap_masked,transition_perplexity_gap_masked,delta_mean_log_score,delta_perplexity,interpretation
+LOLO_vertical_all12_regular_1m,litholog1,92,0,-0.8148,2.2588,-0.8148,2.2588,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog2,92,0,-0.6207,1.8603,-0.6207,1.8603,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog3,92,0,-0.4478,1.5649,-0.4478,1.5649,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog4,83,0,-0.6525,1.9204,-0.6525,1.9204,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog5,83,0,-0.6897,1.9932,-0.6897,1.9932,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog6,83,0,-0.6568,1.9286,-0.6568,1.9286,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog7,78,0,-0.7198,2.0541,-0.7198,2.0541,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog8,78,0,-0.9307,2.5362,-0.9307,2.5362,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog9,77,4,-0.8387,2.3134,-0.7678,2.1549,0.0709,-0.1585,Contains 4 gap-crossing transition(s). Masking shifts log score by +0.0709 and perplexity by -0.1585.
+LOLO_vertical_all12_regular_1m,litholog10,76,0,-0.9048,2.4714,-0.9048,2.4714,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog11,77,0,-0.8822,2.4161,-0.8822,2.4161,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_regular_1m,litholog12,110,0,-1.2174,3.3784,-1.2174,3.3784,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog1,22,0,-1.4533,4.2773,-1.4533,4.2773,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog2,15,0,-1.3538,3.8723,-1.3538,3.8723,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog3,9,0,-1.1509,3.1609,-1.1509,3.1609,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog4,18,0,-0.7651,2.1492,-0.7651,2.1492,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog5,20,0,-0.8036,2.2336,-0.8036,2.2336,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog6,20,0,-0.5018,1.6517,-0.5018,1.6517,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog7,20,0,-0.5867,1.798,-0.5867,1.798,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog8,29,0,-0.6522,1.9199,-0.6522,1.9199,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog9,18,2,-1.3359,3.8034,-1.3686,3.93,-0.0327,0.1266,Contains 2 gap-crossing transition(s). Masking shifts log score by -0.0327 and perplexity by +0.1266.
+LOLO_vertical_all12_embedded_distinct_beds,litholog10,26,0,-0.8194,2.269,-0.8194,2.269,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog11,21,0,-1.3094,3.7039,-1.3094,3.7039,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.
+LOLO_vertical_all12_embedded_distinct_beds,litholog12,62,0,-1.4862,4.4204,-1.4862,4.4204,0.0,0.0,No unrecorded gaps; identical standard and gap-masked evaluation.

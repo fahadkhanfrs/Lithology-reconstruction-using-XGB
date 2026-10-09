@@ -1,0 +1,5 @@
+experiment_direction,model_name,train_wells_count,test_wells_count,test_points_count,accuracy,balanced_accuracy,macro_f1,delta_vs_prior_pp
+Upstream -> Downstream,Training Prior Majority,8,3,267,0.4494,0.1667,0.1034,0.0
+Upstream -> Downstream,Nearest-Well Profile,8,3,267,0.2996,0.1877,0.1777,-14.98
+Upstream -> Downstream,Spatial 3D KNN (k=5),8,3,267,0.3446,0.2197,0.1835,-10.49
+Upstream -> Downstream,Sprint J Calibrated Markov,8,3,267,0.4494,0.1667,0.1034,0.0

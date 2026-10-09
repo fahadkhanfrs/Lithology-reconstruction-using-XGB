@@ -1,0 +1,13 @@
+litholog_id,source_type,source_zero_location,source_direction,current_csv_direction,required_transform,orientation_confidence,evidence_source
+litholog1,measured_section,base,upward,downward,reverse_stratigraphic_axis,high,"Sahoo et al. (2016) measured section; 0 m at base, upward stratigraphic succession; CSV digitized from top down."
+litholog2,measured_section,base,upward,downward,reverse_stratigraphic_axis,high,"Sahoo et al. (2016) measured section; 0 m at base, upward stratigraphic succession; CSV digitized from top down."
+litholog3,measured_section,base,upward,downward,reverse_stratigraphic_axis,high,"Sahoo et al. (2016) measured section; 0 m at base, upward stratigraphic succession; CSV digitized from top down."
+litholog4,measured_section,base,upward,downward,reverse_stratigraphic_axis,high,"Sahoo et al. (2016) measured section; 0 m at base, upward stratigraphic succession; CSV digitized from top down."
+litholog5,measured_section,base,upward,downward,reverse_stratigraphic_axis,high,"Sahoo et al. (2016) measured section; 0 m at base, upward stratigraphic succession; CSV digitized from top down."
+litholog6,measured_section,base,upward,downward,reverse_stratigraphic_axis,high,"Sahoo et al. (2016) measured section; 0 m at base, upward stratigraphic succession; CSV digitized from top down."
+litholog7,measured_section,base,upward,downward,reverse_stratigraphic_axis,high,"Sahoo et al. (2016) measured section; 0 m at base, upward stratigraphic succession; CSV digitized from top down."
+litholog8,measured_section,base,upward,downward,reverse_stratigraphic_axis,high,"Sahoo et al. (2016) measured section; 0 m at base, upward stratigraphic succession; CSV digitized from top down."
+litholog9,measured_section,base,upward,downward,reverse_stratigraphic_axis,high,"Authoritative Sahoo et al. (2016) source figure confirms 0 m at base, fining-upward succession; CSV digitized from top down."
+litholog10,measured_section,base,upward,downward,reverse_stratigraphic_axis,high,"Sahoo et al. (2016) measured section; 0 m at base, upward stratigraphic succession; CSV digitized from top down."
+litholog11,measured_section,base,upward,downward,reverse_stratigraphic_axis,high,"Sahoo et al. (2016) measured section; 0 m at base, upward stratigraphic succession; CSV digitized from top down."
+litholog12,drill_core,base,upward,upward,preserve,unresolved,Supplementary Figure DR6 (lolo/litholog12.pdf) EM-137C core; graphic column drawn 0-242 m with 0 at bottom; digitized 0-111 m preserved as measured from 0 mark without inversion.

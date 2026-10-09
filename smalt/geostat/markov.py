@@ -24,20 +24,22 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 
 DEFAULT_FACIES_MAP: Dict[int, str] = {
-    0: "Coal",
-    1: "Channel Sandstone",
-    2: "Fine Sandstone / Splay",
-    3: "Siltstone",
-    4: "Overbank Mudstone",
+    0: "Channel Sandstone",
+    1: "Planar Sandstone",
+    2: "Rippled Heterolithics",
+    3: "Carbonaceous Mudstone",
+    4: "Coal",
+    5: "Overbank Mudstone",
 }
 
-# 1:1 canonical correspondence with Phase 0 technical schema identifiers
+# 1:1 canonical correspondence with Phase 0 / Sprint F technical schema identifiers
 CANONICAL_TECHNICAL_MAP: Dict[int, str] = {
-    0: "coal",
-    1: "sand",
-    2: "carbon_mud",
-    3: "silt",
-    4: "mud",
+    0: "sand",
+    1: "p_sand",
+    2: "ripples",
+    3: "carbon_mud",
+    4: "coal",
+    5: "mud",
 }
 
 
@@ -68,7 +70,7 @@ class StratigraphicMarkovChain:
 
     def __init__(
         self,
-        num_classes: int = 5,
+        num_classes: int = 6,
         facies_map: Optional[Dict[int, str]] = None,
         embedded: bool = False,
         smoothing_alpha: float = 0.0,
@@ -77,9 +79,9 @@ class StratigraphicMarkovChain:
         Initializes the StratigraphicMarkovChain model.
 
         Args:
-            num_classes: Number of discrete states K >= 2.
+            num_classes: Number of discrete states K >= 2 (default: 6 for SMALT 6-state schema).
             facies_map: Optional dictionary mapping integer facies codes {0, ..., K-1}
-                to human-readable string names. Defaults to the 5-state SMALT schema.
+                to human-readable string names. Defaults to the 6-state SMALT schema.
             embedded: If True, diagonal transitions are excluded prior to normalization (P_ii = 0).
             smoothing_alpha: Non-negative Laplace smoothing parameter alpha >= 0.0.
         """
@@ -91,8 +93,17 @@ class StratigraphicMarkovChain:
             max_code = max(self.facies_map.keys())
             self.num_classes = max(num_classes, max_code + 1, len(self.facies_map))
         else:
-            if num_classes == 5:
+            if num_classes == 6:
                 self.facies_map = DEFAULT_FACIES_MAP.copy()
+            elif num_classes == 5:
+                # Backward compatibility for legacy 5-state test suites
+                self.facies_map = {
+                    0: "Coal",
+                    1: "Channel Sandstone",
+                    2: "Fine Sandstone / Splay",
+                    3: "Siltstone",
+                    4: "Overbank Mudstone",
+                }
             else:
                 self.facies_map = {i: f"Facies_{i}" for i in range(num_classes)}
             self.num_classes = num_classes

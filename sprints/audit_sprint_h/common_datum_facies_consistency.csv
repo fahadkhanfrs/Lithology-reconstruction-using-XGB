@@ -1,0 +1,13 @@
+litholog,raw_interval_count,aligned_interval_count,raw_thickness_m,aligned_thickness_m,facies_counts_identical,thickness_identical,reversibility_verified
+litholog1,26,26,93.0,93.0,True,True,True
+litholog2,20,20,93.0,93.0,True,True,True
+litholog3,15,15,93.0,93.0,True,True,True
+litholog4,23,23,84.0,84.0,True,True,True
+litholog5,24,24,84.0,84.0,True,True,True
+litholog6,23,23,84.0,84.0,True,True,True
+litholog7,24,24,79.0,79.0,True,True,True
+litholog8,32,32,79.0,79.0,True,True,True
+litholog9,25,25,77.0,77.0,True,True,True
+litholog10,29,29,77.0,77.0,True,True,True
+litholog11,24,24,79.0,79.0,True,True,True
+litholog12,63,63,111.0,111.0,True,True,True

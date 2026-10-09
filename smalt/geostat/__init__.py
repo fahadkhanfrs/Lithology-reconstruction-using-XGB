@@ -3,5 +3,29 @@ SMALT Geostatistical Core Module: 1D Markov Chains, Transition Probabilities, an
 """
 
 from smalt.geostat.markov import StratigraphicMarkovChain
+from smalt.geostat.spatial_markov import (
+    SpatialMarkovTransitionAnalyzer,
+    SpatialMarkovPredictor,
+    DEFAULT_LATERAL_FACIES_LENGTHS_M,
+)
+from smalt.geostat.spatial_transition import (
+    EmpiricalHorizontalTransitionEstimator,
+    SpatialTransitionRateModel,
+)
+from smalt.geostat.conditioned_markov import ConditionedMarkovClassifier
+from smalt.geostat.realization import InterWellRealizationGenerator
+from smalt.geostat.empirical_calibration import HorizontalContinuityCalibrator
+from smalt.geostat.ablation import AblationStudyEngine
 
-__all__ = ["StratigraphicMarkovChain"]
+__all__ = [
+    "StratigraphicMarkovChain",
+    "SpatialMarkovTransitionAnalyzer",
+    "SpatialMarkovPredictor",
+    "DEFAULT_LATERAL_FACIES_LENGTHS_M",
+    "EmpiricalHorizontalTransitionEstimator",
+    "SpatialTransitionRateModel",
+    "ConditionedMarkovClassifier",
+    "InterWellRealizationGenerator",
+    "HorizontalContinuityCalibrator",
+    "AblationStudyEngine",
+]

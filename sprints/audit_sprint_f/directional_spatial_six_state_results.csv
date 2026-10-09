@@ -1,0 +1,3 @@
+experiment_name,training_wells_count,target_wells_count,total_test_points,knn_macro_f1,knn_balanced_accuracy,knn_accuracy,prior_macro_f1,prior_balanced_accuracy,prior_accuracy
+Upstream_to_Downstream,8,3,267,0.205,0.2419,0.3933,0.1034,0.1667,0.4494
+Downstream_to_Upstream,3,8,673,0.1999,0.2067,0.3893,0.1001,0.1667,0.4294

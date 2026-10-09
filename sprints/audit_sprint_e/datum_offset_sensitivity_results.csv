@@ -1,0 +1,8 @@
+scenario,downstream_datum_offset_m,knn_macro_f1,knn_balanced_acc,knn_accuracy,near_well_macro_f1,near_well_balanced_acc,near_well_accuracy,prior_macro_f1
+no_shift,0.0,0.2521,0.2561,0.4904,0.2523,0.2545,0.4755,0.1335
+downstream_plus_5m,5.0,0.2481,0.2524,0.4904,0.2523,0.2545,0.4755,0.1335
+downstream_minus_5m,-5.0,0.2481,0.252,0.4862,0.2523,0.2545,0.4755,0.1335
+downstream_plus_10m,10.0,0.2567,0.2608,0.4947,0.2523,0.2545,0.4755,0.1335
+downstream_minus_10m,-10.0,0.245,0.249,0.4851,0.2523,0.2545,0.4755,0.1335
+downstream_plus_20m,20.0,0.2444,0.2489,0.4809,0.2523,0.2545,0.4755,0.1335
+downstream_minus_20m,-20.0,0.2505,0.2544,0.4936,0.2523,0.2545,0.4755,0.1335

@@ -1,0 +1,4 @@
+facies_code,facies_name,true_length_m,estimated_length_m,relative_error_pct,auto_pairs_count,rank_preserved,recovery_status
+0,Short-Range Facies,80.0,237.2,196.5,12,True,MARGINAL
+1,Medium-Range Facies,250.0,265.1,6.0,23,True,PASSED
+2,Long-Range Facies,600.0,610.1,1.7,103,True,PASSED

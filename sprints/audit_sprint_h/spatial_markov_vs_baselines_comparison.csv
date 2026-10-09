@@ -1,0 +1,5 @@
+model_name,conditioning_mechanism,correct_points,total_points,raw_accuracy,balanced_accuracy,macro_f1
+Spatial 3D KNN (k=5),Coordinate Euclidean distance interpolation,429,940,0.4564,0.2196,0.2129
+Nearest-Well Vertical Profile,1D profile from nearest spatial neighbor well,411,940,0.4372,0.2223,0.2209
+Training Prior Majority (sand),Zero-spatial marginal mode prior,409,940,0.4351,0.1667,0.1011
+Spatial Markov Transition Model,Analytical continuous P(h) = expm(R_h * h),350,940,0.3723,0.1667,0.0904

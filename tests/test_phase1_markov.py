@@ -66,9 +66,10 @@ def test_row_stochasticity_strict(synthetic_fining_upward_df, real_litholog_df):
     for both regular and embedded chains across synthetic and real data.
     """
     for df in [synthetic_fining_upward_df, real_litholog_df]:
+        k = max(5, int(df["facies_code"].max() + 1))
         for embedded in [False, True]:
             for alpha in [0.0, 0.5]:
-                model = StratigraphicMarkovChain(num_classes=5, embedded=embedded, smoothing_alpha=alpha)
+                model = StratigraphicMarkovChain(num_classes=k, embedded=embedded, smoothing_alpha=alpha)
                 model.fit(df)
                 P = model.transition_matrix_
                 assert P is not None
@@ -82,8 +83,9 @@ def test_row_stochasticity_strict(synthetic_fining_upward_df, real_litholog_df):
 def test_probability_bounds(synthetic_fining_upward_df, real_litholog_df):
     """Asserts that all elements of P satisfy 0.0 <= P_ij <= 1.0."""
     for df in [synthetic_fining_upward_df, real_litholog_df]:
+        k = max(5, int(df["facies_code"].max() + 1))
         for embedded in [False, True]:
-            model = StratigraphicMarkovChain(num_classes=5, embedded=embedded)
+            model = StratigraphicMarkovChain(num_classes=k, embedded=embedded)
             model.fit(df)
             P = model.transition_matrix_
             assert np.all((P >= 0.0) & (P <= 1.0)), "Probability bounds violated (P < 0 or P > 1)."

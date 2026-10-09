@@ -1,0 +1,5 @@
+experiment,model,test_points,raw_accuracy,balanced_accuracy,macro_f1
+"Upstream -> Downstream (Train L2-L8, L10; Test L9, L11, L12)",Spatial 3D KNN (k=5),267,0.3483,0.2098,0.1813
+"Upstream -> Downstream (Train L2-L8, L10; Test L9, L11, L12)",Training Prior Majority,267,0.4494,0.1667,0.1034
+"Downstream -> Upstream (Train L9, L11, L12; Test L2-L8, L10)",Spatial 3D KNN (k=5),673,0.3923,0.1958,0.1865
+"Downstream -> Upstream (Train L9, L11, L12; Test L2-L8, L10)",Training Prior Majority,673,0.4294,0.1667,0.1001

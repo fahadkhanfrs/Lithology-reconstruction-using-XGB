@@ -1,0 +1,220 @@
+{
+  "manifest_metadata": {
+    "manifest_version": "1.0.0",
+    "project": "SMALT (Subsurface Stratigraphic Modeling & Active Learning Toolkit)",
+    "repository": "fahadkhanfrs/Lithology-reconstruction-using-XGB",
+    "branch": "sprint-k",
+    "baseline_commit": "f08587ca107b518c8baac560339381c53af9ed1f",
+    "audit_timestamp": "2026-10-11T06:50:00Z",
+    "software_environment": {
+      "python_version": "3.14.3",
+      "pytest_version": "9.1.1",
+      "numpy_version": "2.4.6",
+      "pandas_version": "3.0.3",
+      "scipy_version": "1.17.1",
+      "scikit_learn_version": "1.8.0",
+      "matplotlib_version": "3.10.9",
+      "operating_system": "Windows 11"
+    }
+  },
+  "provenance_and_input_datasets": {
+    "litholog_dataset": {
+      "file_path": "data/processed/lithologs_unified.csv",
+      "total_logs": 12,
+      "cumulative_meters": 1033.0,
+      "total_beds": 296,
+      "digitization_provenance": "Manual human digitization from published figures and core photographs in Sahoo et al. (2016)",
+      "benchmark_section": "Litholog 11 benchmarked against optical extraction (93.59% agreement; 73 of 78 meters)",
+      "quarantined_sections": [
+        {
+          "litholog_id": "litholog1",
+          "reason": "Omitted physical field coordinates in Location_coordinates_lithologs.xlsx; retained for 1D vertical Markov succession, strictly quarantined from spatial interpolation."
+        }
+      ],
+      "bounded_core_sections": [
+        {
+          "litholog_id": "litholog12",
+          "core_name": "EM-137C",
+          "digitized_interval_m": "0.0 - 111.0",
+          "total_core_penetration_m": 242.0,
+          "digitized_beds": 63,
+          "undigitized_interval_m": "111.0 - 242.0",
+          "validation_status": "Undigitized lower 131 m is strictly unobserved; no fabricated observations."
+        }
+      ]
+    }
+  },
+  "canonical_facies_schema": {
+    "0": "sand",
+    "1": "p_sand",
+    "2": "ripples",
+    "3": "carbon_mud",
+    "4": "coal",
+    "5": "mud"
+  },
+  "experiments": [
+    {
+      "experiment_id": "EXP-SPRINT-K-GROUP-ANALYSIS",
+      "description": "Litholog Group Stratification and Empirical Reference Statistics Extraction",
+      "script": "smalt/descriptive/group_analysis.py",
+      "command": "python -m smalt.descriptive.group_analysis",
+      "groups_evaluated": [
+        "upstream (L2-L8, L10; N=8)",
+        "downstream_outcrop (L9, L11; N=2)",
+        "downstream_composite (L9, L11, L12; N=3)",
+        "l12_core (L12 alone; N=1)",
+        "pooled_all (L1-L12; N=12)"
+      ],
+      "outputs": [
+        "sprints/audit_sprint_k/litholog_group_facies_proportions.csv",
+        "sprints/audit_sprint_k/litholog_group_bed_thickness_summary.csv",
+        "sprints/audit_sprint_k/litholog_group_transition_matrices.csv",
+        "sprints/audit_sprint_k/litholog_group_comparison_metrics.csv",
+        "sprints/audit_sprint_k/litholog_group_raw_beds.csv"
+      ],
+      "status": "COMPLETED_AND_VERIFIED"
+    },
+    {
+      "experiment_id": "EXP-SPRINT-K-MULTI-SEED-VALIDATION",
+      "description": "Multi-Seed Geological Forward Simulation and Discrepancy Quantification",
+      "script": "smalt/forward/validation.py",
+      "command": "python -m smalt.forward.validation",
+      "configurations": {
+        "domain": {
+          "x_extent_m": 2000.0,
+          "z_extent_m": 50.0,
+          "dx_m": 10.0,
+          "dz_m": 0.5,
+          "grid_shape": [100, 200],
+          "total_cells": 20000
+        },
+        "presets": {
+          "upstream": {
+            "channel_thickness_mu": 1.7870,
+            "channel_thickness_sigma": 0.8823,
+            "channel_wt_ratio": 35.0,
+            "channel_wt_std": 5.0,
+            "basal_planar_sand_fraction": 0.20,
+            "splay_width_range_m": [20.0, 100.0],
+            "splay_thickness_range_m": [0.5, 2.5],
+            "coal_horizons": 2,
+            "coal_thickness_m": 1.0,
+            "target_ntg": 0.45,
+            "tolerance_ntg": 0.08
+          },
+          "downstream_outcrop": {
+            "channel_thickness_mu": 2.20,
+            "channel_thickness_sigma": 0.60,
+            "channel_wt_ratio": 35.0,
+            "basal_planar_sand_fraction": 0.18,
+            "splay_width_range_m": [40.0, 130.0],
+            "splay_thickness_range_m": [1.0, 4.5],
+            "coal_horizons": 1,
+            "coal_thickness_m": 1.5,
+            "target_ntg": 0.42,
+            "tolerance_ntg": 0.08
+          },
+          "pooled": {
+            "channel_thickness_mu": 1.70,
+            "channel_thickness_sigma": 0.85,
+            "channel_wt_ratio": 35.0,
+            "basal_planar_sand_fraction": 0.15,
+            "splay_width_range_m": [20.0, 110.0],
+            "splay_thickness_range_m": [0.5, 3.0],
+            "coal_horizons": 2,
+            "coal_thickness_m": 1.0,
+            "target_ntg": 0.44,
+            "tolerance_ntg": 0.08
+          }
+        }
+      },
+      "sampling": {
+        "seeds_per_preset": 30,
+        "seed_ranges": {
+          "upstream": "1000 - 1029",
+          "downstream_outcrop": "2000 - 2029",
+          "pooled": "3000 - 3029"
+        },
+        "total_realizations": 90
+      },
+      "outputs": [
+        "sprints/audit_sprint_k/multi_seed_geological_validation_metrics.csv",
+        "sprints/audit_sprint_k/multi_seed_validation_summary.csv",
+        "sprints/audit_sprint_k/multi_seed_reference_comparison.csv",
+        "sprints/audit_sprint_k/fig_validation_facies_proportions_distribution.png"
+      ],
+      "status": "COMPLETED_AND_VERIFIED"
+    },
+    {
+      "experiment_id": "EXP-SPRINT-K-SENSITIVITY-WT-RESOLUTION",
+      "description": "Architectural Sensitivity to Channel Width-to-Thickness Ratio and Grid Step",
+      "script": "smalt/forward/validation.py",
+      "command": "python -m smalt.forward.validation",
+      "configurations": {
+        "wt_experiments": {
+          "settings": [20.0, 35.0, 50.0],
+          "seeds_per_setting": 10,
+          "seed_base": 5000
+        },
+        "resolution_experiments": {
+          "dz_settings": [0.25, 0.5, 1.0],
+          "seeds_per_setting": 10,
+          "seed_base": 6000
+        }
+      },
+      "total_sensitivity_realizations": 60,
+      "outputs": [
+        "sprints/audit_sprint_k/sensitivity_wt_and_resolution.csv",
+        "sprints/audit_sprint_k/fig_sensitivity_wt_and_ntg.png"
+      ],
+      "status": "COMPLETED_AND_VERIFIED"
+    },
+    {
+      "experiment_id": "EXP-SPRINT-K-SPARSE-BOREHOLE-BENCHMARK",
+      "description": "Sparse Borehole Reconstruction Benchmark with Strict Leakage Quarantine",
+      "script": "smalt/forward/benchmark.py",
+      "command": "python -m smalt.forward.benchmark",
+      "configurations": {
+        "spacings_evaluated_m": [400.0, 600.0, 1000.0],
+        "borehole_counts": {
+          "400m": 5,
+          "600m": 3,
+          "1000m": 2
+        },
+        "borehole_x_positions_m": {
+          "400m": [200.0, 600.0, 1000.0, 1400.0, 1800.0],
+          "600m": [300.0, 900.0, 1500.0],
+          "1000m": [500.0, 1500.0]
+        },
+        "models_evaluated": [
+          "Nearest_Well",
+          "Vertical_Prior",
+          "Spatial_KNN (k=5, vertical_anisotropy=20.0)",
+          "Spatial_Markov (decay_length=200m)"
+        ],
+        "evaluation_seeds": "8000 - 8029 (10 independent evaluation seeds per spacing)",
+        "total_evaluations": 120,
+        "leakage_safeguards": {
+          "observed_column_masking": "All columns containing sampled boreholes masked from scoring (all_mask[:, c] = False)",
+          "dataset_quarantine": "Models receive only SyntheticBoreholeDataset (sampled 1D columns); full grid and geobody bounding boxes quarantined",
+          "coordinate_quarantine": "Synthetic borehole coordinates strictly prefixed with synthetic_x_m"
+        }
+      },
+      "outputs": [
+        "sprints/audit_sprint_k/synthetic_reconstruction_benchmark_metrics.csv",
+        "sprints/audit_sprint_k/synthetic_reconstruction_summary.csv",
+        "sprints/audit_sprint_k/fig_benchmark_accuracy_vs_spacing.png",
+        "sprints/audit_sprint_k/fig_benchmark_reconstruction_cross_sections.png"
+      ],
+      "status": "COMPLETED_AND_VERIFIED"
+    }
+  ],
+  "verification_tests": {
+    "test_command": "python -m pytest tests/test_sprint_k.py",
+    "test_suite_path": "tests/test_sprint_k.py",
+    "total_tests": 19,
+    "pass_count": 19,
+    "fail_count": 0,
+    "coverage": "Canonical schema, grid shape, orientation, seed reproducibility, geometry, bed thickness, borehole sampling, ground truth isolation, NTG hierarchy, configuration validation, regression, multi-seed validation, baseline models, spacing decay, leakage prevention, L1/L12 boundary invariants, coordinate quarantine, GR leakage prohibition, Lilliefors goodness-of-fit."
+  }
+}

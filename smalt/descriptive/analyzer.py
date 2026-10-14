@@ -30,7 +30,7 @@ PROVENANCE_METADATA: Dict[str, Dict[str, Any]] = {
     "litholog2": {
         "litholog_id": "litholog2",
         "provenance_category": "ai_reconstructed",
-        "provenance_description": "AI-assisted reconstruction from published photomosaics/figures.",
+        "provenance_description": "Manually digitized by user from published source images/photomosaics.",
         "independent_validation": "unvalidated",
         "benchmark_accuracy": None,
         "coordinates_available": True,
@@ -40,7 +40,7 @@ PROVENANCE_METADATA: Dict[str, Dict[str, Any]] = {
     "litholog3": {
         "litholog_id": "litholog3",
         "provenance_category": "ai_reconstructed",
-        "provenance_description": "AI-assisted reconstruction from published photomosaics/figures.",
+        "provenance_description": "Manually digitized by user from published source images/photomosaics.",
         "independent_validation": "unvalidated",
         "benchmark_accuracy": None,
         "coordinates_available": True,
@@ -50,7 +50,7 @@ PROVENANCE_METADATA: Dict[str, Dict[str, Any]] = {
     "litholog4": {
         "litholog_id": "litholog4",
         "provenance_category": "ai_reconstructed",
-        "provenance_description": "AI-assisted reconstruction from published photomosaics/figures.",
+        "provenance_description": "Manually digitized by user from published source images/photomosaics.",
         "independent_validation": "unvalidated",
         "benchmark_accuracy": None,
         "coordinates_available": True,
@@ -60,7 +60,7 @@ PROVENANCE_METADATA: Dict[str, Dict[str, Any]] = {
     "litholog5": {
         "litholog_id": "litholog5",
         "provenance_category": "ai_reconstructed",
-        "provenance_description": "AI-assisted reconstruction from published photomosaics/figures.",
+        "provenance_description": "Manually digitized by user from published source images/photomosaics.",
         "independent_validation": "unvalidated",
         "benchmark_accuracy": None,
         "coordinates_available": True,
@@ -70,7 +70,7 @@ PROVENANCE_METADATA: Dict[str, Dict[str, Any]] = {
     "litholog6": {
         "litholog_id": "litholog6",
         "provenance_category": "ai_reconstructed",
-        "provenance_description": "AI-assisted reconstruction from published photomosaics/figures.",
+        "provenance_description": "Manually digitized by user from published source images/photomosaics.",
         "independent_validation": "unvalidated",
         "benchmark_accuracy": None,
         "coordinates_available": True,
@@ -80,7 +80,7 @@ PROVENANCE_METADATA: Dict[str, Dict[str, Any]] = {
     "litholog7": {
         "litholog_id": "litholog7",
         "provenance_category": "ai_reconstructed",
-        "provenance_description": "AI-assisted reconstruction from published photomosaics/figures.",
+        "provenance_description": "Manually digitized by user from published source images/photomosaics.",
         "independent_validation": "unvalidated",
         "benchmark_accuracy": None,
         "coordinates_available": True,
@@ -90,7 +90,7 @@ PROVENANCE_METADATA: Dict[str, Dict[str, Any]] = {
     "litholog8": {
         "litholog_id": "litholog8",
         "provenance_category": "ai_reconstructed",
-        "provenance_description": "AI-assisted reconstruction from published photomosaics/figures.",
+        "provenance_description": "Manually digitized by user from published source images/photomosaics.",
         "independent_validation": "unvalidated",
         "benchmark_accuracy": None,
         "coordinates_available": True,
@@ -110,7 +110,7 @@ PROVENANCE_METADATA: Dict[str, Dict[str, Any]] = {
     "litholog10": {
         "litholog_id": "litholog10",
         "provenance_category": "ai_reconstructed",
-        "provenance_description": "AI-assisted reconstruction from published photomosaics/figures.",
+        "provenance_description": "Manually digitized by user from published source images/photomosaics.",
         "independent_validation": "unvalidated",
         "benchmark_accuracy": None,
         "coordinates_available": True,
@@ -130,8 +130,12 @@ PROVENANCE_METADATA: Dict[str, Dict[str, Any]] = {
     "litholog12": {
         "litholog_id": "litholog12",
         "provenance_category": "digitized_core_log",
-        "provenance_description": "Subsurface core log EM-137C. Manually digitized by user from core-log image. Covers 0-111 m (original length 242 m).",
+        "provenance_description": "Subsurface core log EM-137C. Manually digitized by user from core-log image. Digitized coverage 0-111 m across 63 intervals (original core length 242 m; 111-242 m undigitized). Absence of independent third-party validation.",
         "independent_validation": "unvalidated",
+        "digitized_coverage_m": [0.0, 111.0],
+        "digitized_intervals_count": 63,
+        "original_core_length_m": 242.0,
+        "undigitized_interval_m": [111.0, 242.0],
         "benchmark_accuracy": None,
         "coordinates_available": True,
         "coordinates_status": "Documented in Location_coordinates_lithologs.xlsx (Row 11: X=-1119.91, Y=14407.30).",

@@ -1,0 +1,4 @@
+preset,seed,borehole_spacing_m,num_boreholes,num_objects,ntg_channel,ntg_pure,ntg_coarse,sand_prop,p_sand_prop,ripples_prop,carbon_mud_prop,coal_prop,mud_prop,mean_sand_bed_thick_m,mean_mud_bed_thick_m
+upstream,101,400.0,5,52,0.3663,0.4688,0.5093,0.3663,0.1025,0.0405,0.0142,0.0182,0.4583,4.9,4.65
+downstream_outcrop,202,600.0,3,16,0.344,0.4109,0.4387,0.344,0.0669,0.0278,0.008,0.0053,0.5481,8.04,9.55
+pooled,303,1000.0,2,39,0.3621,0.4359,0.4674,0.3621,0.0738,0.0315,0.0081,0.0184,0.5061,5.97,5.37

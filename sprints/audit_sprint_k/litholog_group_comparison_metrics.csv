@@ -1,0 +1,6 @@
+comparison,tv_distance_proportions,chi2_stat,chi2_p_value,frob_reg,mse_reg,frob_emb,mse_emb,sand_test_p_val,sand_n_a,sand_n_b,mud_test_p_val,mud_n_a,mud_n_b
+upstream vs downstream_outcrop,0.1996,15.034,0.0102,0.8731,0.021174,1.1985,0.039903,0.3417,34,6,0.2094,67,12
+upstream vs downstream_composite,0.1859,20.297,0.0011,0.8464,0.019899,1.0434,0.03024,0.0939,34,22,0.0,67,34
+upstream vs l12_core,0.2041,23.58,0.0003,1.1648,0.037689,1.4613,0.059317,0.0091,34,16,0.0,67,22
+downstream_outcrop vs l12_core,0.2127,18.208,0.0027,1.0025,0.027916,1.5966,0.070807,0.0101,6,16,0.0289,12,22
+upstream vs pooled_all,0.0489,7.492,0.1866,0.4663,0.006039,0.5806,0.009364,0.4723,34,60,0.0913,67,109

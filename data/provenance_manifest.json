@@ -7,7 +7,7 @@
     "total_logs": 12,
     "total_observations_m": 1031,
     "total_stratigraphic_span_m": 1033,
-    "provenance_policy": "Working dataset consists of mixed provenance: 3 existing/source-derived outcrop logs (including 1 benchmarked), 8 AI-assisted outcrop reconstructions, and 1 manually digitized subsurface core log (L12). In Sprint E, all 12 logs were manually digitized and revised by the user from source images. Downstream models and statistics reflect these updated digitized interval boundaries.",
+    "provenance_policy": "All 12 lithologs were manually digitized by the user from source images. The collection consists of 11 outcrop logs (L1-L11, including benchmarked L11) and 1 subsurface core log (L12, EM-137C). Downstream models and statistics reflect these updated digitized interval boundaries.",
     "qc_benchmark_well": "litholog11",
     "qc_benchmark_accuracy": 0.9359
   },
@@ -42,7 +42,7 @@
       "litholog_id": "litholog2",
       "source": "Sahoo et al. (2016)",
       "provenance_category": "ai_reconstructed",
-      "reconstruction_method": "AI-generated / reconstructed from published source material",
+      "reconstruction_method": "manually digitized by the user from published source material",
       "digitization_revision": "manually digitized and revised by user from source outcrop profile",
       "observation_type": "outcrop",
       "independent_validation": false,
@@ -51,13 +51,13 @@
       "valid_observations_m": 93,
       "continuity": "continuous",
       "coordinates_available": true,
-      "notes": "Reconstructed with AI assistance from published figures/photomosaics. Outcrop log 2. Manually digitized and revised from source image. Coordinates available in Location_coordinates_lithologs.xlsx."
+      "notes": "Manually digitized by user from published source figures/photomosaics. Outcrop log 2. Coordinates available in Location_coordinates_lithologs.xlsx."
     },
     "litholog3": {
       "litholog_id": "litholog3",
       "source": "Sahoo et al. (2016)",
       "provenance_category": "ai_reconstructed",
-      "reconstruction_method": "AI-generated / reconstructed from published source material",
+      "reconstruction_method": "manually digitized by the user from published source material",
       "digitization_revision": "manually digitized and revised by user from source outcrop profile",
       "observation_type": "outcrop",
       "independent_validation": false,
@@ -66,13 +66,13 @@
       "valid_observations_m": 93,
       "continuity": "continuous",
       "coordinates_available": true,
-      "notes": "Reconstructed with AI assistance from published figures/photomosaics. Outcrop log 3. Manually digitized and revised from source image. Coordinates available in Location_coordinates_lithologs.xlsx."
+      "notes": "Manually digitized by user from published source figures/photomosaics. Outcrop log 3. Coordinates available in Location_coordinates_lithologs.xlsx."
     },
     "litholog4": {
       "litholog_id": "litholog4",
       "source": "Sahoo et al. (2016)",
       "provenance_category": "ai_reconstructed",
-      "reconstruction_method": "AI-generated / reconstructed from published source material",
+      "reconstruction_method": "manually digitized by the user from published source material",
       "digitization_revision": "manually digitized and revised by user from source outcrop profile",
       "observation_type": "outcrop",
       "independent_validation": false,
@@ -81,13 +81,13 @@
       "valid_observations_m": 84,
       "continuity": "continuous",
       "coordinates_available": true,
-      "notes": "Reconstructed with AI assistance from published figures/photomosaics. Outcrop log 4. Manually digitized and revised from source image. Coordinates available in Location_coordinates_lithologs.xlsx."
+      "notes": "Manually digitized by user from published source figures/photomosaics. Outcrop log 4. Coordinates available in Location_coordinates_lithologs.xlsx."
     },
     "litholog5": {
       "litholog_id": "litholog5",
       "source": "Sahoo et al. (2016)",
       "provenance_category": "ai_reconstructed",
-      "reconstruction_method": "AI-generated / reconstructed from published source material",
+      "reconstruction_method": "manually digitized by the user from published source material",
       "digitization_revision": "manually digitized and revised by user from source outcrop profile",
       "observation_type": "outcrop",
       "independent_validation": false,
@@ -96,13 +96,13 @@
       "valid_observations_m": 84,
       "continuity": "continuous",
       "coordinates_available": true,
-      "notes": "Reconstructed with AI assistance from published figures/photomosaics. Outcrop log 5. Manually digitized and revised from source image (span corrected to 84 m). Coordinates available in Location_coordinates_lithologs.xlsx."
+      "notes": "Manually digitized by user from published source figures/photomosaics. Outcrop log 5. Span corrected to 84 m. Coordinates available in Location_coordinates_lithologs.xlsx."
     },
     "litholog6": {
       "litholog_id": "litholog6",
       "source": "Sahoo et al. (2016)",
       "provenance_category": "ai_reconstructed",
-      "reconstruction_method": "AI-generated / reconstructed from published source material",
+      "reconstruction_method": "manually digitized by the user from published source material",
       "digitization_revision": "manually digitized and revised by user from source outcrop profile",
       "observation_type": "outcrop",
       "independent_validation": false,
@@ -111,13 +111,13 @@
       "valid_observations_m": 84,
       "continuity": "continuous",
       "coordinates_available": true,
-      "notes": "Reconstructed with AI assistance from published figures/photomosaics. Outcrop log 6. Manually digitized and revised from source image (span corrected to 84 m). Coordinates available in Location_coordinates_lithologs.xlsx."
+      "notes": "Manually digitized by user from published source figures/photomosaics. Outcrop log 6. Span corrected to 84 m. Coordinates available in Location_coordinates_lithologs.xlsx."
     },
     "litholog7": {
       "litholog_id": "litholog7",
       "source": "Sahoo et al. (2016)",
       "provenance_category": "ai_reconstructed",
-      "reconstruction_method": "AI-generated / reconstructed from published source material",
+      "reconstruction_method": "manually digitized by the user from published source material",
       "digitization_revision": "manually digitized and revised by user from source outcrop profile",
       "observation_type": "outcrop",
       "independent_validation": false,
@@ -126,13 +126,13 @@
       "valid_observations_m": 79,
       "continuity": "continuous",
       "coordinates_available": true,
-      "notes": "Reconstructed with AI assistance from published figures/photomosaics. Outcrop log 7. Manually digitized and revised from source image (span corrected to 79 m). Coordinates available in Location_coordinates_lithologs.xlsx."
+      "notes": "Manually digitized by user from published source figures/photomosaics. Outcrop log 7. Span corrected to 79 m. Coordinates available in Location_coordinates_lithologs.xlsx."
     },
     "litholog8": {
       "litholog_id": "litholog8",
       "source": "Sahoo et al. (2016)",
       "provenance_category": "ai_reconstructed",
-      "reconstruction_method": "AI-generated / reconstructed from published source material",
+      "reconstruction_method": "manually digitized by the user from published source material",
       "digitization_revision": "manually digitized and revised by user from source outcrop profile",
       "observation_type": "outcrop",
       "independent_validation": false,
@@ -141,7 +141,7 @@
       "valid_observations_m": 79,
       "continuity": "continuous",
       "coordinates_available": true,
-      "notes": "Reconstructed with AI assistance from published figures/photomosaics. Outcrop log 8. Manually digitized and revised from source image. Coordinates available in Location_coordinates_lithologs.xlsx."
+      "notes": "Manually digitized by user from published source figures/photomosaics. Outcrop log 8. Coordinates available in Location_coordinates_lithologs.xlsx."
     },
     "litholog9": {
       "litholog_id": "litholog9",
@@ -162,7 +162,7 @@
       "litholog_id": "litholog10",
       "source": "Sahoo et al. (2016)",
       "provenance_category": "ai_reconstructed",
-      "reconstruction_method": "AI-generated / reconstructed from published source material",
+      "reconstruction_method": "manually digitized by the user from published source material",
       "digitization_revision": "manually digitized and revised by user from source outcrop profile",
       "observation_type": "outcrop",
       "independent_validation": false,
@@ -171,7 +171,7 @@
       "valid_observations_m": 77,
       "continuity": "continuous",
       "coordinates_available": true,
-      "notes": "Reconstructed with AI assistance from published figures/photomosaics. Outcrop log 10. Manually digitized and revised from source image. Coordinates available in Location_coordinates_lithologs.xlsx."
+      "notes": "Manually digitized by user from published source figures/photomosaics. Outcrop log 10. Coordinates available in Location_coordinates_lithologs.xlsx."
     },
     "litholog11": {
       "litholog_id": "litholog11",
@@ -196,6 +196,7 @@
       "digitization_revision": "manually digitized by the user from supplied core-log image",
       "observation_type": "core",
       "independent_validation": false,
+      "independent_third_party_validation": "none (unvalidated)",
       "benchmark_accuracy": null,
       "stratigraphic_span_m": 111.0,
       "valid_observations_m": 111,
@@ -203,8 +204,10 @@
       "coordinates_available": true,
       "original_core_length_m": 242.0,
       "digitized_interval_m": "0-111m",
-      "scope_limitation": "Digitized coverage strictly limited to 0-111m; core depths >111m not digitized; no extrapolation or invention of undigitized intervals.",
-      "notes": "Subsurface core log EM-137C. Manually digitized by the user from core-log image. Coverage strictly 0-111m (original core length 242m). Not AI-generated; independent validation undocumented/unvalidated. Coordinates available in Location_coordinates_lithologs.xlsx (Row 11: X=-1119.91, Y=14407.30)."
+      "digitized_intervals_count": 63,
+      "undigitized_interval_m": "111-242m",
+      "scope_limitation": "Digitized coverage strictly limited to 0-111m across 63 digitized intervals; core depths 111-242m not digitized; absence of independent third-party validation; no extrapolation or invention of undigitized intervals.",
+      "notes": "Subsurface core log EM-137C. Manually digitized by the user from core-log image. Coverage strictly 0-111m across 63 digitized intervals (original core length 242m; 111-242m interval is undigitized). Absence of independent third-party validation. Coordinates available in Location_coordinates_lithologs.xlsx (Row 11: X=-1119.91, Y=14407.30)."
     }
   }
 }

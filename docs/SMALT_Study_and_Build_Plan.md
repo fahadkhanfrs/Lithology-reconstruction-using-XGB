@@ -16,7 +16,7 @@ Characterizing subsurface sedimentary architecture from sparse borehole logs is 
 
 - Build It: Concrete, documented Python modules with paper equations cited directly in docstrings. 
 
-- Done When: Objective verification — a test passes, a synthetic benchmark is recovered, or a 2D cross-section matches known outcrop ground truth within specified tolerances. 
+- Done When: Objective verification - a test passes, a synthetic benchmark is recovered, or a 2D cross-section matches known outcrop ground truth within specified tolerances. 
 
 ## **The Repository Architecture** 
 
